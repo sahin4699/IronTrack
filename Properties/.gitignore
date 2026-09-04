@@ -1,0 +1,14 @@
+## Build and output
+bin/
+obj/
+
+## SQLite & Local DB
+*.db
+*.db-shm
+*.db-wal
+
+## IDE & User settings
+.vscode/
+.idea/
+*.user
+*.suo
