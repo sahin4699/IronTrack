@@ -3,7 +3,16 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <!-- Mobil / PWA Meta Ayarları -->
+    <meta name="theme-color" content="#0a0a0c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="IronTrack" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
     <title>IronTrack - Gym Tracker</title>
     <style>
         :root {
@@ -23,16 +32,22 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding: 30px 15px;
+            padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+            padding-left: calc(env(safe-area-inset-left, 0px) + 14px);
+            padding-right: calc(env(safe-area-inset-right, 0px) + 14px);
+            min-height: 100vh;
+            user-select: none;
         }
 
         .container {
-            max-width: 680px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
@@ -41,17 +56,16 @@
             background: linear-gradient(145deg, #16181d, #0d0e11);
             border: 1px solid #282c35;
             border-radius: 18px;
-            padding: 24px;
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 107, 0, 0.08);
-            margin-bottom: 24px;
-            position: relative;
+            margin-bottom: 18px;
         }
 
         .hero-text h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 900;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -64,20 +78,20 @@
 
         .hero-text p {
             color: var(--muted);
-            font-size: 13px;
-            margin-top: 6px;
+            font-size: 11px;
+            margin-top: 4px;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
         }
 
-        /* SVG Animasyon */
         .animation-box {
-            width: 130px;
-            height: 110px;
+            width: 100px;
+            height: 85px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .barbell {
@@ -113,15 +127,15 @@
         .box {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .box h2 {
-            font-size: 17px;
-            margin-bottom: 14px;
+            font-size: 15px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -134,22 +148,29 @@
             display: flex;
             gap: 8px;
             margin-bottom: 16px;
-            flex-wrap: wrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+
+        .quick-tags::-webkit-scrollbar {
+            display: none;
         }
 
         .tag {
             background: #191b22;
             border: 1px solid #282d38;
-            padding: 7px 15px;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             color: #b0b5c0;
+            white-space: nowrap;
             transition: all 0.2s ease;
         }
 
-        .tag:hover {
+        .tag:active {
             background: var(--accent);
             color: #000;
             border-color: var(--accent);
@@ -157,11 +178,11 @@
             box-shadow: 0 0 12px var(--accent-glow);
         }
 
-        /* Form Girişleri */
+        /* Form Elemanları */
         .grid-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         .full-row {
@@ -172,12 +193,13 @@
             width: 100%;
             background: #090a0d;
             border: 1px solid #232732;
-            border-radius: 10px;
-            padding: 13px 14px;
+            border-radius: 12px;
+            padding: 14px;
             color: #fff;
-            font-size: 14px;
+            font-size: 16px;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
+            user-select: auto;
         }
 
         input:focus {
@@ -190,57 +212,51 @@
             background: var(--accent);
             color: #000;
             border: none;
-            border-radius: 10px;
-            padding: 14px;
+            border-radius: 12px;
+            padding: 15px;
             font-weight: 800;
             font-size: 15px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             cursor: pointer;
-            box-shadow: 0 4px 20px var(--accent-glow);
+            box-shadow: 0 4px 16px var(--accent-glow);
             transition: all 0.2s ease;
         }
 
-        button.btn-primary:hover {
+        button.btn-primary:active {
             background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 25px rgba(255, 107, 0, 0.6);
+            transform: scale(0.98);
         }
 
         /* PR Rozeti */
         .pr-card {
             display: none;
-            margin-top: 14px;
-            padding: 14px;
+            margin-top: 12px;
+            padding: 12px;
             border-radius: 10px;
             background: rgba(255, 107, 0, 0.08);
             border: 1px dashed var(--accent);
             color: var(--accent);
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
         }
 
-        /* Set Listesi Kartları */
+        /* Set Listesi */
         .log-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #0c0d10;
             border: 1px solid var(--card-border);
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
             border-left: 4px solid var(--accent);
-            transition: transform 0.2s;
-        }
-
-        .log-item:hover {
-            transform: translateX(4px);
         }
 
         .log-item strong {
-            font-size: 15px;
+            font-size: 14px;
             color: #fff;
         }
 
@@ -255,14 +271,14 @@
             background: #1f1113;
             color: #ff4757;
             border: 1px solid #3d1b1f;
-            padding: 7px 14px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-size: 12px;
             cursor: pointer;
             font-weight: 700;
         }
 
-        .del-btn:hover {
+        .del-btn:active {
             background: #ff4757;
             color: #fff;
         }
@@ -279,7 +295,6 @@
                 <p>Hardcore Antrenman & Set Takibi</p>
             </div>
 
-            <!-- Turuncu Plakalı Bench Press Animasyonu -->
             <div class="animation-box">
                 <svg viewBox="0 0 130 100" width="100%" height="100%">
                     <rect x="25" y="72" width="80" height="8" rx="3" fill="#2d3436" />
@@ -299,10 +314,8 @@
                     <g class="barbell">
                         <line x1="15" y1="40" x2="115" y2="40" stroke="#ced6e0" stroke-width="3"
                             stroke-linecap="round" />
-                        <!-- Sol Plakalar -->
                         <rect x="22" y="24" width="6" height="32" rx="2" fill="#ff6b00" />
                         <rect x="29" y="28" width="4" height="24" rx="2" fill="#cc5500" />
-                        <!-- Sağ Plakalar -->
                         <rect x="102" y="24" width="6" height="32" rx="2" fill="#ff6b00" />
                         <rect x="97" y="28" width="4" height="24" rx="2" fill="#cc5500" />
                     </g>
@@ -313,9 +326,10 @@
         <!-- PR Sorgulama -->
         <div class="box">
             <h2>🏆 Kişisel Rekor (PR)</h2>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="prInput" placeholder="Hareket adı (Örn: Bench Press)" />
-                <button type="button" class="btn-primary" style="width: 130px;" onclick="checkPR()">Sorgula</button>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="prInput" placeholder="Hareket (Örn: Bench Press)" />
+                <button type="button" class="btn-primary" style="width: 105px; padding: 0 10px;"
+                    onclick="checkPR()">Bul</button>
             </div>
             <div id="prResult" class="pr-card"></div>
         </div>
@@ -326,10 +340,11 @@
 
             <div class="quick-tags">
                 <span class="tag" onclick="selectExercise('Bench Press')">Bench Press</span>
+                <span class="tag" onclick="selectExercise('Incline Dumbbell Press')">Incline Dumbbell</span>
                 <span class="tag" onclick="selectExercise('Squat')">Squat</span>
                 <span class="tag" onclick="selectExercise('Deadlift')">Deadlift</span>
-                <span class="tag" onclick="selectExercise('Incline Dumbbell Press')">Incline Press</span>
                 <span class="tag" onclick="selectExercise('Lat Pulldown')">Lat Pulldown</span>
+                <span class="tag" onclick="selectExercise('Barbell Row')">Barbell Row</span>
             </div>
 
             <form id="workoutForm" class="grid-form">
@@ -337,23 +352,24 @@
                     <input type="text" id="exerciseName" placeholder="Hareket Adı" required />
                 </div>
                 <div>
-                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" required />
+                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
+                        required />
                 </div>
                 <div>
-                    <input type="number" id="reps" placeholder="Tekrar Sayısı" required />
+                    <input type="number" id="reps" placeholder="Tekrar" inputmode="numeric" required />
                 </div>
                 <div class="full-row">
-                    <input type="number" id="setNumber" placeholder="Set No (Örn: 1)" required />
+                    <input type="number" id="setNumber" placeholder="Set No" inputmode="numeric" required />
                 </div>
                 <div class="full-row">
-                    <button type="submit" class="btn-primary">Seti Listeye Bas</button>
+                    <button type="submit" class="btn-primary">Seti Kaydet</button>
                 </div>
             </form>
         </div>
 
         <!-- Kayıtlar -->
         <div class="box">
-            <h2>📋 Antrenman Kayıtları</h2>
+            <h2>📋 Güncel Antrenman</h2>
             <div id="logsList">Yükleniyor...</div>
         </div>
 
@@ -369,28 +385,33 @@
         }
 
         async function loadLogs() {
-            const res = await fetch(API_URL);
-            const logs = await res.json();
             const container = document.getElementById('logsList');
-            container.innerHTML = '';
+            try {
+                const res = await fetch(API_URL);
+                if (!res.ok) throw new Error("Sunucu yanıt vermedi");
+                const logs = await res.json();
+                container.innerHTML = '';
 
-            if (logs.length === 0) {
-                container.innerHTML = '<p style="color:var(--muted); font-size:14px;">Henüz set kaydedilmedi.</p>';
-                return;
+                if (logs.length === 0) {
+                    container.innerHTML = '<p style="color:var(--muted); font-size:13px; text-align:center; padding:10px 0;">Henüz set girilmedi.</p>';
+                    return;
+                }
+
+                logs.forEach(log => {
+                    const item = document.createElement('div');
+                    item.className = 'log-item';
+                    item.innerHTML = `
+                        <div>
+                            <strong>${log.exerciseName}</strong> &bull; Set ${log.setNumber}
+                            <div class="details">${log.weight} KG &times; ${log.reps} Tekrar</div>
+                        </div>
+                        <button class="del-btn" onclick="deleteLog(${log.id})">Sil</button>
+                    `;
+                    container.appendChild(item);
+                });
+            } catch (err) {
+                container.innerHTML = '<p style="color:#ff4757; font-size:13px; text-align:center;">API bağlantısı bekleniyor...</p>';
             }
-
-            logs.forEach(log => {
-                const item = document.createElement('div');
-                item.className = 'log-item';
-                item.innerHTML = `
-        <div>
-          <strong>${log.exerciseName}</strong> &bull; Set ${log.setNumber}
-          <div class="details">${log.weight} KG &times; ${log.reps} Tekrar</div>
-        </div>
-        <button class="del-btn" onclick="deleteLog(${log.id})">Sil</button>
-      `;
-                container.appendChild(item);
-            });
         }
 
         async function checkPR() {
@@ -411,8 +432,10 @@
                 prBox.style.display = 'block';
                 prBox.style.borderColor = 'var(--accent)';
                 prBox.style.color = 'var(--accent)';
-                prBox.innerHTML = `🔥 <strong>${data.exercise}</strong> PR REKORU: <strong>${data.maxWeight} KG</strong>`;
-            } catch (e) { console.error(e); }
+                prBox.innerHTML = `🔥 <strong>${data.exercise}</strong> PR: <strong>${data.maxWeight} KG</strong>`;
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         document.getElementById('workoutForm').addEventListener('submit', async (e) => {
@@ -424,20 +447,28 @@
                 setNumber: parseInt(document.getElementById('setNumber').value)
             };
 
-            await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            document.getElementById('weight').value = '';
-            document.getElementById('reps').value = '';
-            loadLogs();
+                document.getElementById('weight').value = '';
+                document.getElementById('reps').value = '';
+                loadLogs();
+            } catch (err) {
+                alert("Kayıt eklenirken bir hata oluştu.");
+            }
         });
 
         async function deleteLog(id) {
-            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-            loadLogs();
+            try {
+                await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                loadLogs();
+            } catch (err) {
+                alert("Silme başarısız.");
+            }
         }
 
         loadLogs();
