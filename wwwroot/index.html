@@ -6,14 +6,12 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
-    <!-- iOS SAFARI RESMİ PNG İKONU VE STANDALONE APP MODU -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="IronTruck" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#0b090a" />
 
-    <!-- Apple Safari Fiziksel PNG İkon Yolları -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -204,6 +202,7 @@
             padding: 6px 9px;
             border-radius: 8px;
             white-space: nowrap;
+            cursor: pointer;
         }
 
         /* Ana Grid Düzeni */
@@ -318,13 +317,13 @@
         }
 
         .routine-banner h3 {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
             color: #fff;
         }
 
         .routine-banner p {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--text-muted);
             margin-top: 2px;
         }
@@ -379,7 +378,6 @@
             gap: 4px;
         }
 
-        /* Form */
         .workout-form {
             width: 100%;
             display: grid;
@@ -560,7 +558,6 @@
             margin-bottom: 12px;
         }
 
-        /* Resimli/İkonlu Menü Tabları */
         .drawer-tabs {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -770,7 +767,6 @@
             text-align: center;
         }
 
-        /* Manuel Kalori / Makro Formu */
         .custom-nutrition-box {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
@@ -909,40 +905,103 @@
             height: 100%;
             border: none;
         }
+
+        /* Program Düzenleyici Satırları */
+        .edit-routine-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 8px;
+            background: rgba(13, 11, 12, 0.6);
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- GİRİŞ & PROFİL MODALI -->
+    <!-- GİRİŞ & PROFİL DÜZENLEME MODALI -->
     <div class="modal-backdrop" id="onboardingModal">
-        <div class="modal-box" style="padding: 16px;">
-            <h3 style="color:#fff; font-size:15px; font-weight:800; margin-bottom:4px;">👤 Profilini Tanımla</h3>
-            <p style="color:var(--text-muted); font-size:11px; margin-bottom:12px;">Sana özel antrenman ve hedefleri
-                kaydet.</p>
+        <div class="modal-box" style="padding: 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <h3 style="color:#fff; font-size:16px; font-weight:800;">👤 Profilini Oluştur</h3>
+                <button onclick="closeOnboardingModal()"
+                    style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+            <p style="color:var(--text-muted); font-size:11px; margin-bottom:14px;">Adını ve vücut ölçülerini girerek
+                antrenman takibine başla.</p>
 
             <form id="onboardingForm">
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
                     <div style="grid-column: span 2;">
-                        <input type="text" id="obName" placeholder="Adın Soyadın" required />
+                        <span style="font-size:10px; font-weight:800; color:var(--text-muted);">ADINIZ VEYA
+                            LAKABINIZ</span>
+                        <input type="text" id="obName" placeholder="Örn: Burak, Ahmet, Şahin..." required />
                     </div>
                     <div>
-                        <input type="number" id="obAge" placeholder="Yaş" required />
+                        <span style="font-size:10px; font-weight:800; color:var(--text-muted);">YAŞ</span>
+                        <input type="number" id="obAge" placeholder="22" required />
                     </div>
                     <div>
-                        <input type="number" id="obHeight" placeholder="Boy (cm)" required />
+                        <span style="font-size:10px; font-weight:800; color:var(--text-muted);">BOY (CM)</span>
+                        <input type="number" id="obHeight" placeholder="178" required />
                     </div>
                     <div>
-                        <input type="number" id="obWeight" placeholder="Mevcut Kilo" step="0.5" inputmode="decimal"
-                            required />
+                        <span style="font-size:10px; font-weight:800; color:var(--text-muted);">MEVCUT KİLO (KG)</span>
+                        <input type="number" id="obWeight" placeholder="70" step="0.5" inputmode="decimal" required />
                     </div>
                     <div>
-                        <input type="number" id="obTargetWeight" placeholder="Hedef Kilo" step="0.5" inputmode="decimal"
+                        <span style="font-size:10px; font-weight:800; color:var(--text-muted);">HEDEF KİLO (KG)</span>
+                        <input type="number" id="obTargetWeight" placeholder="78" step="0.5" inputmode="decimal"
                             required />
                     </div>
                 </div>
-                <button type="submit" class="btn-submit">Kaydet & Başla</button>
+                <button type="submit" class="btn-submit">Profili Kaydet & Başla</button>
             </form>
+        </div>
+    </div>
+
+    <!-- ÖZEL ANTRENMAN DÜZENLEME MODALI (HERKES KENDİ PROGRAMINI YAZABİLİR) -->
+    <div class="modal-backdrop" id="editRoutineModal">
+        <div class="modal-box" style="padding: 16px; max-height: 85vh; overflow-y:auto;">
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+                <h3 style="color:#fff; font-size:15px; font-weight:800;" id="editModalDayTitle">Pazartesi Programını
+                    Düzenle</h3>
+                <button onclick="closeEditRoutineModal()"
+                    style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</button>
+            </div>
+
+            <div style="margin-bottom:12px;">
+                <span style="font-size:10px; font-weight:800; color:var(--text-muted);">GÜNÜN BAŞLIĞI / ODAĞI</span>
+                <input type="text" id="editDayTitleInput" placeholder="Örn: PUSH: GÖĞÜS & OMUZ"
+                    style="margin-top:4px;" />
+            </div>
+            <div style="margin-bottom:14px;">
+                <span style="font-size:10px; font-weight:800; color:var(--text-muted);">AÇIKLAMA</span>
+                <input type="text" id="editDayDescInput" placeholder="Örn: Ağır itiş ve kuvvet seansı"
+                    style="margin-top:4px;" />
+            </div>
+
+            <div
+                style="font-size:12px; font-weight:800; color:#fff; text-transform:uppercase; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                <span>Egzersizler</span>
+                <button type="button" onclick="addNewExerciseToEditList()"
+                    style="background:rgba(245,158,11,0.2); border:1px solid var(--accent); color:var(--accent); font-size:10px; font-weight:800; padding:4px 8px; border-radius:6px; cursor:pointer;">+
+                    Hareket Ekle</button>
+            </div>
+
+            <div id="editExerciseListContainer"
+                style="display:flex; flex-direction:column; gap:6px; margin-bottom:14px;"></div>
+
+            <div style="display:flex; gap:8px;">
+                <button type="button" class="btn-submit" onclick="saveCustomRoutine()" style="flex:1;">Kaydet &
+                    Uygula</button>
+                <button type="button" onclick="resetDayToDefault()"
+                    style="background:#26181d; border:1px solid #4a212c; color:#ff7875; padding:10px 14px; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer;">Sıfırla</button>
+            </div>
         </div>
     </div>
 
@@ -1000,7 +1059,7 @@
                 </div>
             </div>
 
-            <!-- 1. KAS GRUPLARI (GÖRSELLİ) -->
+            <!-- 1. KAS GRUPLARI -->
             <div class="tab-panel active" id="tabMuscles">
                 <div class="drawer-banner-header">Hedef Kas Grupları</div>
                 <div class="drawer-muscle-grid">
@@ -1119,7 +1178,7 @@
                 </div>
             </div>
 
-            <!-- 5. KALORİ & SERBEST MAKRO EKLEME -->
+            <!-- 5. KALORİ & SERBEST MAKRO -->
             <div class="tab-panel" id="tabCal">
                 <div class="drawer-banner-header">Günlük Beslenme & Makrolar</div>
 
@@ -1142,7 +1201,6 @@
                     </div>
                 </div>
 
-                <!-- Serbest Makro / Kalori Ekleme Kartı -->
                 <div class="custom-nutrition-box">
                     <div
                         style="font-size:11px; font-weight:800; color:#fff; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:5px;">
@@ -1200,11 +1258,11 @@
             <div class="brand-box">
                 <div class="brand-title">IRON<span>TRUCK</span> <span class="brand-badge">PRO</span></div>
                 <div class="user-greeting" id="headerGreetingText">Hoş geldin, <strong
-                        id="headerUserName">Şahin</strong></div>
+                        id="headerUserName">Sporcu</strong></div>
             </div>
         </div>
         <div class="header-badges">
-            <div class="meta-pill" onclick="openOnboardingModal()" id="userHeaderWeightBadge">67 KG</div>
+            <div class="meta-pill" onclick="openOnboardingModal()" id="userHeaderWeightBadge">KİLO GİR</div>
             <div class="meta-pill" onclick="openDrawerTabDirect('cal')" style="color:var(--gold);" id="headerCalBadge">0
                 KCAL</div>
         </div>
@@ -1213,7 +1271,7 @@
     <!-- ANA ANTRENMAN DÜZENİ -->
     <main class="main-container">
 
-        <!-- 1. SÜTUN: GÜNÜN PROGRAMI -->
+        <!-- 1. SÜTUN: GÜNÜN PROGRAMI VE DÜZENLEME BUTONU -->
         <section class="panel">
             <div class="day-selector" id="daySelector">
                 <div class="day-tab active" onclick="switchDay('mon', this)">Pzt</div>
@@ -1225,11 +1283,17 @@
             </div>
 
             <div class="routine-banner">
-                <div>
+                <div style="min-width:0;">
                     <h3 id="routineDayTitle">PUSH: GÖĞÜS & TRICEPS</h3>
                     <p id="routineDayDesc">Kuvvet ve hipertrofi seansı</p>
                 </div>
-                <span class="meta-pill" id="routineExerciseCount">4 Hareket</span>
+                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;">
+                    <span class="meta-pill" id="routineExerciseCount">4 Hareket</span>
+                    <button onclick="openEditRoutineModal()"
+                        style="background:rgba(245,158,11,0.18); border:1px solid var(--accent); color:var(--accent); font-size:10px; font-weight:800; padding:4px 8px; border-radius:6px; cursor:pointer;">
+                        ✏️ Programı Düzenle
+                    </button>
+                </div>
             </div>
 
             <div class="exercise-list" id="exerciseListContainer"></div>
@@ -1254,21 +1318,12 @@
             </div>
 
             <!-- Hızlı Seçim Butonları -->
-            <div class="quick-exercise-chips">
-                <span class="q-chip" onclick="quickSelect('Barbell Bench Press')">Bench Press</span>
-                <span class="q-chip" onclick="quickSelect('Incline Dumbbell Press')">Incline DB</span>
-                <span class="q-chip" onclick="quickSelect('Barbell Bent-Over Row')">Barbell Row</span>
-                <span class="q-chip" onclick="quickSelect('Lat Pulldown')">Lat Pulldown</span>
-                <span class="q-chip" onclick="quickSelect('Barbell Back Squat')">Squat</span>
-                <span class="q-chip" onclick="quickSelect('Deadlift')">Deadlift</span>
-                <span class="q-chip" onclick="quickSelect('Overhead Barbell Press')">Omuz Press</span>
-                <span class="q-chip" onclick="quickSelect('Barbell Biceps Curl')">Biceps Curl</span>
-                <span class="q-chip" onclick="quickSelect('Triceps Rope Pushdown')">Triceps Rope</span>
-            </div>
+            <div class="quick-exercise-chips" id="quickChipsContainer"></div>
 
             <form id="workoutForm" class="workout-form">
                 <div class="full-span">
-                    <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz" required />
+                    <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz (veya yukarıdan tıkla)"
+                        required />
                 </div>
                 <div>
                     <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
@@ -1301,7 +1356,7 @@
 
     </main>
 
-    <!-- ALT MOBİL NAVİGASYON BAR (KIRILMAYAN SAF SVG İKONLAR) -->
+    <!-- ALT MOBİL NAVİGASYON BAR -->
     <nav class="bottom-nav">
         <div class="b-nav-item active" onclick="scrollToWorkout()">
             <svg class="svg-icon" viewBox="0 0 24 24">
@@ -1358,80 +1413,63 @@
     <script>
         const API_URL = '/api/WorkoutLogs';
 
-        function scrollToWorkout() {
-            window.scrollTo({ top: document.getElementById('workoutSection').offsetTop - 10, behavior: 'smooth' });
-        }
-
-        function openDrawerTabDirect(tab) {
-            toggleDrawer();
-            const tabButtons = document.querySelectorAll('.d-tab');
-            if (tab === 'muscles') switchDrawerTab('muscles', tabButtons[0]);
-            if (tab === 'chart') switchDrawerTab('chart', tabButtons[1]);
-            if (tab === 'steps') switchDrawerTab('steps', tabButtons[2]);
-            if (tab === 'profile') switchDrawerTab('profile', tabButtons[3]);
-            if (tab === 'cal') switchDrawerTab('cal', tabButtons[4]);
-        }
-
-        function quickSelect(name) {
-            document.getElementById('exerciseName').value = name;
-            const selectEl = document.getElementById('exerciseChartSelect');
-            if (selectEl) {
-                let exists = false;
-                for (let i = 0; i < selectEl.options.length; i++) {
-                    if (selectEl.options[i].value === name) {
-                        selectEl.selectedIndex = i;
-                        exists = true;
-                        break;
-                    }
-                }
-                if (!exists) {
-                    const opt = document.createElement('option');
-                    opt.value = name;
-                    opt.innerText = name;
-                    selectEl.appendChild(opt);
-                    selectEl.value = name;
-                }
-                updateExerciseChart();
-            }
-        }
-
+        /* 1. DİNAMİK KULLANICI PROFİLİ MOTORU (KİMSEDE SABİT İSİM ÇIKMAZ) */
         function getProfile() {
-            return JSON.parse(localStorage.getItem('ironTruckUserProfile')) || {
-                name: "Şahin",
-                age: 21,
-                height: 175,
-                weight: 67,
-                target: 75
+            const stored = localStorage.getItem('ironTruckUserProfile');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return {
+                name: "Sporcu",
+                age: null,
+                height: null,
+                weight: null,
+                target: null,
+                isNewUser: true
             };
         }
 
         function initProfile() {
             const p = getProfile();
             document.getElementById('headerUserName').innerText = p.name;
-            document.getElementById('userHeaderWeightBadge').innerText = `${p.weight} KG`;
+
+            if (p.weight) {
+                document.getElementById('userHeaderWeightBadge').innerText = `${p.weight} KG`;
+            } else {
+                document.getElementById('userHeaderWeightBadge').innerText = "KİLO GİR";
+            }
 
             document.getElementById('pNameDisp').innerText = p.name;
-            document.getElementById('pAgeHeightDisp').innerText = `${p.age} Yaş / ${p.height} cm`;
-            document.getElementById('pWeightDisp').innerText = `${p.weight} kg`;
-            document.getElementById('pTargetDisp').innerText = `${p.target} kg`;
+            document.getElementById('pAgeHeightDisp').innerText = (p.age && p.height) ? `${p.age} Yaş / ${p.height} cm` : "Belirtilmedi";
+            document.getElementById('pWeightDisp').innerText = p.weight ? `${p.weight} kg` : "-";
+            document.getElementById('pTargetDisp').innerText = p.target ? `${p.target} kg` : "-";
 
-            const hMeter = p.height / 100;
-            const bmi = (p.weight / (hMeter * hMeter)).toFixed(1);
-            document.getElementById('pBmiDisp').innerText = `${bmi} (Normal)`;
+            if (p.height && p.weight) {
+                const hMeter = p.height / 100;
+                const bmi = (p.weight / (hMeter * hMeter)).toFixed(1);
+                document.getElementById('pBmiDisp').innerText = `${bmi} (Normal)`;
+            } else {
+                document.getElementById('pBmiDisp').innerText = "-";
+            }
 
-            if (!localStorage.getItem('ironTruckUserProfile')) {
-                openOnboardingModal();
+            // Eğer ilk defa giriyorsa hoş geldin modalını aç
+            if (p.isNewUser) {
+                setTimeout(() => openOnboardingModal(), 600);
             }
         }
 
         function openOnboardingModal() {
             const p = getProfile();
-            document.getElementById('obName').value = p.name;
-            document.getElementById('obAge').value = p.age;
-            document.getElementById('obHeight').value = p.height;
-            document.getElementById('obWeight').value = p.weight;
-            document.getElementById('obTargetWeight').value = p.target;
+            document.getElementById('obName').value = p.isNewUser ? "" : p.name;
+            document.getElementById('obAge').value = p.age || "";
+            document.getElementById('obHeight').value = p.height || "";
+            document.getElementById('obWeight').value = p.weight || "";
+            document.getElementById('obTargetWeight').value = p.target || "";
             document.getElementById('onboardingModal').style.display = 'flex';
+        }
+
+        function closeOnboardingModal() {
+            document.getElementById('onboardingModal').style.display = 'none';
         }
 
         document.getElementById('onboardingForm').addEventListener('submit', (e) => {
@@ -1440,110 +1478,17 @@
                 name: document.getElementById('obName').value.trim() || "Sporcu",
                 age: parseInt(document.getElementById('obAge').value) || 20,
                 height: parseFloat(document.getElementById('obHeight').value) || 175,
-                weight: parseFloat(document.getElementById('obWeight').value) || 67,
-                target: parseFloat(document.getElementById('obTargetWeight').value) || 75
+                weight: parseFloat(document.getElementById('obWeight').value) || 70,
+                target: parseFloat(document.getElementById('obTargetWeight').value) || 75,
+                isNewUser: false
             };
             localStorage.setItem('ironTruckUserProfile', JSON.stringify(profile));
-            document.getElementById('onboardingModal').style.display = 'none';
+            closeOnboardingModal();
             initProfile();
         });
 
-        function toggleDrawer() {
-            document.getElementById('drawerOverlay').classList.toggle('open');
-        }
-
-        function closeDrawer(e) {
-            if (e.target.id === 'drawerOverlay') toggleDrawer();
-        }
-
-        function switchDrawerTab(tabName, el) {
-            document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            if (el) el.classList.add('active');
-
-            if (tabName === 'muscles') document.getElementById('tabMuscles').classList.add('active');
-            if (tabName === 'chart') {
-                document.getElementById('tabChart').classList.add('active');
-                setTimeout(() => {
-                    updateExerciseChart();
-                }, 100);
-            }
-            if (tabName === 'steps') document.getElementById('tabSteps').classList.add('active');
-            if (tabName === 'profile') document.getElementById('tabProfile').classList.add('active');
-            if (tabName === 'cal') document.getElementById('tabCal').classList.add('active');
-        }
-
-        let exerciseChart = null;
-        let globalLogs = [];
-
-        function updateExerciseChart() {
-            const selectEl = document.getElementById('exerciseChartSelect');
-            if (!selectEl) return;
-            const exName = selectEl.value;
-            const canvas = document.getElementById('exerciseSpecificChart');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            const filteredLogs = globalLogs.filter(l =>
-                l.exerciseName.toLowerCase().trim() === exName.toLowerCase().trim()
-            );
-
-            let labels = [];
-            let dataPoints = [];
-
-            if (filteredLogs.length > 0) {
-                labels = filteredLogs.map((l, i) => `S${l.setNumber || (i + 1)}`);
-                dataPoints = filteredLogs.map(l => l.weight);
-            } else {
-                labels = ['Kayıt Yok'];
-                dataPoints = [0];
-            }
-
-            if (exerciseChart) {
-                exerciseChart.destroy();
-            }
-
-            exerciseChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: `${exName}`,
-                        data: dataPoints,
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.18)',
-                        borderWidth: 2.5,
-                        pointBackgroundColor: '#ea580c',
-                        pointBorderColor: '#fff',
-                        pointRadius: 4,
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw} KG` } }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: 'rgba(61, 51, 57, 0.3)' },
-                            ticks: { color: '#a3989e', font: { size: 9 } }
-                        },
-                        y: {
-                            grid: { color: 'rgba(61, 51, 57, 0.3)' },
-                            ticks: { color: '#a3989e', font: { size: 9 } }
-                        }
-                    }
-                }
-            });
-
-            exerciseChart.resize();
-        }
-
-        const routineTemplates = {
+        /* 2. KULLANICIYA ÖZEL PROGRAM SİSTEMİ (CUSTOM ROUTINES) */
+        const defaultRoutineTemplates = {
             mon: {
                 title: "PUSH: GÖĞÜS & TRICEPS", desc: "Ağır itiş & bileşik seansı", exercises: [
                     { name: "Barbell Bench Press", id: "rT7DgCr-3pg", target: "4 Set x 6-8 Tekrar" },
@@ -1594,44 +1539,13 @@
             }
         };
 
-        const muscleLibrary = {
-            chest: [
-                { name: "Barbell Bench Press", id: "rT7DgCr-3pg", target: "Bileşik • Güç" },
-                { name: "Incline Dumbbell Press", id: "8iPEnn-ltC8", target: "Üst Göğüs" },
-                { name: "Cable Chest Fly", id: "Z57CtFmRMxA", target: "İzolasyon" }
-            ],
-            back: [
-                { name: "Barbell Bent-Over Row", id: "9efgc2TrvEg", target: "Kalınlık" },
-                { name: "Lat Pulldown", id: "CAwf7n6Luuc", target: "Genişlik" },
-                { name: "Deadlift", id: "op9kVnSso6Q", target: "Tüm Sırt" }
-            ],
-            shoulders: [
-                { name: "Overhead Barbell Press", id: "2yjwXTZQDDI", target: "Ön Omuz" },
-                { name: "Dumbbell Lateral Raise", id: "3VcKaXpzqRo", target: "Yan Omuz" },
-                { name: "Face Pull", id: "rep-qVOkqgk", target: "Arka Omuz" }
-            ],
-            biceps: [
-                { name: "Barbell Biceps Curl", id: "ykJmrZ5v0Oo", target: "Kol Kütlesi" },
-                { name: "Dumbbell Hammer Curl", id: "zC3nLlEvin4", target: "Brachialis" }
-            ],
-            triceps: [
-                { name: "Triceps Rope Pushdown", id: "vB5OHsJ3EME", target: "İzolasyon" },
-                { name: "Skull Crusher", id: "d_KZxkH_toI", target: "Kütle" }
-            ],
-            abs: [
-                { name: "Hanging Leg Raise", id: "hdng3Nm1x_E", target: "Alt Karın" },
-                { name: "Cable Crunch", id: "pZapRXZcggU", target: "Üst Karın" }
-            ],
-            quads: [
-                { name: "Barbell Back Squat", id: "bEv6CCg2BC8", target: "Ön Bacak Güç" },
-                { name: "Leg Press", id: "IZxyjW7MPJQ", target: "Hipertrofi" }
-            ],
-            hams: [
-                { name: "Romanian Deadlift", id: "JCXUYuzwNrM", target: "Hamstring" },
-                { name: "Standing Calf Raise", id: "-M4-G8p8fmc", target: "Baldır / Kalf" }
-            ]
-        };
+        function getUserRoutines() {
+            const stored = localStorage.getItem('ironTruckUserRoutines');
+            if (stored) return JSON.parse(stored);
+            return JSON.parse(JSON.stringify(defaultRoutineTemplates));
+        }
 
+        let userRoutines = getUserRoutines();
         let currentActiveDay = 'mon';
 
         function switchDay(day, el) {
@@ -1642,22 +1556,27 @@
         }
 
         function renderDayRoutine() {
-            const plan = routineTemplates[currentActiveDay];
+            const plan = userRoutines[currentActiveDay] || { title: "DİNLENME GÜNÜ", desc: "Serbest gün", exercises: [] };
             document.getElementById('routineDayTitle').innerText = plan.title;
             document.getElementById('routineDayDesc').innerText = plan.desc;
             document.getElementById('routineExerciseCount').innerText = `${plan.exercises.length} Hareket`;
 
             const list = document.getElementById('exerciseListContainer');
             list.innerHTML = '';
+
+            if (plan.exercises.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted); font-size:12px; text-align:center; padding:16px;">Bu gün için hareket tanımlanmamış. "Programı Düzenle"ye basarak istediğin hareketleri ekleyebilirsin.</p>';
+            }
+
             plan.exercises.forEach(ex => {
                 const card = document.createElement('div');
                 card.className = 'exercise-card';
                 card.innerHTML = `
                     <div style="min-width:0;">
                         <div class="title">${ex.name}</div>
-                        <div class="sub">${ex.target}</div>
+                        <div class="sub">${ex.target || '3 Set'}</div>
                     </div>
-                    <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')">
+                    <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id || 'rT7DgCr-3pg'}')">
                         <svg class="svg-icon" style="width:12px; height:12px; fill:var(--accent);" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         <span>Video</span>
                     </button>
@@ -1667,45 +1586,250 @@
                     scrollToWorkout();
                 };
                 list.appendChild(card);
+            });
+
+            renderQuickChips();
+        }
+
+        function renderQuickChips() {
+            const container = document.getElementById('quickChipsContainer');
+            container.innerHTML = '';
+            const plan = userRoutines[currentActiveDay];
+
+            // Günün kendi hareketlerini en başa çip olarak koy
+            if (plan && plan.exercises) {
+                plan.exercises.forEach(ex => {
+                    const chip = document.createElement('span');
+                    chip.className = 'q-chip';
+                    chip.innerText = ex.name;
+                    chip.onclick = () => quickSelect(ex.name);
+                    container.appendChild(chip);
+                });
+            }
+
+            // Ek genel popüler hareketler
+            const generalList = ["Bench Press", "Squat", "Deadlift", "Omuz Press", "Biceps Curl"];
+            generalList.forEach(name => {
+                const chip = document.createElement('span');
+                chip.className = 'q-chip';
+                chip.innerText = name;
+                chip.onclick = () => quickSelect(name);
+                container.appendChild(chip);
             });
         }
 
-        function selectMuscleGroup(key, el) {
-            document.querySelectorAll('.d-muscle-btn').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
+        /* 3. PROGRAM DÜZENLEME MODAL FONKSİYONLARI */
+        const dayNamesTr = { mon: "Pazartesi", tue: "Salı", wed: "Çarşamba", thu: "Perşembe", fri: "Cuma", sat: "Cumartesi" };
 
-            const exercises = muscleLibrary[key];
-            if (!exercises) return;
+        function openEditRoutineModal() {
+            const plan = userRoutines[currentActiveDay];
+            document.getElementById('editModalDayTitle').innerText = `${dayNamesTr[currentActiveDay]} Programını Düzenle`;
+            document.getElementById('editDayTitleInput').value = plan.title;
+            document.getElementById('editDayDescInput').value = plan.desc;
 
-            document.getElementById('routineDayTitle').innerText = `${key.toUpperCase()} ÇALIŞMASI`;
-            document.getElementById('routineDayDesc').innerText = "Menüden seçilen egzersizler";
-            document.getElementById('routineExerciseCount').innerText = `${exercises.length} Hareket`;
+            const container = document.getElementById('editExerciseListContainer');
+            container.innerHTML = '';
 
-            const list = document.getElementById('exerciseListContainer');
-            list.innerHTML = '';
-            exercises.forEach(ex => {
-                const card = document.createElement('div');
-                card.className = 'exercise-card';
-                card.innerHTML = `
-                    <div style="min-width:0;">
-                        <div class="title">${ex.name}</div>
-                        <div class="sub">${ex.target}</div>
-                    </div>
-                    <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')">
-                        <svg class="svg-icon" style="width:12px; height:12px; fill:var(--accent);" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        <span>Video</span>
-                    </button>
-                `;
-                card.onclick = () => {
-                    quickSelect(ex.name);
-                    toggleDrawer();
-                    scrollToWorkout();
-                };
-                list.appendChild(card);
+            plan.exercises.forEach((ex, idx) => {
+                appendEditRow(ex.name, ex.target, ex.id);
             });
+
+            document.getElementById('editRoutineModal').style.display = 'flex';
+        }
+
+        function closeEditRoutineModal() {
+            document.getElementById('editRoutineModal').style.display = 'none';
+        }
+
+        function appendEditRow(name = "", target = "", id = "") {
+            const container = document.getElementById('editExerciseListContainer');
+            const row = document.createElement('div');
+            row.className = 'edit-routine-row';
+            row.innerHTML = `
+                <input type="text" class="edit-ex-name" placeholder="Egzersiz Adı" value="${name}" style="flex:1.4; padding:8px;" />
+                <input type="text" class="edit-ex-target" placeholder="Set x Tekrar" value="${target || '3 Set x 10 Tekrar'}" style="flex:1; padding:8px;" />
+                <input type="hidden" class="edit-ex-id" value="${id || 'rT7DgCr-3pg'}" />
+                <button type="button" onclick="this.parentElement.remove()" style="background:#2d1a1e; border:1px solid #4a212c; color:#ff4d4f; padding:8px 10px; border-radius:6px; cursor:pointer; font-weight:800;">&times;</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function addNewExerciseToEditList() {
+            appendEditRow("", "3 Set x 10 Tekrar", "rT7DgCr-3pg");
+        }
+
+        function saveCustomRoutine() {
+            const title = document.getElementById('editDayTitleInput').value.trim() || `${dayNamesTr[currentActiveDay]} Antrenmanı`;
+            const desc = document.getElementById('editDayDescInput').value.trim() || "Özel antrenman seansı";
+
+            const names = document.querySelectorAll('.edit-ex-name');
+            const targets = document.querySelectorAll('.edit-ex-target');
+            const ids = document.querySelectorAll('.edit-ex-id');
+
+            const exercises = [];
+            for (let i = 0; i < names.length; i++) {
+                const n = names[i].value.trim();
+                if (n) {
+                    exercises.push({
+                        name: n,
+                        target: targets[i].value.trim() || "3 Set x 10 Tekrar",
+                        id: ids[i].value.trim() || "rT7DgCr-3pg"
+                    });
+                }
+            }
+
+            userRoutines[currentActiveDay] = {
+                title: title,
+                desc: desc,
+                exercises: exercises
+            };
+
+            localStorage.setItem('ironTruckUserRoutines', JSON.stringify(userRoutines));
+            closeEditRoutineModal();
+            renderDayRoutine();
+
+            confetti({
+                particleCount: 60,
+                spread: 60,
+                origin: { y: 0.7 },
+                colors: ['#f59e0b', '#10b981', '#ffffff']
+            });
+        }
+
+        function resetDayToDefault() {
+            if (confirm("Bu günün programını varsayılan ayarlara döndürmek istiyor musun?")) {
+                userRoutines[currentActiveDay] = JSON.parse(JSON.stringify(defaultRoutineTemplates[currentActiveDay]));
+                localStorage.setItem('ironTruckUserRoutines', JSON.stringify(userRoutines));
+                closeEditRoutineModal();
+                renderDayRoutine();
+            }
+        }
+
+        /* 4. GENEL NAVİGASYON VE DİĞER KONTROLLER */
+        function scrollToWorkout() {
+            window.scrollTo({ top: document.getElementById('workoutSection').offsetTop - 10, behavior: 'smooth' });
+        }
+
+        function openDrawerTabDirect(tab) {
             toggleDrawer();
+            const tabButtons = document.querySelectorAll('.d-tab');
+            if (tab === 'muscles') switchDrawerTab('muscles', tabButtons[0]);
+            if (tab === 'chart') switchDrawerTab('chart', tabButtons[1]);
+            if (tab === 'steps') switchDrawerTab('steps', tabButtons[2]);
+            if (tab === 'profile') switchDrawerTab('profile', tabButtons[3]);
+            if (tab === 'cal') switchDrawerTab('cal', tabButtons[4]);
         }
 
+        function quickSelect(name) {
+            document.getElementById('exerciseName').value = name;
+            const selectEl = document.getElementById('exerciseChartSelect');
+            if (selectEl) {
+                let exists = false;
+                for (let i = 0; i < selectEl.options.length; i++) {
+                    if (selectEl.options[i].value === name) {
+                        selectEl.selectedIndex = i;
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.innerText = name;
+                    selectEl.appendChild(opt);
+                    selectEl.value = name;
+                }
+                updateExerciseChart();
+            }
+        }
+
+        function toggleDrawer() {
+            document.getElementById('drawerOverlay').classList.toggle('open');
+        }
+
+        function closeDrawer(e) {
+            if (e.target.id === 'drawerOverlay') toggleDrawer();
+        }
+
+        function switchDrawerTab(tabName, el) {
+            document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            if (tabName === 'muscles') document.getElementById('tabMuscles').classList.add('active');
+            if (tabName === 'chart') {
+                document.getElementById('tabChart').classList.add('active');
+                setTimeout(() => updateExerciseChart(), 100);
+            }
+            if (tabName === 'steps') document.getElementById('tabSteps').classList.add('active');
+            if (tabName === 'profile') document.getElementById('tabProfile').classList.add('active');
+            if (tabName === 'cal') document.getElementById('tabCal').classList.add('active');
+        }
+
+        /* 5. GRAFİK MOTORU */
+        let exerciseChart = null;
+        let globalLogs = [];
+
+        function updateExerciseChart() {
+            const selectEl = document.getElementById('exerciseChartSelect');
+            if (!selectEl) return;
+            const exName = selectEl.value;
+            const canvas = document.getElementById('exerciseSpecificChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const filteredLogs = globalLogs.filter(l =>
+                l.exerciseName.toLowerCase().trim() === exName.toLowerCase().trim()
+            );
+
+            let labels = [];
+            let dataPoints = [];
+
+            if (filteredLogs.length > 0) {
+                labels = filteredLogs.map((l, i) => `S${l.setNumber || (i + 1)}`);
+                dataPoints = filteredLogs.map(l => l.weight);
+            } else {
+                labels = ['Kayıt Yok'];
+                dataPoints = [0];
+            }
+
+            if (exerciseChart) exerciseChart.destroy();
+
+            exerciseChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `${exName}`,
+                        data: dataPoints,
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.18)',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#ea580c',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw} KG` } }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(61, 51, 57, 0.3)' }, ticks: { color: '#a3989e', font: { size: 9 } } },
+                        y: { grid: { color: 'rgba(61, 51, 57, 0.3)' }, ticks: { color: '#a3989e', font: { size: 9 } } }
+                    }
+                }
+            });
+
+            exerciseChart.resize();
+        }
+
+        /* 6. BESLENME & SERBEST MAKRO EKLEME */
         const foods = [
             { name: "Izgara Tavuk Göğsü (150g)", cal: 247, p: 46, c: 0, f: 5, img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=150&auto=format&fit=crop&q=80" },
             { name: "Beyaz Pirinç Pilavı (200g)", cal: 260, p: 5, c: 57, f: 1, img: "https://images.unsplash.com/photo-1516684732162-798a0062be99?w=150&auto=format&fit=crop&q=80" },
@@ -1805,6 +1929,7 @@
             document.getElementById('headerCalBadge').innerText = `${nutrition.cal} KCAL`;
         }
 
+        /* 7. ADIMSAYAR SİSTEMİ */
         let stepCount = parseInt(localStorage.getItem('ironTruckStepWarm')) || 0;
         let sensorActive = false;
         let lastStepTime = 0;
@@ -1861,6 +1986,7 @@
             updateStepDisplay();
         }
 
+        /* 8. VİDEO MODAL */
         let pickedName = "";
         function openVideo(name, id) {
             pickedName = name;
@@ -1896,6 +2022,7 @@
             setTimeout(() => banner.style.display = 'none', 5000);
         }
 
+        /* 9. SET KAYITLARI & API BAĞLANTISI */
         async function fetchLogs() {
             const list = document.getElementById('logsList');
             try {
