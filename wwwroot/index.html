@@ -5,11 +5,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#0b090a" />
+
+    <!-- iOS SAFARI STANDALONE / APP MODU ETİKETLERİ -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="IronTruck" />
+    <link rel="apple-touch-icon"
+        href="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=180&auto=format&fit=crop" />
+
+    <!-- Standart PWA ve Android Manifest -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#0b090a" />
+    <link rel="manifest" href="/manifest.json" />
+
     <title>IRONTRUCK PRO</title>
 
+    <!-- Google Fonts, FontAwesome & Kütüphaneler -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
@@ -58,10 +69,12 @@
             background-repeat: no-repeat;
             color: var(--text);
             padding: 12px;
-            padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+            /* iOS Çentik ve Alt Çizgi Koruma Alanları */
+            padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
             padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 85px);
             min-height: 100vh;
             user-select: none;
+            -webkit-touch-callout: none;
         }
 
         /* Top Header */
@@ -306,7 +319,8 @@
             border-radius: 10px;
             padding: 13px;
             color: #fff;
-            font-size: 15px;
+            font-size: 16px;
+            /* iOS'ta otomatik zoom'u engellemek için minimum 16px olmalıdır */
             outline: none;
         }
 
@@ -426,6 +440,7 @@
             border-right: 1px solid var(--border);
             z-index: 10000;
             padding: 20px 16px;
+            padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
             overflow-y: auto;
             transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
             display: flex;
@@ -765,10 +780,12 @@
                         <input type="number" id="obHeight" placeholder="Boy (cm)" required />
                     </div>
                     <div>
-                        <input type="number" id="obWeight" placeholder="Mevcut Kilo" step="0.5" required />
+                        <input type="number" id="obWeight" placeholder="Mevcut Kilo" step="0.5" inputmode="decimal"
+                            required />
                     </div>
                     <div>
-                        <input type="number" id="obTargetWeight" placeholder="Hedef Kilo" step="0.5" required />
+                        <input type="number" id="obTargetWeight" placeholder="Hedef Kilo" step="0.5" inputmode="decimal"
+                            required />
                     </div>
                 </div>
                 <button type="submit" class="btn-submit">Kaydet & Başla</button>
@@ -1056,6 +1073,21 @@
 
     <script>
         const API_URL = '/api/WorkoutLogs';
+
+        /* iOS Safari Standalone Modunda Dışarıya Link Açılmasını Engelleyen Kilit */
+        if (("standalone" in window.navigator) && window.navigator.standalone) {
+            var noddy, remotes = false;
+            document.addEventListener('click', function (event) {
+                noddy = event.target;
+                while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
+                    noddy = noddy.parentNode;
+                }
+                if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes)) {
+                    event.preventDefault();
+                    document.location.href = noddy.href;
+                }
+            }, false);
+        }
 
         function scrollToWorkout() {
             window.scrollTo({ top: document.getElementById('workoutSection').offsetTop - 20, behavior: 'smooth' });
