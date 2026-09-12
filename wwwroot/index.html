@@ -5,14 +5,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-
     <meta name="theme-color" content="#0a0a0c" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="IronTrack" />
-    <meta name="mobile-web-app-capable" content="yes" />
+    <title>IronTrack 3D Anatomy Pro</title>
 
-    <title>IronTrack Pro - Gym Tracker</title>
+    <!-- Three.js Kütüphanesi -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
         :root {
             --bg: #0a0a0c;
@@ -24,7 +25,6 @@
             --gold: #ffa502;
             --text: #f5f6fa;
             --muted: #8a8f9d;
-            --success: #2ed573;
         }
 
         * {
@@ -43,7 +43,6 @@
             padding-left: calc(env(safe-area-inset-left, 0px) + 14px);
             padding-right: calc(env(safe-area-inset-right, 0px) + 14px);
             min-height: 100vh;
-            user-select: none;
         }
 
         .container {
@@ -51,182 +50,79 @@
             margin: 0 auto;
         }
 
-        /* Hero */
-        .hero {
-            background: linear-gradient(145deg, #16181d, #0d0e11);
-            border: 1px solid #282c35;
+        /* 3D Model Bölümü */
+        .viewer-box {
+            background: radial-gradient(circle at center, #1c1f26 0%, #0d0e11 100%);
+            border: 1px solid var(--card-border);
             border-radius: 18px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            overflow: hidden;
+            margin-bottom: 14px;
+            position: relative;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            margin-bottom: 14px;
         }
 
-        .hero-text h1 {
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+        #canvas3d {
+            width: 100%;
+            height: 240px;
+            display: block;
+            touch-action: none;
+            cursor: grab;
         }
 
-        .hero-text h1 span {
-            color: var(--accent);
-            text-shadow: 0 0 15px var(--accent-glow);
+        #canvas3d:active {
+            cursor: grabbing;
         }
 
-        .hero-text p {
-            color: var(--muted);
+        .viewer-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 11px;
-            margin-top: 3px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .animation-box {
-            width: 90px;
-            height: 75px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .barbell {
-            animation: benchPress 1.8s ease-in-out infinite alternate;
-        }
-
-        .arms {
-            animation: armPush 1.8s ease-in-out infinite alternate;
-            transform-origin: 65px 70px;
-        }
-
-        @keyframes benchPress {
-            0% {
-                transform: translateY(0px);
-            }
-
-            100% {
-                transform: translateY(22px);
-            }
-        }
-
-        @keyframes armPush {
-            0% {
-                transform: scaleY(1);
-            }
-
-            100% {
-                transform: scaleY(0.7);
-            }
-        }
-
-        /* Program Seçim Sekmeleri (PPL) */
-        .split-tabs {
-            display: flex;
-            background: #121316;
-            padding: 4px;
+            color: var(--muted);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 10px;
             border-radius: 12px;
-            border: 1px solid var(--card-border);
-            margin-bottom: 14px;
-            gap: 4px;
-        }
-
-        .split-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-            font-size: 13px;
-            font-weight: 700;
-            border-radius: 9px;
-            cursor: pointer;
-            color: var(--muted);
-            transition: all 0.2s;
-        }
-
-        .split-tab.active {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 2px 10px var(--accent-glow);
-        }
-
-        /* Dashboard Özet Sayaçları */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            padding: 12px 16px;
-            text-align: center;
-        }
-
-        .stat-card .label {
-            font-size: 11px;
-            color: var(--muted);
+            pointer-events: none;
             text-transform: uppercase;
-            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        .stat-card .val {
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            margin-top: 4px;
-        }
-
-        .stat-card .val span {
-            color: var(--accent);
-            font-size: 13px;
-        }
-
-        /* Rest Timer Floating Bar */
-        .timer-card {
-            background: #14171d;
-            border: 1px solid #282d38;
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-
-        .timer-display {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--gold);
-            letter-spacing: 1px;
-        }
-
-        .timer-actions {
+        /* Kas Seçim Hapları */
+        .muscle-selector {
             display: flex;
             gap: 6px;
+            overflow-x: auto;
+            padding: 10px 14px;
+            background: #111216;
+            border-bottom: 1px solid var(--card-border);
+            scrollbar-width: none;
         }
 
-        .timer-btn {
-            background: #232732;
-            border: none;
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 8px;
+        .muscle-selector::-webkit-scrollbar {
+            display: none;
+        }
+
+        .m-tag {
+            background: #191b22;
+            border: 1px solid #282d38;
+            padding: 7px 13px;
+            border-radius: 16px;
             font-size: 12px;
             font-weight: 700;
+            color: #b0b5c0;
+            white-space: nowrap;
             cursor: pointer;
         }
 
-        .timer-btn:active {
+        .m-tag.active {
             background: var(--accent);
             color: #000;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
         }
 
-        /* Standart Kutular */
+        /* Egzersiz Öneri Kartları */
         .box {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -243,41 +139,93 @@
             align-items: center;
             gap: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        /* Quick Tags */
-        .quick-tags {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 12px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .quick-tags::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tag {
-            background: #191b22;
-            border: 1px solid #282d38;
-            padding: 7px 12px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-weight: 600;
+        .ex-card {
+            background: #090a0d;
+            border: 1px solid #232732;
+            border-radius: 10px;
+            padding: 10px;
             cursor: pointer;
-            color: #b0b5c0;
-            white-space: nowrap;
+            transition: all 0.2s;
         }
 
-        .tag:active {
-            background: var(--accent);
-            color: #000;
+        .ex-card:hover,
+        .ex-card:active {
+            border-color: var(--accent);
+            background: #15171e;
         }
 
-        /* Form & Canlı 1RM */
+        .ex-card .title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .ex-card .meta {
+            font-size: 11px;
+            color: var(--accent);
+            margin-top: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Form */
         .grid-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -301,21 +249,6 @@
 
         input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 8px var(--accent-glow);
-        }
-
-        .live-preview {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--muted);
-            padding: 4px 6px;
-            font-weight: 600;
-        }
-
-        .live-preview span {
-            color: var(--accent);
-            font-weight: 700;
         }
 
         button.btn-primary {
@@ -328,30 +261,21 @@
             font-weight: 800;
             font-size: 14px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             cursor: pointer;
-            box-shadow: 0 4px 16px var(--accent-glow);
         }
 
-        button.btn-primary:active {
-            transform: scale(0.98);
+        /* Rest Timer Bar */
+        .timer-bar {
+            background: #14171d;
+            border: 1px solid #282d38;
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
         }
 
-        /* PR Card */
-        .pr-card {
-            display: none;
-            margin-top: 10px;
-            padding: 12px;
-            border-radius: 10px;
-            background: rgba(255, 107, 0, 0.08);
-            border: 1px dashed var(--accent);
-            color: var(--accent);
-            text-align: center;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        /* Set Listesi */
         .log-item {
             display: flex;
             justify-content: space-between;
@@ -363,29 +287,6 @@
             margin-bottom: 8px;
             border-left: 4px solid var(--accent);
         }
-
-        .log-item strong {
-            font-size: 14px;
-            color: #fff;
-        }
-
-        .log-item .details {
-            color: var(--accent);
-            font-size: 12px;
-            font-weight: 700;
-            margin-top: 3px;
-        }
-
-        .del-btn {
-            background: #1f1113;
-            color: #ff4757;
-            border: 1px solid #3d1b1f;
-            padding: 7px 12px;
-            border-radius: 7px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: 700;
-        }
     </style>
 </head>
 
@@ -393,109 +294,60 @@
 
     <div class="container">
 
-        <div class="hero">
-            <div class="hero-text">
-                <h1>IRON<span>TRACK</span></h1>
-                <p>Hardcore Antrenman & Set Takibi</p>
+        <!-- 3D Anatomi Görüntüleyici -->
+        <div class="viewer-box">
+            <div class="muscle-selector">
+                <span class="m-tag active" onclick="selectMuscle('chest', this)">GÖĞÜS</span>
+                <span class="m-tag" onclick="selectMuscle('back', this)">SIRT</span>
+                <span class="m-tag" onclick="selectMuscle('shoulders', this)">OMUZ</span>
+                <span class="m-tag" onclick="selectMuscle('biceps', this)">BICEPS</span>
+                <span class="m-tag" onclick="selectMuscle('triceps', this)">TRICEPS</span>
+                <span class="m-tag" onclick="selectMuscle('legs', this)">BACAK</span>
             </div>
 
-            <div class="animation-box">
-                <svg viewBox="0 0 130 100" width="100%" height="100%">
-                    <rect x="25" y="72" width="80" height="8" rx="3" fill="#2d3436" />
-                    <rect x="35" y="80" width="6" height="15" fill="#14171a" />
-                    <rect x="89" y="80" width="6" height="15" fill="#14171a" />
-                    <rect x="40" y="66" width="50" height="7" rx="3" fill="#ff6b00" />
-                    <circle cx="34" cy="69" r="6" fill="#dfe6e9" />
-                    <g class="arms">
-                        <line x1="55" y1="67" x2="65" y2="40" stroke="#f1f2f6" stroke-width="4"
-                            stroke-linecap="round" />
-                        <line x1="75" y1="67" x2="65" y2="40" stroke="#f1f2f6" stroke-width="4"
-                            stroke-linecap="round" />
-                    </g>
-                    <g class="barbell">
-                        <line x1="15" y1="40" x2="115" y2="40" stroke="#ced6e0" stroke-width="3"
-                            stroke-linecap="round" />
-                        <rect x="22" y="24" width="6" height="32" rx="2" fill="#ff6b00" />
-                        <rect x="29" y="28" width="4" height="24" rx="2" fill="#cc5500" />
-                        <rect x="102" y="24" width="6" height="32" rx="2" fill="#ff6b00" />
-                        <rect x="97" y="28" width="4" height="24" rx="2" fill="#cc5500" />
-                    </g>
-                </svg>
-            </div>
+            <canvas id="canvas3d"></canvas>
+            <div class="viewer-hint">🔄 Döndürmek için kaydır</div>
         </div>
 
-        <!-- PPL Gün Seçimi -->
-        <div class="split-tabs">
-            <div class="split-tab active" onclick="setProgram('push', this)">🔥 PUSH (İTİŞ)</div>
-            <div class="split-tab" onclick="setProgram('pull', this)">⚡ PULL (ÇEKİŞ)</div>
-            <div class="split-tab" onclick="setProgram('legs', this)">💥 LEGS (BACAK)</div>
-        </div>
-
-        <!-- Antrenman Özet Sayaçları -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="label">Toplam Hacim</div>
-                <div class="val" id="totalVolume">0 <span>KG</span></div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Tamamlanan Set</div>
-                <div class="val" id="totalSets">0 <span>SET</span></div>
-            </div>
-        </div>
-
-        <!-- Dinlenme Kronometresi -->
-        <div class="timer-card">
-            <div>
-                <div style="font-size:11px; color:var(--muted); font-weight:700;">DİNLENME SAYACI</div>
-                <div class="timer-display" id="timer">01:30</div>
-            </div>
-            <div class="timer-actions">
-                <button class="timer-btn" onclick="startTimer()">Başlat</button>
-                <button class="timer-btn" onclick="addTimer(30)">+30s</button>
-                <button class="timer-btn" onclick="resetTimer()">Sıfırla</button>
-            </div>
-        </div>
-
-        <!-- PR Sorgulama -->
+        <!-- Seçili Kas Hareketleri -->
         <div class="box">
-            <h2>🏆 Kişisel Rekor (PR)</h2>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="prInput" placeholder="Hareket (Örn: Bench Press)" />
-                <button type="button" class="btn-primary" style="width: 100px; padding:0;"
-                    onclick="checkPR()">Sorgula</button>
+            <h2 id="muscleTitle">🎯 GÖĞÜS HAREKETLERİ & FORM</h2>
+            <div class="exercise-grid" id="exerciseGrid"></div>
+        </div>
+
+        <!-- Dinlenme Sayacı -->
+        <div class="timer-bar">
+            <div>
+                <span style="font-size:11px; color:var(--muted); font-weight:700;">DİNLENME</span>
+                <div style="font-size:20px; font-weight:900; color:var(--gold);" id="timer">01:30</div>
             </div>
-            <div id="prResult" class="pr-card"></div>
+            <div style="display:flex; gap:6px;">
+                <button onclick="startTimer()"
+                    style="background:#232732; border:none; color:#fff; padding:6px 12px; border-radius:6px; font-weight:700;">Başlat</button>
+                <button onclick="resetTimer()"
+                    style="background:#232732; border:none; color:#fff; padding:6px 12px; border-radius:6px; font-weight:700;">Sıfırla</button>
+            </div>
         </div>
 
         <!-- Set Giriş Formu -->
         <div class="box">
-            <h2>➕ Yeni Set Ekle</h2>
-
-            <div class="quick-tags" id="quickTags"></div>
-
+            <h2>➕ Seti Kaydet</h2>
             <form id="workoutForm" class="grid-form">
                 <div class="full-row">
-                    <input type="text" id="exerciseName" placeholder="Hareket Adı" required />
+                    <input type="text" id="exerciseName" placeholder="Seçilen Hareket" required />
                 </div>
                 <div>
-                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal" required
-                        oninput="calc1RM()" />
+                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
+                        required />
                 </div>
                 <div>
-                    <input type="number" id="reps" placeholder="Tekrar" inputmode="numeric" required
-                        oninput="calc1RM()" />
+                    <input type="number" id="reps" placeholder="Tekrar" inputmode="numeric" required />
                 </div>
-
-                <div class="full-row live-preview">
-                    <div>Tahmini 1RM: <span id="est1RM">0 KG</span></div>
-                    <div>Set Hacmi: <span id="setVol">0 KG</span></div>
-                </div>
-
                 <div class="full-row">
                     <input type="number" id="setNumber" placeholder="Set No" value="1" inputmode="numeric" required />
                 </div>
                 <div class="full-row">
-                    <button type="submit" class="btn-primary">Seti Kaydet & Sayacı Başlat</button>
+                    <button type="submit" class="btn-primary">Seti Bas & Sayacı Başlat</button>
                 </div>
             </form>
         </div>
@@ -508,92 +360,279 @@
 
     </div>
 
+    <!-- Video Modal Penceresi -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong id="modalTitle" style="color:var(--accent);">Egzersiz Formu</strong>
+                <button onclick="closeModal()"
+                    style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+            <div class="video-wrapper">
+                <iframe id="videoFrame" src="" allowfullscreen></iframe>
+            </div>
+            <div style="padding:12px;">
+                <button class="btn-primary" onclick="useExerciseFromModal()">Bu Hareketi Antrenmana Seç</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_URL = '/api/WorkoutLogs';
 
-        // PPL Egzersiz Havuzu
-        const routines = {
-            push: ['Bench Press', 'Incline Dumbbell Press', 'Overhead Press', 'Lateral Raise', 'Triceps Pushdown', 'Dips'],
-            pull: ['Barbell Row', 'Lat Pulldown', 'Seated Cable Row', 'Face Pull', 'Barbell Curl', 'Hammer Curl'],
-            legs: ['Squat', 'Leg Press', 'Romanian Deadlift', 'Leg Curl', 'Leg Extension', 'Calf Raise']
+        // Kas Veritabanı ve Eğitim Videoları
+        const muscleData = {
+            chest: {
+                title: "🎯 GÖĞÜS HAREKETLERİ",
+                rotation: 0, // Öne bak
+                targetMesh: "chest",
+                exercises: [
+                    { name: "Barbell Bench Press", videoId: "rT7DgCr-3pg", sets: "3-4 Set" },
+                    { name: "Incline Dumbbell Press", videoId: "8iPEnn-ltC8", sets: "3-4 Set" },
+                    { name: "Chest Fly (Cable/Dumbbell)", videoId: "Z57CtFmRMxA", sets: "3 Set" },
+                    { name: "Dips (Göğüs Odaklı)", videoId: "2z8JmcrW-As", sets: "3 Set" }
+                ]
+            },
+            back: {
+                title: "🎯 SIRT HAREKETLERİ",
+                rotation: Math.PI, // Arkaya bak
+                targetMesh: "back",
+                exercises: [
+                    { name: "Barbell Bent-Over Row", videoId: "9efgc2TrvEg", sets: "4 Set" },
+                    { name: "Lat Pulldown", videoId: "CAwf7n6Luuc", sets: "3-4 Set" },
+                    { name: "Seated Cable Row", videoId: "GZbfZ033f74", sets: "3 Set" },
+                    { name: "Deadlift", videoId: "op9kVnSso6Q", sets: "3-5 Set" }
+                ]
+            },
+            shoulders: {
+                title: "🎯 OMUZ HAREKETLERİ",
+                rotation: 0,
+                targetMesh: "shoulders",
+                exercises: [
+                    { name: "Overhead Barbell Press", videoId: "2yjwXTZQDDI", sets: "4 Set" },
+                    { name: "Dumbbell Lateral Raise", videoId: "3VcKaXpzqRo", sets: "4 Set" },
+                    { name: "Face Pull", videoId: "rep-qVOkqgk", sets: "3-4 Set" },
+                    { name: "Reverse Pec Deck", videoId: "6yMdhi2DVao", sets: "3 Set" }
+                ]
+            },
+            biceps: {
+                title: "🎯 BICEPS HAREKETLERİ",
+                rotation: 0,
+                targetMesh: "arms",
+                exercises: [
+                    { name: "Barbell Curl", videoId: "ykJmrZ5v0Oo", sets: "3-4 Set" },
+                    { name: "Incline Dumbbell Curl", videoId: "soxrZlIl35U", sets: "3 Set" },
+                    { name: "Hammer Curl", videoId: "zC3nLlEvin4", sets: "3 Set" }
+                ]
+            },
+            triceps: {
+                title: "🎯 TRICEPS HAREKETLERİ",
+                rotation: Math.PI,
+                targetMesh: "arms",
+                exercises: [
+                    { name: "Triceps Rope Pushdown", videoId: "vB5OHsJ3EME", sets: "3-4 Set" },
+                    { name: "Skull Crusher", videoId: "d_KZxkH_toI", sets: "3 Set" },
+                    { name: "Overhead Dumbbell Extension", videoId: "nRiJVZDpdL0", sets: "3 Set" }
+                ]
+            },
+            legs: {
+                title: "🎯 BACAK HAREKETLERİ",
+                rotation: 0,
+                targetMesh: "legs",
+                exercises: [
+                    { name: "Barbell Squat", videoId: "bEv6CCg2BC8", sets: "4 Set" },
+                    { name: "Leg Press", videoId: "IZxyjW7MPJQ", sets: "3-4 Set" },
+                    { name: "Romanian Deadlift", videoId: "JCXUYuzwNrM", sets: "3-4 Set" },
+                    { name: "Leg Extension / Curl", videoId: "m0FOpMEgero", sets: "3 Set" }
+                ]
+            }
         };
 
-        let currentProgram = 'push';
+        let selectedExName = "";
 
-        function renderQuickTags() {
-            const container = document.getElementById('quickTags');
-            container.innerHTML = '';
-            routines[currentProgram].forEach(ex => {
-                const span = document.createElement('span');
-                span.className = 'tag';
-                span.innerText = ex;
-                span.onclick = () => selectExercise(ex);
-                container.appendChild(span);
+        /* ================= 3D THREE.JS MOTORU ================= */
+        let scene, camera, renderer, mannequin;
+        let meshes = {};
+        let isDragging = false;
+        let prevMouseX = 0;
+        let targetRotationY = 0;
+
+        function init3D() {
+            const canvas = document.getElementById('canvas3d');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(40, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+            camera.position.set(0, 1.2, 4.2);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Işıklar
+            const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambient);
+            const dirLight = new THREE.DirectionalLight(0xff6b00, 1.2);
+            dirLight.position.set(2, 4, 3);
+            scene.add(dirLight);
+
+            // Manken Grubu
+            mannequin = new THREE.Group();
+
+            const matBase = new THREE.MeshStandardMaterial({ color: 0x222630, roughness: 0.5 });
+            const matAccent = new THREE.MeshStandardMaterial({ color: 0xff6b00, roughness: 0.3, emissive: 0x552200 });
+
+            // Baş
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), matBase);
+            head.position.y = 1.9;
+            mannequin.add(head);
+
+            // Göğüs
+            meshes.chest = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.35, 0.3), matAccent);
+            meshes.chest.position.set(0, 1.5, 0.05);
+            mannequin.add(meshes.chest);
+
+            // Sırt
+            meshes.back = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.45, 0.15), matBase);
+            meshes.back.position.set(0, 1.45, -0.08);
+            mannequin.add(meshes.back);
+
+            // Omuzlar
+            const shoulderGeo = new THREE.SphereGeometry(0.14, 16, 16);
+            meshes.shoulderL = new THREE.Mesh(shoulderGeo, matBase);
+            meshes.shoulderL.position.set(-0.38, 1.6, 0);
+            meshes.shoulderR = new THREE.Mesh(shoulderGeo, matBase);
+            meshes.shoulderR.position.set(0.38, 1.6, 0);
+            mannequin.add(meshes.shoulderL, meshes.shoulderR);
+
+            // Kollar
+            const armGeo = new THREE.CylinderGeometry(0.08, 0.07, 0.5, 12);
+            meshes.armL = new THREE.Mesh(armGeo, matBase);
+            meshes.armL.position.set(-0.42, 1.2, 0);
+            meshes.armR = new THREE.Mesh(armGeo, matBase);
+            meshes.armR.position.set(0.42, 1.2, 0);
+            mannequin.add(meshes.armL, meshes.armR);
+
+            // Bel
+            const abs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.3, 0.25), matBase);
+            abs.position.set(0, 1.15, 0);
+            mannequin.add(abs);
+
+            // Bacaklar
+            const legGeo = new THREE.CylinderGeometry(0.11, 0.09, 0.8, 12);
+            meshes.legL = new THREE.Mesh(legGeo, matBase);
+            meshes.legL.position.set(-0.16, 0.6, 0);
+            meshes.legR = new THREE.Mesh(legGeo, matBase);
+            meshes.legR.position.set(0.16, 0.6, 0);
+            mannequin.add(meshes.legL, meshes.legR);
+
+            mannequin.position.y = -0.7;
+            scene.add(mannequin);
+
+            // Dokunmatik ve Fare Kontrolleri
+            canvas.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                prevMouseX = e.clientX;
+            });
+            window.addEventListener('pointerup', () => isDragging = false);
+            window.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                const delta = e.clientX - prevMouseX;
+                mannequin.rotation.y += delta * 0.015;
+                targetRotationY = mannequin.rotation.y;
+                prevMouseX = e.clientX;
+            });
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            // Yumuşak dönüş geçişi
+            if (!isDragging) {
+                mannequin.rotation.y += (targetRotationY - mannequin.rotation.y) * 0.08;
+            }
+            renderer.render(scene, camera);
+        }
+
+        /* Kas Seçildiğinde 3D Modeli Vurgula */
+        function highlightMesh(group) {
+            const defaultMat = new THREE.MeshStandardMaterial({ color: 0x222630, roughness: 0.5 });
+            const activeMat = new THREE.MeshStandardMaterial({ color: 0xff6b00, roughness: 0.2, emissive: 0x662200 });
+
+            meshes.chest.material = defaultMat;
+            meshes.back.material = defaultMat;
+            meshes.shoulderL.material = defaultMat;
+            meshes.shoulderR.material = defaultMat;
+            meshes.armL.material = defaultMat;
+            meshes.armR.material = defaultMat;
+            meshes.legL.material = defaultMat;
+            meshes.legR.material = defaultMat;
+
+            if (group === 'chest') meshes.chest.material = activeMat;
+            if (group === 'back') meshes.back.material = activeMat;
+            if (group === 'shoulders') { meshes.shoulderL.material = activeMat; meshes.shoulderR.material = activeMat; }
+            if (group === 'biceps' || group === 'triceps') { meshes.armL.material = activeMat; meshes.armR.material = activeMat; }
+            if (group === 'legs') { meshes.legL.material = activeMat; meshes.legR.material = activeMat; }
+        }
+
+        function selectMuscle(key, el) {
+            document.querySelectorAll('.m-tag').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            const data = muscleData[key];
+            document.getElementById('muscleTitle').innerText = data.title;
+            targetRotationY = data.rotation;
+            highlightMesh(key);
+
+            // Egzersizleri Listele
+            const grid = document.getElementById('exerciseGrid');
+            grid.innerHTML = '';
+            data.exercises.forEach(ex => {
+                const card = document.createElement('div');
+                card.className = 'ex-card';
+                card.innerHTML = `
+                    <div class="title">${ex.name}</div>
+                    <div class="meta"><span>${ex.sets}</span><span>▶ Video</span></div>
+                `;
+                card.onclick = () => openVideo(ex.name, ex.videoId);
+                grid.appendChild(card);
             });
         }
 
-        function setProgram(prog, el) {
-            currentProgram = prog;
-            document.querySelectorAll('.split-tab').forEach(tab => tab.classList.remove('active'));
-            el.classList.add('active');
-            renderQuickTags();
+        /* Modal & Video */
+        function openVideo(name, videoId) {
+            selectedExName = name;
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            document.getElementById('videoModal').style.display = 'flex';
         }
 
-        function selectExercise(name) {
-            document.getElementById('exerciseName').value = name;
-            document.getElementById('prInput').value = name;
-            document.getElementById('setNumber').value = 1;
-            checkPR();
+        function closeModal() {
+            document.getElementById('videoFrame').src = '';
+            document.getElementById('videoModal').style.display = 'none';
         }
 
-        // Canlı 1RM Hesaplama (Epley Formülü: Ağırlık * (1 + Tekrar / 30))
-        function calc1RM() {
-            const w = parseFloat(document.getElementById('weight').value) || 0;
-            const r = parseInt(document.getElementById('reps').value) || 0;
-
-            const oneRM = r === 1 ? w : Math.round(w * (1 + r / 30) * 10) / 10;
-            const vol = Math.round(w * r);
-
-            document.getElementById('est1RM').innerText = `${oneRM} KG`;
-            document.getElementById('setVol').innerText = `${vol} KG`;
+        function useExerciseFromModal() {
+            document.getElementById('exerciseName').value = selectedExName;
+            closeModal();
+            window.scrollTo({ top: document.getElementById('workoutForm').offsetTop - 20, behavior: 'smooth' });
         }
 
-        // Dinlenme Sayacı (Rest Timer)
-        let timerSeconds = 90;
-        let timerInterval = null;
-
-        function updateTimerDisplay() {
-            const m = Math.floor(timerSeconds / 60);
-            const s = timerSeconds % 60;
-            document.getElementById('timer').innerText =
-                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        /* Timer */
+        let tSec = 90, tInt = null;
+        function updateT() {
+            const m = Math.floor(tSec / 60), s = tSec % 60;
+            document.getElementById('timer').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
-
         function startTimer() {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                if (timerSeconds > 0) {
-                    timerSeconds--;
-                    updateTimerDisplay();
-                } else {
-                    clearInterval(timerInterval);
-                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-                }
+            clearInterval(tInt);
+            tInt = setInterval(() => {
+                if (tSec > 0) { tSec--; updateT(); }
+                else clearInterval(tInt);
             }, 1000);
         }
+        function resetTimer() { clearInterval(tInt); tSec = 90; updateT(); }
 
-        function resetTimer() {
-            clearInterval(timerInterval);
-            timerSeconds = 90;
-            updateTimerDisplay();
-        }
-
-        function addTimer(sec) {
-            timerSeconds += sec;
-            updateTimerDisplay();
-        }
-
-        // API Fonksiyonları
+        /* API Veri İletişimi */
         async function loadLogs() {
             const container = document.getElementById('logsList');
             try {
@@ -601,105 +640,62 @@
                 if (!res.ok) throw new Error();
                 const logs = await res.json();
                 container.innerHTML = '';
-
                 if (logs.length === 0) {
-                    container.innerHTML = '<p style="color:var(--muted); font-size:13px; text-align:center;">Henüz set kaydedilmedi.</p>';
-                    document.getElementById('totalVolume').innerHTML = `0 <span>KG</span>`;
-                    document.getElementById('totalSets').innerHTML = `0 <span>SET</span>`;
+                    container.innerHTML = '<p style="color:var(--muted); font-size:13px; text-align:center;">Henüz set girilmedi.</p>';
                     return;
                 }
-
-                let totalVol = 0;
                 logs.forEach(log => {
-                    totalVol += (log.weight * log.reps);
                     const item = document.createElement('div');
                     item.className = 'log-item';
                     item.innerHTML = `
                         <div>
                             <strong>${log.exerciseName}</strong> &bull; Set ${log.setNumber}
-                            <div class="details">${log.weight} KG &times; ${log.reps} Tekrar &bull; ${(log.weight * log.reps)} KG Hacim</div>
+                            <div style="color:var(--accent); font-size:12px; font-weight:700;">${log.weight} KG &times; ${log.reps} Tekrar</div>
                         </div>
-                        <button class="del-btn" onclick="deleteLog(${log.id})">Sil</button>
+                        <button style="background:#1f1113; color:#ff4757; border:none; padding:6px 12px; border-radius:6px; font-weight:700;" onclick="deleteLog(${log.id})">Sil</button>
                     `;
                     container.appendChild(item);
                 });
-
-                document.getElementById('totalVolume').innerHTML = `${totalVol.toLocaleString()} <span>KG</span>`;
-                document.getElementById('totalSets').innerHTML = `${logs.length} <span>SET</span>`;
-            } catch (err) {
-                container.innerHTML = '<p style="color:#ff4757; font-size:13px; text-align:center;">API bağlantısı kuruluyor...</p>';
+            } catch (e) {
+                container.innerHTML = '<p style="color:#888; font-size:13px; text-align:center;">API hazır.</p>';
             }
-        }
-
-        async function checkPR() {
-            const name = document.getElementById('prInput').value.trim();
-            const prBox = document.getElementById('prResult');
-            if (!name) return;
-
-            try {
-                const res = await fetch(`${API_URL}/pr/${encodeURIComponent(name)}`);
-                if (res.status === 404) {
-                    prBox.style.display = 'block';
-                    prBox.style.borderColor = '#333';
-                    prBox.style.color = '#888';
-                    prBox.innerText = `${name} için henüz rekor yok.`;
-                    return;
-                }
-                const data = await res.json();
-                prBox.style.display = 'block';
-                prBox.style.borderColor = 'var(--accent)';
-                prBox.style.color = 'var(--accent)';
-                prBox.innerHTML = `🔥 <strong>${data.exercise}</strong> PR: <strong>${data.maxWeight} KG</strong>`;
-            } catch (e) { console.error(e); }
         }
 
         document.getElementById('workoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const setInput = document.getElementById('setNumber');
-            const curSet = parseInt(setInput.value) || 1;
-
+            const cSet = parseInt(setInput.value) || 1;
             const payload = {
                 exerciseName: document.getElementById('exerciseName').value,
                 weight: parseFloat(document.getElementById('weight').value),
                 reps: parseInt(document.getElementById('reps').value),
-                setNumber: curSet
+                setNumber: cSet
             };
 
-            try {
-                await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-                document.getElementById('weight').value = '';
-                document.getElementById('reps').value = '';
-                document.getElementById('est1RM').innerText = '0 KG';
-                document.getElementById('setVol').innerText = '0 KG';
-                setInput.value = curSet + 1;
-
-                // Set kaydedilince otomatik dinlenme sayacını başlatır
-                resetTimer();
-                startTimer();
-
-                loadLogs();
-            } catch (err) {
-                alert("Kayıt eklenemedi.");
-            }
+            document.getElementById('weight').value = '';
+            document.getElementById('reps').value = '';
+            setInput.value = cSet + 1;
+            resetTimer();
+            startTimer();
+            loadLogs();
         });
 
         async function deleteLog(id) {
-            try {
-                await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-                loadLogs();
-            } catch (err) {
-                alert("Silinemedi.");
-            }
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            loadLogs();
         }
 
-        // Başlangıç
-        renderQuickTags();
-        loadLogs();
+        window.onload = () => {
+            init3D();
+            selectMuscle('chest', document.querySelector('.m-tag'));
+            loadLogs();
+        };
     </script>
 </body>
 
