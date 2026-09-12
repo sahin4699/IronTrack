@@ -23,7 +23,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -81,7 +80,18 @@
             min-height: 100vh;
         }
 
-        /* Top Header */
+        /* SVG İkon Yardımcı Sınıfı */
+        .svg-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+            vertical-align: middle;
+        }
+
+        /* Üst Header */
         .app-header {
             width: 100%;
             display: flex;
@@ -114,7 +124,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
             cursor: pointer;
             flex-shrink: 0;
             transition: all 0.2s;
@@ -363,6 +372,9 @@
             font-size: 11px;
             font-weight: 800;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* Form */
@@ -447,7 +459,7 @@
             text-align: center;
         }
 
-        /* Alt Sabit Menü */
+        /* ALT SABİT MENÜ */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -469,7 +481,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
             color: var(--text-muted);
             font-size: 10px;
             font-weight: 700;
@@ -478,8 +490,10 @@
             text-align: center;
         }
 
-        .b-nav-item i {
-            font-size: 16px;
+        .b-nav-item .svg-icon {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-muted);
         }
 
         .b-nav-item.active {
@@ -487,7 +501,11 @@
             font-weight: 800;
         }
 
-        /* Sol Menü (Drawer) */
+        .b-nav-item.active .svg-icon {
+            fill: var(--accent);
+        }
+
+        /* SOL MENÜ (DRAWER) */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -546,7 +564,7 @@
             grid-template-columns: repeat(5, 1fr);
             background: rgba(28, 24, 27, 0.85);
             border-radius: 10px;
-            padding: 3px;
+            padding: 4px;
             margin-bottom: 14px;
             gap: 2px;
         }
@@ -557,22 +575,28 @@
             align-items: center;
             gap: 4px;
             padding: 6px 1px;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 700;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             color: var(--text-muted);
             white-space: nowrap;
         }
 
-        .d-tab i {
-            font-size: 13px;
+        .d-tab .svg-icon {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
         }
 
         .d-tab.active {
             background: var(--accent);
             color: #000;
             font-weight: 800;
+        }
+
+        .d-tab.active .svg-icon {
+            fill: #000;
         }
 
         .tab-panel {
@@ -583,7 +607,6 @@
             display: block;
         }
 
-        /* Menü İçi Kartlar & Görseller */
         .drawer-banner-header {
             display: flex;
             align-items: center;
@@ -632,7 +655,6 @@
             background: rgba(35, 28, 32, 0.95);
         }
 
-        /* MOBİLDE KİLİTLENMEYİ BİTİREN KORUMALI GRAFİK KUTUSU */
         .chart-box-wrapper {
             position: relative;
             width: 100%;
@@ -649,7 +671,6 @@
             height: 100% !important;
         }
 
-        /* Adımsayar Halka */
         .step-circle-box {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
@@ -723,7 +744,6 @@
             text-align: center;
         }
 
-        /* Besinler */
         .nutrition-metric {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
@@ -743,7 +763,7 @@
         .macro-pill {
             background: rgba(13, 11, 12, 0.85);
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             padding: 5px 2px;
             text-align: center;
         }
@@ -808,7 +828,6 @@
             flex-shrink: 0;
         }
 
-        /* Profil */
         .profile-card {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
@@ -832,7 +851,6 @@
             border-bottom: 1px solid var(--border);
         }
 
-        /* Modal */
         .modal-backdrop {
             display: none;
             position: fixed;
@@ -921,32 +939,53 @@
     <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer(event)">
         <div class="drawer" onclick="event.stopPropagation()">
             <div class="drawer-header">
-                <div style="font-size: 13px; font-weight: 800; color: var(--accent);"><i
-                        class="fa-solid fa-sliders"></i> KONTROL PANELİ</div>
+                <div
+                    style="font-size: 13px; font-weight: 800; color: var(--accent); display:flex; align-items:center; gap:6px;">
+                    <!-- Ayarlar SVG İkonu -->
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span>KONTROL PANELİ</span>
+                </div>
                 <button onclick="toggleDrawer()"
                     style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
             </div>
 
-            <!-- Resimli/İkonlu 5 Sekme -->
+            <!-- Resimli/İkonlu 5 Sekme (Dahili SVG) -->
             <div class="drawer-tabs">
                 <div class="d-tab active" onclick="switchDrawerTab('muscles', this)">
-                    <i class="fa-solid fa-dumbbell"></i>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29l-1.43-1.43z" />
+                    </svg>
                     <span>Kaslar</span>
                 </div>
                 <div class="d-tab" onclick="switchDrawerTab('chart', this)">
-                    <i class="fa-solid fa-chart-line"></i>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z" />
+                    </svg>
                     <span>Grafik</span>
                 </div>
                 <div class="d-tab" onclick="switchDrawerTab('steps', this)">
-                    <i class="fa-solid fa-shoe-prints"></i>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7" />
+                    </svg>
                     <span>Adım</span>
                 </div>
                 <div class="d-tab" onclick="switchDrawerTab('profile', this)">
-                    <i class="fa-solid fa-user"></i>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
                     <span>Profil</span>
                 </div>
                 <div class="d-tab" onclick="switchDrawerTab('cal', this)">
-                    <i class="fa-solid fa-bowl-food"></i>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.48L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.05zM1 21.99V21h15.03v1c0 .55-.45.99-1.01.99H2.01c-.56 0-1.01-.44-1.01-.99zm15.03-7c0-8-15.03-8-15.03 0h15.03z" />
+                    </svg>
                     <span>Kalori</span>
                 </div>
             </div>
@@ -994,7 +1033,7 @@
                 </div>
             </div>
 
-            <!-- 2. GRAFİK (GÖRSELLİ VE MOBİL SIKIŞMASINI BİTİREN WRAPPER) -->
+            <!-- 2. GRAFİK -->
             <div class="tab-panel" id="tabChart">
                 <div class="drawer-banner-header">Ağırlık Gelişim Analizi</div>
                 <div style="margin-bottom:8px;">
@@ -1103,7 +1142,12 @@
     <!-- Üst Header -->
     <header class="app-header">
         <div class="header-left">
-            <button class="btn-drawer-open" onclick="toggleDrawer()"><i class="fa-solid fa-bars-staggered"></i></button>
+            <button class="btn-drawer-open" onclick="toggleDrawer()">
+                <!-- Hamburger Menü SVG -->
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+            </button>
             <div class="brand-box">
                 <div class="brand-title">IRON<span>TRUCK</span> <span class="brand-badge">PRO</span></div>
                 <div class="user-greeting" id="headerGreetingText">Hoş geldin, <strong
@@ -1153,7 +1197,11 @@
 
             <div
                 style="font-size:12px; font-weight:800; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-stopwatch-20" style="color:var(--accent);"></i> Set Kaydet & Uygula
+                <svg class="svg-icon" style="fill:var(--accent);" viewBox="0 0 24 24">
+                    <path
+                        d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
+                </svg>
+                <span>Set Kaydet & Uygula</span>
             </div>
 
             <!-- Hızlı Seçim Butonları -->
@@ -1190,7 +1238,13 @@
 
             <div
                 style="font-size:12px; font-weight:800; text-transform:uppercase; margin-top:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-                <span><i class="fa-solid fa-list-check" style="color:var(--gold);"></i> Güncel Antrenman Günlüğü</span>
+                <span style="display:flex; align-items:center; gap:6px;">
+                    <svg class="svg-icon" style="fill:var(--gold); width:15px; height:15px;" viewBox="0 0 24 24">
+                        <path
+                            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                    </svg>
+                    Güncel Antrenman Günlüğü
+                </span>
                 <span style="font-size:11px; color:var(--text-muted);" id="todayTotalSets">0 Set</span>
             </div>
             <div id="logsList" style="max-height: 200px; overflow-y: auto;">Kayıtlar yükleniyor...</div>
@@ -1198,26 +1252,39 @@
 
     </main>
 
-    <!-- ALT MOBİL NAVİGASYON BAR -->
+    <!-- ALT MOBİL NAVİGASYON BAR (KIRILMAYAN SAF SVG İKONLAR) -->
     <nav class="bottom-nav">
         <div class="b-nav-item active" onclick="scrollToWorkout()">
-            <i class="fa-solid fa-dumbbell"></i>
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <path
+                    d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29l-1.43-1.43z" />
+            </svg>
             <span>Antrenman</span>
         </div>
         <div class="b-nav-item" onclick="openDrawerTabDirect('muscles')">
-            <i class="fa-solid fa-person"></i>
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z" />
+            </svg>
             <span>Kaslar</span>
         </div>
         <div class="b-nav-item" onclick="openDrawerTabDirect('chart')">
-            <i class="fa-solid fa-chart-line"></i>
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z" />
+            </svg>
             <span>Grafik</span>
         </div>
         <div class="b-nav-item" onclick="openDrawerTabDirect('steps')">
-            <i class="fa-solid fa-shoe-prints"></i>
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <path
+                    d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7" />
+            </svg>
             <span>Adım</span>
         </div>
         <div class="b-nav-item" onclick="openDrawerTabDirect('cal')">
-            <i class="fa-solid fa-utensils"></i>
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <path
+                    d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.48L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.05zM1 21.99V21h15.03v1c0 .55-.45.99-1.01.99H2.01c-.56 0-1.01-.44-1.01-.99zm15.03-7c0-8-15.03-8-15.03 0h15.03z" />
+            </svg>
             <span>Kalori</span>
         </div>
     </nav>
@@ -1357,7 +1424,6 @@
             if (tabName === 'cal') document.getElementById('tabCal').classList.add('active');
         }
 
-        /* HATASIZ VE RESPONSIVE HAREKET GRAFİĞİ MOTORU */
         let exerciseChart = null;
         let globalLogs = [];
 
@@ -1425,7 +1491,6 @@
                 }
             });
 
-            // Mobil resize emri
             exerciseChart.resize();
         }
 
@@ -1543,7 +1608,10 @@
                         <div class="title">${ex.name}</div>
                         <div class="sub">${ex.target}</div>
                     </div>
-                    <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')"><i class="fa-solid fa-play"></i> Video</button>
+                    <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')">
+                        <svg class="svg-icon" style="width:12px; height:12px; fill:var(--accent);" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <span>Video</span>
+                    </button>
                 `;
                 card.onclick = () => {
                     quickSelect(ex.name);
@@ -1574,7 +1642,10 @@
                         <div class="title">${ex.name}</div>
                         <div class="sub">${ex.target}</div>
                     </div>
-                    <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')"><i class="fa-solid fa-play"></i> Video</button>
+                    <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')">
+                        <svg class="svg-icon" style="width:12px; height:12px; fill:var(--accent);" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <span>Video</span>
+                    </button>
                 `;
                 card.onclick = () => {
                     quickSelect(ex.name);
@@ -1609,7 +1680,9 @@
                         <div class="name">${f.name}</div>
                         <div class="cal">${f.cal} kcal &bull; P:${f.p}g K:${f.c}g Y:${f.f}g</div>
                     </div>
-                    <button class="btn-add-food" onclick="addFoodItem(${i})"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btn-add-food" onclick="addFoodItem(${i})">
+                        <svg class="svg-icon" style="width:14px; height:14px; fill:#fff;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    </button>
                 `;
                 container.appendChild(div);
             });
