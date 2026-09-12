@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#090a0f" />
-    <title>IronTruck Pro - Gym & Nutrition Tracker</title>
+    <title>IronTruck Pro</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,8 +43,10 @@
             color: var(--text-main);
             padding: 16px;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* Header */
         .header {
             display: flex;
             align-items: center;
@@ -52,8 +54,34 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 14px 20px;
+            padding: 12px 20px;
             margin-bottom: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .menu-toggle-btn {
+            background: #1c2130;
+            border: 1px solid #2e364f;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-toggle-btn:active {
+            background: var(--accent);
+            color: #000;
         }
 
         .header h1 {
@@ -67,41 +95,88 @@
             text-shadow: 0 0 12px var(--accent-glow);
         }
 
-        .main-grid {
-            display: grid;
-            grid-template-columns: 360px 1.2fr 1fr;
-            gap: 16px;
-            max-width: 1600px;
-            margin: 0 auto;
+        /* SOL AÇILIR MENÜ (DRAWER) */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        @media (max-width: 1100px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        .panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-        }
-
-        .panel-title {
-            font-size: 14px;
-            font-weight: 700;
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -380px;
+            width: 360px;
+            max-width: 88vw;
+            height: 100vh;
+            background: #0d0f16;
+            border-right: 1px solid var(--border);
+            z-index: 1001;
+            padding: 20px 16px;
+            overflow-y: auto;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
             display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-overlay.open .drawer {
+            transform: translateX(380px);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 14px;
         }
 
-        .panel-title i {
-            color: var(--accent);
+        .drawer-tabs {
+            display: flex;
+            background: #151824;
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 14px;
+            gap: 3px;
+        }
+
+        .d-tab {
+            flex: 1;
+            text-align: center;
+            padding: 8px 4px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .d-tab.active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
         }
 
         /* Dairesel Canlı Adımsayar */
@@ -118,8 +193,8 @@
 
         .ring-box {
             position: relative;
-            width: 160px;
-            height: 160px;
+            width: 150px;
+            height: 150px;
         }
 
         .ring-svg {
@@ -157,39 +232,31 @@
         }
 
         .ring-text .count {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             color: #fff;
-        }
-
-        .ring-text .sub {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
         }
 
         .step-info-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
-            margin-top: 14px;
+            margin-top: 12px;
         }
 
         .step-info-card {
             background: #0b0c10;
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 8px 10px;
+            padding: 8px;
             text-align: center;
         }
 
         .step-info-card .val {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             color: var(--gold);
-            margin-top: 2px;
         }
 
         .step-btns {
@@ -211,13 +278,13 @@
             cursor: pointer;
         }
 
-        /* Beslenme & Yemek Kartları */
+        /* Besin Kartları */
         .cal-box {
             background: var(--surface-card);
             border: 1px solid var(--border);
             border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 14px;
+            padding: 12px;
+            margin-bottom: 12px;
             text-align: center;
         }
 
@@ -225,67 +292,40 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 6px;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .macro-pill {
             background: #0b0c10;
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 6px 4px;
+            padding: 5px 4px;
             text-align: center;
-        }
-
-        .macro-pill .label {
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .macro-pill .val {
-            font-size: 13px;
-            font-weight: 800;
-            color: #fff;
-            margin-top: 2px;
         }
 
         .food-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 330px;
+            gap: 8px;
+            max-height: 380px;
             overflow-y: auto;
             padding-right: 4px;
-        }
-
-        .food-list::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .food-list::-webkit-scrollbar-thumb {
-            background: #222736;
-            border-radius: 4px;
         }
 
         .food-card {
             background: var(--surface-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px 10px;
+            border-radius: 10px;
+            padding: 8px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            transition: border-color 0.2s;
-        }
-
-        .food-card:hover {
-            border-color: var(--accent);
+            gap: 10px;
         }
 
         .food-img {
-            width: 54px;
-            height: 54px;
-            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
             object-fit: cover;
             border: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
@@ -297,13 +337,13 @@
         }
 
         .food-info .name {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: #fff;
         }
 
         .food-info .cal {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             margin-top: 2px;
         }
@@ -312,30 +352,59 @@
             background: #1e2436;
             border: 1px solid #2b344d;
             color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .btn-add-food:hover,
-        .btn-add-food:active {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
+        /* PR Rozeti ve Kartı */
+        .pr-result-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(255, 94, 0, 0.08);
+            border: 1px dashed var(--accent);
+            color: var(--accent);
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
         }
 
-        /* Medikal Kas Anatomisi & Flip */
+        /* ANA EKRAN DÜZENİ */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Anatomi & Flip */
         .anatomy-viewport {
             background: radial-gradient(circle at center, #161924 0%, #090a0e 100%);
             border: 1px solid var(--border);
             border-radius: 18px;
             padding: 16px;
-            min-height: 560px;
+            min-height: 520px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -346,8 +415,8 @@
         }
 
         .flip-stage {
-            width: 320px;
-            height: 480px;
+            width: 300px;
+            height: 460px;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -684,75 +753,109 @@
 
 <body>
 
+    <!-- SOL AÇILIR MENÜ (DRAWER: KALORİ / PR / ADIMSAYAR) -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer(event)">
+        <div class="drawer" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <div style="font-size: 14px; font-weight: 800; color: var(--accent);"><i
+                        class="fa-solid fa-sliders"></i> KONTROL PANELİ</div>
+                <button onclick="toggleDrawer()"
+                    style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+
+            <!-- Sekme Butonları -->
+            <div class="drawer-tabs">
+                <div class="d-tab active" onclick="switchDrawerTab('cal', this)"><i class="fa-solid fa-utensils"></i>
+                    Kalori</div>
+                <div class="d-tab" onclick="switchDrawerTab('pr', this)"><i class="fa-solid fa-trophy"></i> PR Sorgula
+                </div>
+                <div class="d-tab" onclick="switchDrawerTab('steps', this)"><i class="fa-solid fa-shoe-prints"></i>
+                    Adımlar</div>
+            </div>
+
+            <!-- 1. SEKME: KALORİ & BESİNLER -->
+            <div class="tab-panel active" id="tabCal">
+                <div class="cal-box">
+                    <div style="font-size: 20px; font-weight: 800;"><span id="calVal">0</span> <span
+                            style="font-size: 11px; color: var(--text-muted);">/ 2500 KCAL</span></div>
+                    <div class="macro-row">
+                        <div class="macro-pill">
+                            <div style="font-size:9px; color:var(--protein); font-weight:700;">P</div>
+                            <div style="font-size:12px; font-weight:800;" id="pVal">0g</div>
+                        </div>
+                        <div class="macro-pill">
+                            <div style="font-size:9px; color:var(--carb); font-weight:700;">K</div>
+                            <div style="font-size:12px; font-weight:800;" id="cVal">0g</div>
+                        </div>
+                        <div class="macro-pill">
+                            <div style="font-size:9px; color:var(--fat); font-weight:700;">Y</div>
+                            <div style="font-size:12px; font-weight:800;" id="fVal">0g</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="food-list" id="foodContainer"></div>
+                <button onclick="resetCalories()"
+                    style="width:100%; margin-top:10px; background:#1c2130; border:1px solid #2e364f; color:#fff; padding:8px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Günü
+                    Sıfırla</button>
+            </div>
+
+            <!-- 2. SEKME: PR (KİŞİSEL REKOR) -->
+            <div class="tab-panel" id="tabPr">
+                <div style="display:flex; gap:8px; margin-bottom:10px;">
+                    <input type="text" id="prQueryInput" placeholder="Hareket (Örn: Bench Press)" />
+                    <button class="btn-submit" style="width:90px; padding:0;" onclick="checkPR()">Bul</button>
+                </div>
+                <div id="prResultBox" class="pr-result-box"></div>
+            </div>
+
+            <!-- 3. SEKME: CANLI ADIMSAYAR -->
+            <div class="tab-panel" id="tabSteps">
+                <div class="step-circle-box">
+                    <div class="ring-box">
+                        <svg class="ring-svg" viewBox="0 0 160 160">
+                            <circle class="ring-bg" cx="80" cy="80" r="70" />
+                            <circle class="ring-bar" id="stepBar" cx="80" cy="80" r="70" />
+                        </svg>
+                        <div class="ring-text">
+                            <div class="count" id="stepCountDisplay">0</div>
+                            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">/ 10.000 ADIM</div>
+                        </div>
+                    </div>
+                    <div class="step-info-row">
+                        <div class="step-info-card">
+                            <div style="font-size:9px; color:var(--text-muted); font-weight:700;">🔥 YAKILAN</div>
+                            <div class="val" id="burnedCalDisplay">0.0 kcal</div>
+                        </div>
+                        <div class="step-info-card">
+                            <div style="font-size:9px; color:var(--text-muted); font-weight:700;">📍 MESAFE</div>
+                            <div class="val" id="distanceDisplay">0.00 km</div>
+                        </div>
+                    </div>
+                    <div class="step-btns">
+                        <button class="btn-sensor" id="sensorBtn" onclick="toggleSensor()"><i
+                                class="fa-solid fa-play"></i> Başlat</button>
+                        <button class="btn-sensor" onclick="addManualSteps(50)"><i class="fa-solid fa-plus"></i>
+                            +50</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Header -->
     <header class="header">
-        <h1>IRON<span>TRUCK</span> PRO</h1>
+        <div class="header-left">
+            <button class="menu-toggle-btn" onclick="toggleDrawer()"><i class="fa-solid fa-bars"></i></button>
+            <h1>IRON<span>TRUCK</span> PRO</h1>
+        </div>
         <div style="font-size: 13px; font-weight: 700; color: var(--accent);" id="headerCal">0 / 2500 KCAL</div>
     </header>
 
-    <main class="main-grid">
+    <!-- ANA ANTRENMAN EKRANI -->
+    <main class="main-container">
 
-        <!-- 1. KOLON: CANLI ADIMSAYAR & GERÇEK FOTOĞRAFLI BESLENME -->
-        <section class="panel">
-            <div class="panel-title"><i class="fa-solid fa-person-running"></i> Canlı Adımsayar</div>
-
-            <div class="step-circle-box">
-                <div class="ring-box">
-                    <svg class="ring-svg" viewBox="0 0 160 160">
-                        <circle class="ring-bg" cx="80" cy="80" r="70" />
-                        <circle class="ring-bar" id="stepBar" cx="80" cy="80" r="70" />
-                    </svg>
-                    <div class="ring-text">
-                        <i class="fa-solid fa-shoe-prints"
-                            style="color:var(--accent); font-size:13px; margin-bottom:2px;"></i>
-                        <div class="count" id="stepCountDisplay">0</div>
-                        <div class="sub">/ 10.000 ADIM</div>
-                    </div>
-                </div>
-
-                <div class="step-info-row">
-                    <div class="step-info-card">
-                        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">🔥 YAKILAN</div>
-                        <div class="val" id="burnedCalDisplay">0.0 kcal</div>
-                    </div>
-                    <div class="step-info-card">
-                        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">📍 MESAFE</div>
-                        <div class="val" id="distanceDisplay">0.00 km</div>
-                    </div>
-                </div>
-
-                <div class="step-btns">
-                    <button class="btn-sensor" id="sensorBtn" onclick="toggleSensor()"><i class="fa-solid fa-play"></i>
-                        Sensörü Başlat</button>
-                    <button class="btn-sensor" onclick="addManualSteps(50)"><i class="fa-solid fa-plus"></i> +50
-                        Adım</button>
-                </div>
-            </div>
-
-            <div class="panel-title" style="margin-top: 8px;"><i class="fa-solid fa-bowl-food"></i> Fit Yemek Havuzu
-            </div>
-            <div class="cal-box">
-                <div style="font-size: 24px; font-weight: 800;"><span id="calVal">0</span> <span
-                        style="font-size: 12px; color: var(--text-muted);">/ 2500 KCAL</span></div>
-                <div class="macro-row">
-                    <div class="macro-pill">
-                        <div class="label" style="color:var(--protein);">Protein</div>
-                        <div class="val"><span id="pVal">0</span>g</div>
-                    </div>
-                    <div class="macro-pill">
-                        <div class="label" style="color:var(--carb);">Karb</div>
-                        <div class="val"><span id="cVal">0</span>g</div>
-                    </div>
-                    <div class="macro-pill">
-                        <div class="label" style="color:var(--fat);">Yağ</div>
-                        <div class="val"><span id="fVal">0</span>g</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="food-list" id="foodContainer"></div>
-        </section>
-
-        <!-- 2. KOLON: MEDİKAL KAS ANATOMİSİ -->
+        <!-- 1. SÜTUN: MEDİKAL KAS ANATOMİSİ -->
         <section class="anatomy-viewport" onclick="flipBody(event)">
             <div class="flip-stage" id="stageCard">
 
@@ -840,10 +943,11 @@
             <div class="flip-indicator"><i class="fa-solid fa-arrows-rotate"></i> Vücudu çevirmek için dokun</div>
         </section>
 
-        <!-- 3. KOLON: HAREKETLER & SET KAYDI -->
+        <!-- 2. SÜTUN: HAREKETLER & SET KAYDI -->
         <section class="panel">
-            <div class="panel-title" id="activeMuscleTitle"><i class="fa-solid fa-fire"></i> Göğüs (Chest) Egzersizleri
-            </div>
+            <div style="font-size:14px; font-weight:700; text-transform:uppercase; margin-bottom:12px;"
+                id="activeMuscleTitle"><i class="fa-solid fa-fire" style="color:var(--accent);"></i> Göğüs (Chest)
+                Egzersizleri</div>
             <div class="exercise-grid" id="exerciseGrid"></div>
 
             <form id="workoutForm" class="workout-form">
@@ -864,9 +968,9 @@
                 </div>
             </form>
 
-            <div class="panel-title" style="font-size: 13px; margin-top: 10px;"><i class="fa-solid fa-list-check"></i>
-                Antrenman Kayıtları</div>
-            <div id="logsList" style="max-height: 200px; overflow-y: auto;">Kayıtlar yükleniyor...</div>
+            <div style="font-size:13px; font-weight:700; text-transform:uppercase; margin-top:12px; margin-bottom:8px;">
+                <i class="fa-solid fa-list-check" style="color:var(--accent);"></i> Antrenman Kayıtları</div>
+            <div id="logsList" style="max-height: 220px; overflow-y: auto;">Kayıtlar yükleniyor...</div>
         </section>
 
     </main>
@@ -891,7 +995,51 @@
     <script>
         const API_URL = '/api/WorkoutLogs';
 
-        /* 1. ADIMSAYAR MOTORU */
+        /* DRAWER KONTROLÜ */
+        function toggleDrawer() {
+            document.getElementById('drawerOverlay').classList.toggle('open');
+        }
+
+        function closeDrawer(e) {
+            if (e.target.id === 'drawerOverlay') toggleDrawer();
+        }
+
+        function switchDrawerTab(tabName, el) {
+            document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+
+            if (tabName === 'cal') document.getElementById('tabCal').classList.add('active');
+            if (tabName === 'pr') document.getElementById('tabPr').classList.add('active');
+            if (tabName === 'steps') document.getElementById('tabSteps').classList.add('active');
+        }
+
+        /* 1. PR SORGULAMA */
+        async function checkPR() {
+            const name = document.getElementById('prQueryInput').value.trim();
+            const box = document.getElementById('prResultBox');
+            if (!name) return;
+
+            try {
+                const res = await fetch(`${API_URL}/pr/${encodeURIComponent(name)}`);
+                box.style.display = 'block';
+                if (res.status === 404) {
+                    box.style.borderColor = '#333';
+                    box.style.color = '#888';
+                    box.innerText = `${name} için henüz rekor yok.`;
+                    return;
+                }
+                const data = await res.json();
+                box.style.borderColor = 'var(--accent)';
+                box.style.color = 'var(--accent)';
+                box.innerHTML = `🏆 <strong>${data.exercise}</strong> PR: <strong>${data.maxWeight} KG</strong>`;
+            } catch (e) {
+                box.style.display = 'block';
+                box.innerText = "Sorgu başarısız.";
+            }
+        }
+
+        /* 2. CANLI ADIMSAYAR */
         let stepCount = parseInt(localStorage.getItem('ironTruckSteps')) || 0;
         let sensorActive = false;
         let lastStepTime = 0;
@@ -937,7 +1085,7 @@
             } else {
                 window.removeEventListener('devicemotion', handleMotion);
                 sensorActive = false;
-                btn.innerHTML = '<i class="fa-solid fa-play"></i> Sensörü Başlat';
+                btn.innerHTML = '<i class="fa-solid fa-play"></i> Başlat';
                 btn.style.background = '#1c2130';
                 btn.style.color = '#fff';
             }
@@ -948,43 +1096,15 @@
             updateStepDisplay();
         }
 
-        /* 2. ÖZEL VE AYRI BESİN FOTOĞRAFLARI */
+        /* 3. BESİNLER & KALORİ */
         const foods = [
-            {
-                name: "Izgara Tavuk Göğsü (150g)",
-                cal: 247, p: 46, c: 0, f: 5,
-                img: "https://images.pexels.com/photos/6210876/pexels-photo-6210876.jpeg?auto=compress&cs=tinysrgb&w=150"
-            },
-            {
-                name: "Beyaz Pirinç Pilavı (200g)",
-                cal: 260, p: 5, c: 57, f: 1,
-                img: "https://images.pexels.com/photos/723198/pexels-photo-723198.jpeg?auto=compress&cs=tinysrgb&w=150"
-            },
-            {
-                name: "Fitness Yulaf Kasesi (80g)",
-                cal: 310, p: 10, c: 58, f: 5,
-                img: "https://images.pexels.com/photos/103124/pexels-photo-103124.jpeg?auto=compress&cs=tinysrgb&w=150"
-            },
-            {
-                name: "Haşlanmış Yumurta (3 Adet)",
-                cal: 215, p: 18, c: 1, f: 15,
-                img: "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=150"
-            },
-            {
-                name: "Döküm Izgara Köfte (160g)",
-                cal: 340, p: 30, c: 4, f: 22,
-                img: "https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=150"
-            },
-            {
-                name: "Çikolatalı Whey Shake",
-                cal: 120, p: 24, c: 2, f: 1.5,
-                img: "https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=150"
-            },
-            {
-                name: "Taze Lor Peyniri (100g)",
-                cal: 98, p: 12, c: 3, f: 4,
-                img: "https://images.pexels.com/photos/4198019/pexels-photo-4198019.jpeg?auto=compress&cs=tinysrgb&w=150"
-            }
+            { name: "Izgara Tavuk Göğsü (150g)", cal: 247, p: 46, c: 0, f: 5, img: "https://images.pexels.com/photos/6210876/pexels-photo-6210876.jpeg?auto=compress&cs=tinysrgb&w=150" },
+            { name: "Beyaz Pirinç Pilavı (200g)", cal: 260, p: 5, c: 57, f: 1, img: "https://images.pexels.com/photos/723198/pexels-photo-723198.jpeg?auto=compress&cs=tinysrgb&w=150" },
+            { name: "Fitness Yulaf Kasesi (80g)", cal: 310, p: 10, c: 58, f: 5, img: "https://images.pexels.com/photos/103124/pexels-photo-103124.jpeg?auto=compress&cs=tinysrgb&w=150" },
+            { name: "Haşlanmış Yumurta (3 Adet)", cal: 215, p: 18, c: 1, f: 15, img: "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=150" },
+            { name: "Döküm Izgara Köfte (160g)", cal: 340, p: 30, c: 4, f: 22, img: "https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=150" },
+            { name: "Çikolatalı Whey Shake", cal: 120, p: 24, c: 2, f: 1.5, img: "https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=150" },
+            { name: "Taze Lor Peyniri (100g)", cal: 98, p: 12, c: 3, f: 4, img: "https://images.pexels.com/photos/4198019/pexels-photo-4198019.jpeg?auto=compress&cs=tinysrgb&w=150" }
         ];
 
         let nutrition = JSON.parse(localStorage.getItem('ironTruckNutrition')) || { cal: 0, p: 0, c: 0, f: 0 };
@@ -1018,15 +1138,21 @@
             updateCalUI();
         }
 
+        function resetCalories() {
+            nutrition = { cal: 0, p: 0, c: 0, f: 0 };
+            localStorage.setItem('ironTruckNutrition', JSON.stringify(nutrition));
+            updateCalUI();
+        }
+
         function updateCalUI() {
             document.getElementById('calVal').innerText = nutrition.cal;
-            document.getElementById('pVal').innerText = nutrition.p;
-            document.getElementById('cVal').innerText = nutrition.c;
-            document.getElementById('fVal').innerText = nutrition.f;
+            document.getElementById('pVal').innerText = `${nutrition.p}g`;
+            document.getElementById('cVal').innerText = `${nutrition.c}g`;
+            document.getElementById('fVal').innerText = `${nutrition.f}g`;
             document.getElementById('headerCal').innerText = `${nutrition.cal} / 2500 KCAL`;
         }
 
-        /* 3. MEDİKAL ANATOMİ VE HAREKETLER */
+        /* 4. MEDİKAL ANATOMİ & HAREKETLER */
         let isFlipped = false;
         function flipBody(e) {
             if (e.target.classList.contains('hotspot-node')) return;
@@ -1066,9 +1192,7 @@
             },
             abs: {
                 title: "Karın Egzersizleri",
-                items: [
-                    { name: "Hanging Leg Raise", id: "hdng3Nm1x_E", meta: "Alt Karın" }
-                ]
+                items: [{ name: "Hanging Leg Raise", id: "hdng3Nm1x_E", meta: "Alt Karın" }]
             },
             quads: {
                 title: "Ön Bacak Egzersizleri",
@@ -1106,7 +1230,7 @@
             const data = exercisesDB[key];
             if (!data) return;
 
-            document.getElementById('activeMuscleTitle').innerHTML = `<i class="fa-solid fa-fire"></i> ${data.title}`;
+            document.getElementById('activeMuscleTitle').innerHTML = `<i class="fa-solid fa-fire" style="color:var(--accent);"></i> ${data.title}`;
             const grid = document.getElementById('exerciseGrid');
             grid.innerHTML = '';
 
@@ -1137,10 +1261,11 @@
 
         function selectFromModal() {
             document.getElementById('exerciseName').value = pickedName;
+            document.getElementById('prQueryInput').value = pickedName;
             closeModal();
         }
 
-        /* 4. ANTRENMAN KAYITLARI & API */
+        /* 5. ANTRENMAN KAYITLARI */
         async function fetchLogs() {
             const list = document.getElementById('logsList');
             try {
