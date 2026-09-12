@@ -25,9 +25,10 @@
             --gold: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #8e98ab;
+            --protein: #10b981;
+            --carb: #3b82f6;
+            --fat: #f59e0b;
             --muscle-red: #8b1e13;
-            --muscle-fiber: #b52c1e;
-            --tendon: #e2e8f0;
         }
 
         * {
@@ -67,7 +68,7 @@
 
         .main-grid {
             display: grid;
-            grid-template-columns: 340px 1.2fr 1fr;
+            grid-template-columns: 360px 1.2fr 1fr;
             gap: 16px;
             max-width: 1600px;
             margin: 0 auto;
@@ -209,7 +210,7 @@
             cursor: pointer;
         }
 
-        /* Beslenme & Yemek Kartları */
+        /* Beslenme & Resimli Yemek Kartları */
         .cal-box {
             background: var(--surface-card);
             border: 1px solid var(--border);
@@ -219,35 +220,75 @@
             text-align: center;
         }
 
+        .macro-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .macro-pill {
+            background: #0b0c10;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 4px;
+            text-align: center;
+        }
+
+        .macro-pill .label {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .macro-pill .val {
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 2px;
+        }
+
         .food-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 250px;
+            gap: 10px;
+            max-height: 320px;
             overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .food-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .food-list::-webkit-scrollbar-thumb {
+            background: #222736;
+            border-radius: 4px;
         }
 
         .food-card {
             background: var(--surface-card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 10px 12px;
+            padding: 8px 10px;
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: border-color 0.2s;
         }
 
-        .food-icon {
-            width: 44px;
-            height: 44px;
+        .food-card:hover {
+            border-color: var(--accent);
+        }
+
+        .food-img {
+            width: 52px;
+            height: 52px;
             border-radius: 10px;
-            background: #1b202e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: var(--accent);
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             flex-shrink: 0;
+            background: #1b1e2b;
         }
 
         .food-info {
@@ -255,7 +296,7 @@
         }
 
         .food-info .name {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             color: #fff;
         }
@@ -273,7 +314,18 @@
             width: 32px;
             height: 32px;
             border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add-food:hover,
+        .btn-add-food:active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
         }
 
         /* Medikal Kas Anatomisi & Flip */
@@ -638,7 +690,7 @@
 
     <main class="main-grid">
 
-        <!-- 1. KOLON: ADIMSAYAR & BESLENME -->
+        <!-- 1. KOLON: ADIMSAYAR & BESLENME (GERÇEK YEMEK RESİMLERİ) -->
         <section class="panel">
             <div class="panel-title"><i class="fa-solid fa-person-running"></i> Canlı Adımsayar</div>
 
@@ -675,16 +727,31 @@
                 </div>
             </div>
 
-            <div class="panel-title" style="margin-top: 8px;"><i class="fa-solid fa-bowl-food"></i> Kalori & Makro</div>
+            <div class="panel-title" style="margin-top: 8px;"><i class="fa-solid fa-bowl-food"></i> Fit Yemek Havuzu
+            </div>
             <div class="cal-box">
                 <div style="font-size: 24px; font-weight: 800;"><span id="calVal">0</span> <span
                         style="font-size: 12px; color: var(--text-muted);">/ 2500 KCAL</span></div>
+                <div class="macro-row">
+                    <div class="macro-pill">
+                        <div class="label" style="color:var(--protein);">Protein</div>
+                        <div class="val"><span id="pVal">0</span>g</div>
+                    </div>
+                    <div class="macro-pill">
+                        <div class="label" style="color:var(--carb);">Karb</div>
+                        <div class="val"><span id="cVal">0</span>g</div>
+                    </div>
+                    <div class="macro-pill">
+                        <div class="label" style="color:var(--fat);">Yağ</div>
+                        <div class="val"><span id="fVal">0</span>g</div>
+                    </div>
+                </div>
             </div>
 
             <div class="food-list" id="foodContainer"></div>
         </section>
 
-        <!-- 2. KOLON: MEDİKAL KAS ANATOMİSİ (ÖN / ARKA) -->
+        <!-- 2. KOLON: MEDİKAL KAS ANATOMİSİ -->
         <section class="anatomy-viewport" onclick="flipBody(event)">
             <div class="flip-stage" id="stageCard">
 
@@ -701,30 +768,22 @@
                                 <stop offset="100%" stop-color="#64748b" />
                             </linearGradient>
                         </defs>
-                        <!-- Kafa ve Boyun -->
                         <ellipse cx="150" cy="45" rx="20" ry="24" fill="url(#mf)" stroke="#380d07" />
                         <path d="M138 68 L162 68 L176 90 L124 90 Z" fill="url(#mf)" />
-                        <!-- Göğüs -->
                         <path d="M125 90 C140 85, 150 88, 150 114 C134 120, 122 116, 115 110 Z" fill="url(#mf)"
                             stroke="#220603" stroke-width="1.5" />
                         <path d="M175 90 C160 85, 150 88, 150 114 C166 120, 178 116, 185 110 Z" fill="url(#mf)"
                             stroke="#220603" stroke-width="1.5" />
-                        <!-- Omuzlar -->
                         <circle cx="106" cy="98" r="15" fill="url(#mf)" />
                         <circle cx="194" cy="98" r="15" fill="url(#mf)" />
-                        <!-- Kollar (Biceps) -->
                         <path d="M96 102 L48 108 L48 118 L96 118 Z" fill="url(#mf)" />
                         <path d="M204 102 L252 108 L252 118 L204 118 Z" fill="url(#mf)" />
-                        <!-- Karın -->
                         <path d="M132 118 L168 118 L164 175 L136 175 Z" fill="url(#mf)" />
                         <line x1="150" y1="118" x2="150" y2="175" stroke="url(#tf)" stroke-width="2" />
-                        <!-- Ön Bacaklar -->
                         <path d="M130 185 C120 215, 120 270, 128 300 C138 300, 146 280, 148 240 Z" fill="url(#mf)" />
                         <path d="M170 185 C180 215, 180 270, 172 300 C162 300, 154 280, 152 240 Z" fill="url(#mf)" />
-                        <!-- Diz Tendonları -->
                         <ellipse cx="132" cy="315" rx="7" ry="7" fill="url(#tf)" />
                         <ellipse cx="168" cy="315" rx="7" ry="7" fill="url(#tf)" />
-                        <!-- Kalf -->
                         <path d="M125 325 C118 355, 122 390, 128 410 L138 410 C142 385, 142 350, 138 325 Z"
                             fill="url(#mf)" />
                         <path d="M175 325 C182 355, 178 390, 172 410 L162 410 C158 385, 158 350, 162 325 Z"
@@ -736,10 +795,8 @@
                     </div>
                     <div class="hotspot-node hs-shoulder-r" onclick="pickMuscle('shoulders', event)" title="Sağ Omuz">
                     </div>
-                    <div class="hotspot-node hs-biceps-l" onclick="pickMuscle('biceps', event)" title="Sol Biceps">
-                    </div>
-                    <div class="hotspot-node hs-biceps-r" onclick="pickMuscle('biceps', event)" title="Sağ Biceps">
-                    </div>
+                    <div class="hotspot-node hs-biceps-l" onclick="pickMuscle('biceps', event)" title="Sol Kol"></div>
+                    <div class="hotspot-node hs-biceps-r" onclick="pickMuscle('biceps', event)" title="Sağ Kol"></div>
                     <div class="hotspot-node hs-abs" onclick="pickMuscle('abs', event)" title="Karın"></div>
                     <div class="hotspot-node hs-quads-l" onclick="pickMuscle('quads', event)" title="Sol Ön Bacak">
                     </div>
@@ -751,18 +808,13 @@
                 <div class="body-card back">
                     <svg class="anatomy-svg" viewBox="0 0 300 480">
                         <ellipse cx="150" cy="45" rx="20" ry="24" fill="url(#mf)" stroke="#380d07" />
-                        <!-- Trapez -->
                         <path d="M138 68 L162 68 L185 102 L150 130 L115 102 Z" fill="url(#mf)" />
-                        <!-- Sırt (Kanat) -->
                         <path d="M115 102 C126 114, 138 122, 144 160 C130 156, 118 144, 110 124 Z" fill="url(#mf)" />
                         <path d="M185 102 C174 114, 162 122, 156 160 C170 156, 182 144, 190 124 Z" fill="url(#mf)" />
-                        <!-- Triceps -->
                         <path d="M96 102 L48 108 L48 118 L96 118 Z" fill="url(#mf)" />
                         <path d="M204 102 L252 108 L252 118 L204 118 Z" fill="url(#mf)" />
-                        <!-- Kalça & Arka Bacak -->
                         <path d="M130 180 C120 200, 122 250, 130 295 C140 295, 146 270, 148 230 Z" fill="url(#mf)" />
                         <path d="M170 180 C180 200, 178 250, 170 295 C160 295, 154 270, 152 230 Z" fill="url(#mf)" />
-                        <!-- Arka Kalf -->
                         <path d="M125 325 C118 355, 120 390, 128 410 L138 410 C142 385, 142 350, 138 325 Z"
                             fill="url(#mf)" />
                         <path d="M175 325 C182 355, 180 390, 172 410 L162 410 C158 385, 158 350, 162 325 Z"
@@ -895,17 +947,46 @@
             updateStepDisplay();
         }
 
-        /* 2. BESİNLER MOTORU */
+        /* 2. BESİNLER & GERÇEK YEMEK GÖRSELLERİ */
         const foods = [
-            { name: "Izgara Tavuk Göğsü (150g)", cal: 247, icon: "fa-drumstick-bite" },
-            { name: "Pirinç Pilavı (200g)", cal: 260, icon: "fa-bowl-rice" },
-            { name: "Yulaf & Muz Kasesi (80g)", cal: 310, icon: "fa-wheat-awn" },
-            { name: "Haşlanmış Yumurta (3 Adet)", cal: 215, icon: "fa-egg" },
-            { name: "Izgara Kasap Köfte (160g)", cal: 340, icon: "fa-burger" },
-            { name: "Whey Protein Shake (1 Ölçek)", cal: 120, icon: "fa-bottle-water" }
+            {
+                name: "Tavuk Göğsü (150g)",
+                cal: 247, p: 46, c: 0, f: 5,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Grilled_chicken_breast.jpg/320px-Grilled_chicken_breast.jpg"
+            },
+            {
+                name: "Pirinç Pilavı (200g)",
+                cal: 260, p: 5, c: 57, f: 1,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Turkish_rice_pilaf.jpg/320px-Turkish_rice_pilaf.jpg"
+            },
+            {
+                name: "Yulaf Ezmesi & Meyve",
+                cal: 310, p: 10, c: 58, f: 5,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Oatmeal_porridge.jpg/320px-Oatmeal_porridge.jpg"
+            },
+            {
+                name: "Haşlanmış Yumurta (3 Adet)",
+                cal: 215, p: 18, c: 1, f: 15,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Boiled_egg_-_three_stages_of_boiling.jpg/320px-Boiled_egg_-_three_stages_of_boiling.jpg"
+            },
+            {
+                name: "Izgara Kasap Köfte (160g)",
+                cal: 340, p: 30, c: 4, f: 22,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/K%C3%B6fte_with_rice.jpg/320px-K%C3%B6fte_with_rice.jpg"
+            },
+            {
+                name: "Whey Protein Shake",
+                cal: 120, p: 24, c: 2, f: 1.5,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Chocolate_protein_shake.jpg/320px-Chocolate_protein_shake.jpg"
+            },
+            {
+                name: "Lor Peyniri (100g)",
+                cal: 98, p: 12, c: 3, f: 4,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Cottage_cheese_bowl.jpg/320px-Cottage_cheese_bowl.jpg"
+            }
         ];
 
-        let totalCal = parseInt(localStorage.getItem('ironTotalCal')) || 0;
+        let nutrition = JSON.parse(localStorage.getItem('ironNutritionFull')) || { cal: 0, p: 0, c: 0, f: 0 };
 
         function renderFoods() {
             const container = document.getElementById('foodContainer');
@@ -914,27 +995,34 @@
                 const div = document.createElement('div');
                 div.className = 'food-card';
                 div.innerHTML = `
-                    <div class="food-icon"><i class="fa-solid ${f.icon}"></i></div>
+                    <img src="${f.img}" alt="${f.name}" class="food-img" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=120&q=80'" />
                     <div class="food-info">
                         <div class="name">${f.name}</div>
-                        <div class="cal">${f.cal} KCAL</div>
+                        <div class="cal">${f.cal} kcal &bull; P:${f.p}g K:${f.c}g Y:${f.f}g</div>
                     </div>
-                    <button class="btn-add-food" onclick="addCalories(${f.cal})"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btn-add-food" onclick="addFoodItem(${i})"><i class="fa-solid fa-plus"></i></button>
                 `;
                 container.appendChild(div);
             });
             updateCalUI();
         }
 
-        function addCalories(cal) {
-            totalCal += cal;
-            localStorage.setItem('ironTotalCal', totalCal);
+        function addFoodItem(i) {
+            const item = foods[i];
+            nutrition.cal += item.cal;
+            nutrition.p += item.p;
+            nutrition.c += item.c;
+            nutrition.f += item.f;
+            localStorage.setItem('ironNutritionFull', JSON.stringify(nutrition));
             updateCalUI();
         }
 
         function updateCalUI() {
-            document.getElementById('calVal').innerText = totalCal;
-            document.getElementById('headerCal').innerText = `${totalCal} / 2500 KCAL`;
+            document.getElementById('calVal').innerText = nutrition.cal;
+            document.getElementById('pVal').innerText = nutrition.p;
+            document.getElementById('cVal').innerText = nutrition.c;
+            document.getElementById('fVal').innerText = nutrition.f;
+            document.getElementById('headerCal').innerText = `${nutrition.cal} / 2500 KCAL`;
         }
 
         /* 3. MEDİKAL ANATOMİ VE HAREKETLER */
