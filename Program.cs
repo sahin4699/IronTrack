@@ -11,19 +11,33 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// CORS İzni (Render ve Mobil için)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
+
+// SQLite veritabanı ve tabloları otomatik oluştur
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.EnsureCreated();
+}
+
+app.UseCors("AllowAll");
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Tarayıcıdan Swagger görsel panelini açmak için
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Swagger (opsiyonel geliştirici ekranı)
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
