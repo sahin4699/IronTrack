@@ -20,11 +20,11 @@
     <style>
         :root {
             /* Sıcak & Göz Yormayan Premium Palet */
-            --bg: #0d0b0c;
-            --surface: #141113;
-            --surface-card: #1c181b;
-            --border: #2c2529;
-            --border-highlight: #3d3339;
+            --bg: #0b090a;
+            --surface: rgba(20, 17, 19, 0.78);
+            --surface-card: rgba(28, 24, 27, 0.72);
+            --border: rgba(61, 51, 57, 0.6);
+            --border-highlight: rgba(245, 158, 11, 0.4);
 
             --accent: #f59e0b;
             /* Sıcak Kehribar */
@@ -35,7 +35,7 @@
             --clay: #d97706;
 
             --text: #f5f3f4;
-            --text-muted: #9c9298;
+            --text-muted: #a3989e;
             --protein: #10b981;
             --carb: #38bdf8;
             --fat: #fbbf24;
@@ -51,6 +51,15 @@
 
         body {
             background-color: var(--bg);
+            /* Belli belirsiz, sinematik spor salonu arka planı */
+            background-image:
+                radial-gradient(circle at 50% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, rgba(11, 9, 10, 0.88) 0%, rgba(13, 11, 12, 0.94) 100%),
+                url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: var(--text);
             padding: 16px;
             min-height: 100vh;
@@ -62,13 +71,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: linear-gradient(135deg, rgba(24, 20, 23, 0.92), rgba(16, 13, 15, 0.95));
-            backdrop-filter: blur(14px);
+            background: rgba(24, 20, 23, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--border);
             border-radius: 18px;
             padding: 12px 18px;
             margin-bottom: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .header-left {
@@ -78,7 +88,7 @@
         }
 
         .btn-drawer-open {
-            background: #231e22;
+            background: rgba(35, 30, 34, 0.85);
             border: 1px solid var(--border);
             color: #fff;
             width: 42px;
@@ -129,14 +139,20 @@
         }
 
         .meta-pill {
-            background: rgba(245, 158, 11, 0.08);
-            border: 1px solid rgba(245, 158, 11, 0.25);
+            background: rgba(245, 158, 11, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.28);
             color: var(--accent);
             font-size: 11px;
             font-weight: 800;
             padding: 6px 12px;
             border-radius: 10px;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .meta-pill:hover {
+            background: rgba(245, 158, 11, 0.18);
         }
 
         /* GİRİŞ / PROFİL MODAL (ONBOARDING) */
@@ -148,7 +164,8 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 999999;
             align-items: center;
             justify-content: center;
@@ -156,7 +173,8 @@
         }
 
         .onboarding-box {
-            background: var(--surface);
+            background: rgba(22, 18, 21, 0.95);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border-highlight);
             border-radius: 20px;
             width: 100%;
@@ -204,19 +222,20 @@
         input,
         select {
             width: 100%;
-            background: #0d0b0c;
+            background: rgba(13, 11, 12, 0.85);
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 12px 14px;
             color: #fff;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         input:focus,
         select:focus {
             border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
         }
 
         .btn-submit {
@@ -230,7 +249,7 @@
             font-size: 14px;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 16px var(--accent-glow);
+            box-shadow: 0 4px 18px var(--accent-glow);
             transition: all 0.15s;
         }
 
@@ -246,7 +265,7 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(8px);
             z-index: 9999;
             opacity: 0;
             pointer-events: none;
@@ -265,7 +284,9 @@
             width: 380px;
             max-width: 88vw;
             height: 100vh;
-            background: #0d0a0c;
+            background: rgba(15, 12, 14, 0.94);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border-right: 1px solid var(--border);
             z-index: 10000;
             padding: 20px 16px;
@@ -291,7 +312,7 @@
         .drawer-tabs {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.85);
             border-radius: 12px;
             padding: 4px;
             margin-bottom: 16px;
@@ -334,7 +355,7 @@
         }
 
         .d-muscle-btn {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.7);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 12px 10px;
@@ -359,12 +380,12 @@
         .d-muscle-btn.active {
             border-color: var(--accent);
             color: #fff;
-            background: #231c20;
+            background: rgba(35, 28, 32, 0.9);
         }
 
         /* Profil / Kilo & Hedef */
         .profile-card {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 14px;
@@ -392,7 +413,7 @@
 
         /* HAREKETE ÖZEL GRAFİK PANELİ */
         .chart-panel-box {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 14px;
@@ -405,7 +426,7 @@
 
         /* Beslenme & Yemek Kartları */
         .nutrition-metric {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 14px;
@@ -421,7 +442,7 @@
         }
 
         .macro-pill {
-            background: #0d0b0c;
+            background: rgba(13, 11, 12, 0.85);
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 6px 4px;
@@ -438,7 +459,7 @@
         }
 
         .food-card {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 8px 10px;
@@ -474,7 +495,7 @@
         }
 
         .btn-add-food {
-            background: #231c20;
+            background: rgba(35, 28, 32, 0.85);
             border: 1px solid var(--border);
             color: #fff;
             width: 32px;
@@ -493,7 +514,7 @@
 
         /* Adımsayar Halka */
         .step-circle-box {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 16px;
@@ -559,7 +580,7 @@
         }
 
         .step-stat-card {
-            background: #0d0b0c;
+            background: rgba(13, 11, 12, 0.85);
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 8px;
@@ -583,6 +604,8 @@
 
         .panel {
             background: var(--surface);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 20px;
@@ -604,7 +627,7 @@
         }
 
         .day-tab {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.7);
             border: 1px solid var(--border);
             padding: 8px 14px;
             border-radius: 10px;
@@ -622,14 +645,15 @@
         }
 
         .day-tab.active {
-            background: #231c20;
+            background: rgba(35, 28, 32, 0.95);
             border-color: var(--accent);
             color: var(--accent);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
         }
 
         .routine-banner {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(234, 88, 12, 0.04));
-            border: 1px solid rgba(245, 158, 11, 0.25);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(234, 88, 12, 0.06));
+            border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 14px;
             padding: 14px;
             margin-bottom: 16px;
@@ -657,7 +681,8 @@
         }
 
         .exercise-card {
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.7);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 12px 14px;
@@ -670,7 +695,7 @@
 
         .exercise-card:hover {
             border-color: var(--accent);
-            background: #201a1e;
+            background: rgba(35, 28, 32, 0.95);
             transform: translateX(4px);
         }
 
@@ -688,14 +713,15 @@
         }
 
         .btn-video {
-            background: rgba(245, 158, 11, 0.1);
+            background: rgba(245, 158, 11, 0.12);
             color: var(--accent);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.35);
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 800;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .btn-video:hover {
@@ -719,7 +745,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--surface-card);
+            background: rgba(28, 24, 27, 0.7);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 11px 14px;
@@ -730,7 +756,7 @@
         /* PR Kutlama Bannerı */
         .pr-alert-banner {
             display: none;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(234, 88, 12, 0.08));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(234, 88, 12, 0.12));
             border: 1px solid var(--accent);
             border-radius: 12px;
             padding: 12px;
@@ -746,8 +772,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
             z-index: 99999;
             align-items: center;
             justify-content: center;
@@ -755,7 +781,7 @@
         }
 
         .modal-box {
-            background: var(--surface);
+            background: rgba(22, 18, 21, 0.95);
             border: 1px solid var(--border);
             border-radius: 18px;
             width: 100%;
@@ -1162,7 +1188,6 @@
             const exName = document.getElementById('exerciseChartSelect').value;
             const ctx = document.getElementById('exerciseSpecificChart').getContext('2d');
 
-            // Sadece seçilen hareketin loglarını filtrele
             const filteredLogs = globalLogs.filter(l =>
                 l.exerciseName.toLowerCase().trim() === exName.toLowerCase().trim()
             );
@@ -1187,7 +1212,7 @@
                         label: `${exName} Ağırlık (kg)`,
                         data: dataPoints,
                         borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.12)',
+                        backgroundColor: 'rgba(245, 158, 11, 0.15)',
                         borderWidth: 3,
                         pointBackgroundColor: '#ea580c',
                         pointBorderColor: '#fff',
@@ -1205,8 +1230,8 @@
                         }
                     },
                     scales: {
-                        x: { grid: { color: '#272024' }, ticks: { color: '#9c9298' } },
-                        y: { grid: { color: '#272024' }, ticks: { color: '#9c9298' } }
+                        x: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e' } },
+                        y: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e' } }
                     }
                 }
             });
@@ -1472,7 +1497,7 @@
                 window.removeEventListener('devicemotion', handleMotion);
                 sensorActive = false;
                 btn.innerHTML = 'Sensör';
-                btn.style.background = '#231c20';
+                btn.style.background = 'rgba(35, 28, 32, 0.85)';
                 btn.style.color = '#fff';
             }
         }
@@ -1542,7 +1567,7 @@
                             <strong style="font-size:14px; color:#fff;">${log.exerciseName}</strong> &bull; Set ${log.setNumber}
                             <div style="color:var(--accent); font-size:11px; font-weight:800; margin-top:3px;">${log.weight} KG &times; ${log.reps} Tekrar</div>
                         </div>
-                        <button onclick="deleteLog(${log.id})" style="background:#26181d; border:1px solid #4a212c; color:#ff4d4f; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">Sil</button>
+                        <button onclick="deleteLog(${log.id})" style="background:rgba(38, 24, 29, 0.85); border:1px solid #4a212c; color:#ff4d4f; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">Sil</button>
                     `;
                     list.appendChild(row);
                 });
