@@ -1127,7 +1127,6 @@
             const bmi = (p.weight / (hMeter * hMeter)).toFixed(1);
             document.getElementById('pBmiDisp').innerText = `${bmi} (Normal Aralık)`;
 
-            // İlk defa açılıyorsa modalı aç
             if (!localStorage.getItem('ironTruckUserProfile')) {
                 openOnboardingModal();
             }
