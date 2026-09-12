@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="IronTrack" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <title>IronTrack - Gym Tracker</title>
+    <title>IronTrack Pro - Gym Tracker</title>
     <style>
         :root {
             --bg: #0a0a0c;
@@ -24,6 +24,7 @@
             --gold: #ffa502;
             --text: #f5f6fa;
             --muted: #8a8f9d;
+            --success: #2ed573;
         }
 
         * {
@@ -37,34 +38,34 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
-            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 30px);
-            padding-left: calc(env(safe-area-inset-left, 0px) + 16px);
-            padding-right: calc(env(safe-area-inset-right, 0px) + 16px);
+            padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+            padding-left: calc(env(safe-area-inset-left, 0px) + 14px);
+            padding-right: calc(env(safe-area-inset-right, 0px) + 14px);
             min-height: 100vh;
             user-select: none;
         }
 
         .container {
-            max-width: 640px;
+            max-width: 620px;
             margin: 0 auto;
         }
 
-        /* Hero Banner */
+        /* Hero */
         .hero {
             background: linear-gradient(145deg, #16181d, #0d0e11);
             border: 1px solid #282c35;
             border-radius: 18px;
-            padding: 20px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 107, 0, 0.08);
-            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            margin-bottom: 14px;
         }
 
         .hero-text h1 {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 900;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -77,20 +78,19 @@
 
         .hero-text p {
             color: var(--muted);
-            font-size: 12px;
-            margin-top: 4px;
+            font-size: 11px;
+            margin-top: 3px;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
         }
 
         .animation-box {
-            width: 110px;
-            height: 90px;
+            width: 90px;
+            height: 75px;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
         }
 
         .barbell {
@@ -122,19 +122,123 @@
             }
         }
 
-        /* Kart Kutuları */
+        /* Program Seçim Sekmeleri (PPL) */
+        .split-tabs {
+            display: flex;
+            background: #121316;
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 14px;
+            gap: 4px;
+        }
+
+        .split-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 9px;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.2s;
+        }
+
+        .split-tab.active {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 2px 10px var(--accent-glow);
+        }
+
+        /* Dashboard Özet Sayaçları */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 12px 16px;
+            text-align: center;
+        }
+
+        .stat-card .label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .stat-card .val {
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            margin-top: 4px;
+        }
+
+        .stat-card .val span {
+            color: var(--accent);
+            font-size: 13px;
+        }
+
+        /* Rest Timer Floating Bar */
+        .timer-card {
+            background: #14171d;
+            border: 1px solid #282d38;
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .timer-display {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 1px;
+        }
+
+        .timer-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .timer-btn {
+            background: #232732;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .timer-btn:active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Standart Kutular */
         .box {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 18px;
+            padding: 16px;
+            margin-bottom: 14px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .box h2 {
-            font-size: 16px;
-            margin-bottom: 14px;
+            font-size: 14px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -142,13 +246,13 @@
             letter-spacing: 0.5px;
         }
 
-        /* Hızlı Seçim Butonları */
+        /* Quick Tags */
         .quick-tags {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 6px;
+            margin-bottom: 12px;
             overflow-x: auto;
-            padding-bottom: 6px;
+            padding-bottom: 4px;
             scrollbar-width: none;
         }
 
@@ -159,29 +263,25 @@
         .tag {
             background: #191b22;
             border: 1px solid #282d38;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 13px;
+            padding: 7px 12px;
+            border-radius: 16px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             color: #b0b5c0;
             white-space: nowrap;
-            transition: all 0.2s ease;
         }
 
         .tag:active {
             background: var(--accent);
             color: #000;
-            border-color: var(--accent);
-            font-weight: 700;
-            box-shadow: 0 0 12px var(--accent-glow);
         }
 
-        /* Form */
+        /* Form & Canlı 1RM */
         .grid-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         .full-row {
@@ -192,18 +292,30 @@
             width: 100%;
             background: #090a0d;
             border: 1px solid #232732;
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 10px;
+            padding: 13px;
             color: #fff;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            user-select: auto;
         }
 
         input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .live-preview {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--muted);
+            padding: 4px 6px;
+            font-weight: 600;
+        }
+
+        .live-preview span {
+            color: var(--accent);
+            font-weight: 700;
         }
 
         button.btn-primary {
@@ -212,32 +324,30 @@
             color: #000;
             border: none;
             border-radius: 12px;
-            padding: 15px;
+            padding: 14px;
             font-weight: 800;
-            font-size: 15px;
+            font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             cursor: pointer;
             box-shadow: 0 4px 16px var(--accent-glow);
-            transition: all 0.15s ease;
         }
 
         button.btn-primary:active {
-            background: var(--accent-hover);
             transform: scale(0.98);
         }
 
-        /* PR Rozeti */
+        /* PR Card */
         .pr-card {
             display: none;
-            margin-top: 12px;
-            padding: 14px;
-            border-radius: 12px;
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 10px;
             background: rgba(255, 107, 0, 0.08);
             border: 1px dashed var(--accent);
             color: var(--accent);
             text-align: center;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
         }
 
@@ -248,38 +358,33 @@
             align-items: center;
             background: #0c0d10;
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
             border-left: 4px solid var(--accent);
         }
 
         .log-item strong {
-            font-size: 15px;
+            font-size: 14px;
             color: #fff;
         }
 
         .log-item .details {
             color: var(--accent);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .del-btn {
             background: #1f1113;
             color: #ff4757;
             border: 1px solid #3d1b1f;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 7px 12px;
+            border-radius: 7px;
+            font-size: 11px;
             cursor: pointer;
             font-weight: 700;
-        }
-
-        .del-btn:active {
-            background: #ff4757;
-            color: #fff;
         }
     </style>
 </head>
@@ -299,17 +404,14 @@
                     <rect x="25" y="72" width="80" height="8" rx="3" fill="#2d3436" />
                     <rect x="35" y="80" width="6" height="15" fill="#14171a" />
                     <rect x="89" y="80" width="6" height="15" fill="#14171a" />
-
                     <rect x="40" y="66" width="50" height="7" rx="3" fill="#ff6b00" />
                     <circle cx="34" cy="69" r="6" fill="#dfe6e9" />
-
                     <g class="arms">
                         <line x1="55" y1="67" x2="65" y2="40" stroke="#f1f2f6" stroke-width="4"
                             stroke-linecap="round" />
                         <line x1="75" y1="67" x2="65" y2="40" stroke="#f1f2f6" stroke-width="4"
                             stroke-linecap="round" />
                     </g>
-
                     <g class="barbell">
                         <line x1="15" y1="40" x2="115" y2="40" stroke="#ced6e0" stroke-width="3"
                             stroke-linecap="round" />
@@ -322,12 +424,44 @@
             </div>
         </div>
 
+        <!-- PPL Gün Seçimi -->
+        <div class="split-tabs">
+            <div class="split-tab active" onclick="setProgram('push', this)">🔥 PUSH (İTİŞ)</div>
+            <div class="split-tab" onclick="setProgram('pull', this)">⚡ PULL (ÇEKİŞ)</div>
+            <div class="split-tab" onclick="setProgram('legs', this)">💥 LEGS (BACAK)</div>
+        </div>
+
+        <!-- Antrenman Özet Sayaçları -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label">Toplam Hacim</div>
+                <div class="val" id="totalVolume">0 <span>KG</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Tamamlanan Set</div>
+                <div class="val" id="totalSets">0 <span>SET</span></div>
+            </div>
+        </div>
+
+        <!-- Dinlenme Kronometresi -->
+        <div class="timer-card">
+            <div>
+                <div style="font-size:11px; color:var(--muted); font-weight:700;">DİNLENME SAYACI</div>
+                <div class="timer-display" id="timer">01:30</div>
+            </div>
+            <div class="timer-actions">
+                <button class="timer-btn" onclick="startTimer()">Başlat</button>
+                <button class="timer-btn" onclick="addTimer(30)">+30s</button>
+                <button class="timer-btn" onclick="resetTimer()">Sıfırla</button>
+            </div>
+        </div>
+
         <!-- PR Sorgulama -->
         <div class="box">
             <h2>🏆 Kişisel Rekor (PR)</h2>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="prInput" placeholder="Hareket Adı (Örn: Bench Press)" />
-                <button type="button" class="btn-primary" style="width: 110px; padding: 0 10px;"
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="prInput" placeholder="Hareket (Örn: Bench Press)" />
+                <button type="button" class="btn-primary" style="width: 100px; padding:0;"
                     onclick="checkPR()">Sorgula</button>
             </div>
             <div id="prResult" class="pr-card"></div>
@@ -337,31 +471,31 @@
         <div class="box">
             <h2>➕ Yeni Set Ekle</h2>
 
-            <div class="quick-tags">
-                <span class="tag" onclick="selectExercise('Bench Press')">Bench Press</span>
-                <span class="tag" onclick="selectExercise('Incline Dumbbell Press')">Incline Press</span>
-                <span class="tag" onclick="selectExercise('Barbell Row')">Barbell Row</span>
-                <span class="tag" onclick="selectExercise('Lat Pulldown')">Lat Pulldown</span>
-                <span class="tag" onclick="selectExercise('Squat')">Squat</span>
-                <span class="tag" onclick="selectExercise('Deadlift')">Deadlift</span>
-            </div>
+            <div class="quick-tags" id="quickTags"></div>
 
             <form id="workoutForm" class="grid-form">
                 <div class="full-row">
                     <input type="text" id="exerciseName" placeholder="Hareket Adı" required />
                 </div>
                 <div>
-                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
-                        required />
+                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal" required
+                        oninput="calc1RM()" />
                 </div>
                 <div>
-                    <input type="number" id="reps" placeholder="Tekrar" inputmode="numeric" required />
+                    <input type="number" id="reps" placeholder="Tekrar" inputmode="numeric" required
+                        oninput="calc1RM()" />
                 </div>
+
+                <div class="full-row live-preview">
+                    <div>Tahmini 1RM: <span id="est1RM">0 KG</span></div>
+                    <div>Set Hacmi: <span id="setVol">0 KG</span></div>
+                </div>
+
                 <div class="full-row">
                     <input type="number" id="setNumber" placeholder="Set No" value="1" inputmode="numeric" required />
                 </div>
                 <div class="full-row">
-                    <button type="submit" class="btn-primary">Seti Listeye Bas</button>
+                    <button type="submit" class="btn-primary">Seti Kaydet & Sayacı Başlat</button>
                 </div>
             </form>
         </div>
@@ -377,6 +511,34 @@
     <script>
         const API_URL = '/api/WorkoutLogs';
 
+        // PPL Egzersiz Havuzu
+        const routines = {
+            push: ['Bench Press', 'Incline Dumbbell Press', 'Overhead Press', 'Lateral Raise', 'Triceps Pushdown', 'Dips'],
+            pull: ['Barbell Row', 'Lat Pulldown', 'Seated Cable Row', 'Face Pull', 'Barbell Curl', 'Hammer Curl'],
+            legs: ['Squat', 'Leg Press', 'Romanian Deadlift', 'Leg Curl', 'Leg Extension', 'Calf Raise']
+        };
+
+        let currentProgram = 'push';
+
+        function renderQuickTags() {
+            const container = document.getElementById('quickTags');
+            container.innerHTML = '';
+            routines[currentProgram].forEach(ex => {
+                const span = document.createElement('span');
+                span.className = 'tag';
+                span.innerText = ex;
+                span.onclick = () => selectExercise(ex);
+                container.appendChild(span);
+            });
+        }
+
+        function setProgram(prog, el) {
+            currentProgram = prog;
+            document.querySelectorAll('.split-tab').forEach(tab => tab.classList.remove('active'));
+            el.classList.add('active');
+            renderQuickTags();
+        }
+
         function selectExercise(name) {
             document.getElementById('exerciseName').value = name;
             document.getElementById('prInput').value = name;
@@ -384,33 +546,88 @@
             checkPR();
         }
 
+        // Canlı 1RM Hesaplama (Epley Formülü: Ağırlık * (1 + Tekrar / 30))
+        function calc1RM() {
+            const w = parseFloat(document.getElementById('weight').value) || 0;
+            const r = parseInt(document.getElementById('reps').value) || 0;
+
+            const oneRM = r === 1 ? w : Math.round(w * (1 + r / 30) * 10) / 10;
+            const vol = Math.round(w * r);
+
+            document.getElementById('est1RM').innerText = `${oneRM} KG`;
+            document.getElementById('setVol').innerText = `${vol} KG`;
+        }
+
+        // Dinlenme Sayacı (Rest Timer)
+        let timerSeconds = 90;
+        let timerInterval = null;
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timerSeconds / 60);
+            const s = timerSeconds % 60;
+            document.getElementById('timer').innerText =
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerSeconds = 90;
+            updateTimerDisplay();
+        }
+
+        function addTimer(sec) {
+            timerSeconds += sec;
+            updateTimerDisplay();
+        }
+
+        // API Fonksiyonları
         async function loadLogs() {
             const container = document.getElementById('logsList');
             try {
                 const res = await fetch(API_URL);
-                if (!res.ok) throw new Error("Sunucu yanıt vermedi");
+                if (!res.ok) throw new Error();
                 const logs = await res.json();
                 container.innerHTML = '';
 
                 if (logs.length === 0) {
-                    container.innerHTML = '<p style="color:var(--muted); font-size:14px; text-align:center; padding:10px 0;">Henüz set kaydedilmedi.</p>';
+                    container.innerHTML = '<p style="color:var(--muted); font-size:13px; text-align:center;">Henüz set kaydedilmedi.</p>';
+                    document.getElementById('totalVolume').innerHTML = `0 <span>KG</span>`;
+                    document.getElementById('totalSets').innerHTML = `0 <span>SET</span>`;
                     return;
                 }
 
+                let totalVol = 0;
                 logs.forEach(log => {
+                    totalVol += (log.weight * log.reps);
                     const item = document.createElement('div');
                     item.className = 'log-item';
                     item.innerHTML = `
                         <div>
                             <strong>${log.exerciseName}</strong> &bull; Set ${log.setNumber}
-                            <div class="details">${log.weight} KG &times; ${log.reps} Tekrar</div>
+                            <div class="details">${log.weight} KG &times; ${log.reps} Tekrar &bull; ${(log.weight * log.reps)} KG Hacim</div>
                         </div>
                         <button class="del-btn" onclick="deleteLog(${log.id})">Sil</button>
                     `;
                     container.appendChild(item);
                 });
+
+                document.getElementById('totalVolume').innerHTML = `${totalVol.toLocaleString()} <span>KG</span>`;
+                document.getElementById('totalSets').innerHTML = `${logs.length} <span>SET</span>`;
             } catch (err) {
-                container.innerHTML = '<p style="color:#ff4757; font-size:13px; text-align:center;">Bağlantı kuruluyor...</p>';
+                container.innerHTML = '<p style="color:#ff4757; font-size:13px; text-align:center;">API bağlantısı kuruluyor...</p>';
             }
         }
 
@@ -433,21 +650,19 @@
                 prBox.style.borderColor = 'var(--accent)';
                 prBox.style.color = 'var(--accent)';
                 prBox.innerHTML = `🔥 <strong>${data.exercise}</strong> PR: <strong>${data.maxWeight} KG</strong>`;
-            } catch (e) {
-                console.error(e);
-            }
+            } catch (e) { console.error(e); }
         }
 
         document.getElementById('workoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const currentSetInput = document.getElementById('setNumber');
-            const currentSet = parseInt(currentSetInput.value) || 1;
+            const setInput = document.getElementById('setNumber');
+            const curSet = parseInt(setInput.value) || 1;
 
             const payload = {
                 exerciseName: document.getElementById('exerciseName').value,
                 weight: parseFloat(document.getElementById('weight').value),
                 reps: parseInt(document.getElementById('reps').value),
-                setNumber: currentSet
+                setNumber: curSet
             };
 
             try {
@@ -459,12 +674,17 @@
 
                 document.getElementById('weight').value = '';
                 document.getElementById('reps').value = '';
-                // Bir sonraki set için numarayı otomatik 1 artırır
-                currentSetInput.value = currentSet + 1;
+                document.getElementById('est1RM').innerText = '0 KG';
+                document.getElementById('setVol').innerText = '0 KG';
+                setInput.value = curSet + 1;
+
+                // Set kaydedilince otomatik dinlenme sayacını başlatır
+                resetTimer();
+                startTimer();
 
                 loadLogs();
             } catch (err) {
-                alert("Kayıt eklenirken bir hata oluştu.");
+                alert("Kayıt eklenemedi.");
             }
         });
 
@@ -473,10 +693,12 @@
                 await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
                 loadLogs();
             } catch (err) {
-                alert("Silme başarısız.");
+                alert("Silinemedi.");
             }
         }
 
+        // Başlangıç
+        renderQuickTags();
         loadLogs();
     </script>
 </body>
