@@ -5,26 +5,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#090a0f" />
-    <title>IronTruck Pro</title>
+    <meta name="theme-color" content="#060709" />
+    <title>IRONTRUCK PRO - Elite Gym Intelligence</title>
 
+    <!-- Google Fonts, FontAwesome & Kütüphaneler -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Chart.js Grafikler -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti (PR Patlaması) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            --bg: #08090d;
-            --surface: #10121a;
-            --surface-card: #151824;
-            --border: #202536;
-            --accent: #ff5e00;
-            --accent-glow: rgba(255, 94, 0, 0.4);
-            --gold: #f59e0b;
-            --text-main: #f8fafc;
-            --text-muted: #8e98ab;
+            --bg: #060709;
+            --surface: #0c0e14;
+            --surface-card: #131722;
+            --border: #1e2436;
+            --accent: #ff4500;
+            --accent-glow: rgba(255, 69, 0, 0.5);
+            --gold: #ffb703;
+            --purple: #8b5cf6;
+            --text: #f8fafc;
+            --muted: #8892b0;
             --protein: #10b981;
             --carb: #3b82f6;
             --fat: #f59e0b;
@@ -40,59 +46,73 @@
 
         body {
             background-color: var(--bg);
-            color: var(--text-main);
+            color: var(--text);
             padding: 16px;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Header */
-        .header {
+        /* Top Header */
+        .app-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--surface);
+            background: linear-gradient(135deg, rgba(19, 23, 34, 0.8), rgba(12, 14, 20, 0.9));
+            backdrop-filter: blur(14px);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 12px 20px;
             margin-bottom: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
-        .header-left {
+        .header-brand {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .menu-toggle-btn {
-            background: #1c2130;
-            border: 1px solid #2e364f;
+        .btn-drawer-open {
+            background: #181d2a;
+            border: 1px solid var(--border);
             color: #fff;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .menu-toggle-btn:active {
+        .btn-drawer-open:hover,
+        .btn-drawer-open:active {
             background: var(--accent);
             color: #000;
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        .header h1 {
+        .brand-title {
             font-size: 20px;
-            font-weight: 800;
+            font-weight: 900;
             letter-spacing: 0.5px;
         }
 
-        .header h1 span {
+        .brand-title span {
             color: var(--accent);
-            text-shadow: 0 0 12px var(--accent-glow);
+            text-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .cal-badge {
+            background: rgba(255, 69, 0, 0.12);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 10px;
         }
 
         /* SOL AÇILIR MENÜ (DRAWER) */
@@ -102,9 +122,9 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -118,57 +138,58 @@
         .drawer {
             position: fixed;
             top: 0;
-            left: -380px;
-            width: 360px;
+            left: -400px;
+            width: 380px;
             max-width: 88vw;
             height: 100vh;
-            background: #0d0f16;
+            background: #090b10;
             border-right: 1px solid var(--border);
-            z-index: 1001;
+            z-index: 10000;
             padding: 20px 16px;
             overflow-y: auto;
-            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
             display: flex;
             flex-direction: column;
         }
 
         .drawer-overlay.open .drawer {
-            transform: translateX(380px);
+            transform: translateX(400px);
         }
 
         .drawer-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 12px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--border);
             margin-bottom: 14px;
         }
 
         .drawer-tabs {
             display: flex;
-            background: #151824;
-            border-radius: 10px;
-            padding: 3px;
+            background: var(--surface-card);
+            border-radius: 12px;
+            padding: 4px;
             margin-bottom: 14px;
-            gap: 3px;
+            gap: 4px;
         }
 
         .d-tab {
             flex: 1;
             text-align: center;
-            padding: 8px 4px;
+            padding: 9px 4px;
             font-size: 11px;
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
-            color: var(--text-muted);
+            color: var(--muted);
             transition: all 0.2s;
         }
 
         .d-tab.active {
             background: var(--accent);
             color: #000;
+            box-shadow: 0 0 12px var(--accent-glow);
         }
 
         .tab-panel {
@@ -179,7 +200,101 @@
             display: block;
         }
 
-        /* Dairesel Canlı Adımsayar */
+        /* Beslenme & Yemek Kartları */
+        .nutrition-metric {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .macro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .macro-pill {
+            background: #08090d;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 4px;
+            text-align: center;
+        }
+
+        .food-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .food-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .food-card:hover {
+            border-color: var(--accent);
+        }
+
+        .food-img {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+            background: #171b26;
+        }
+
+        .food-info {
+            flex: 1;
+        }
+
+        .food-info .name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .food-info .cal {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .btn-add-food {
+            background: #1c2130;
+            border: 1px solid #2e364f;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add-food:active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Adımsayar Halka */
         .step-circle-box {
             background: var(--surface-card);
             border: 1px solid var(--border);
@@ -205,7 +320,7 @@
 
         .ring-bg {
             fill: none;
-            stroke: #1e2230;
+            stroke: #181c28;
             stroke-width: 12;
         }
 
@@ -217,6 +332,7 @@
             stroke-dasharray: 440;
             stroke-dashoffset: 440;
             transition: stroke-dashoffset 0.4s ease;
+            filter: drop-shadow(0 0 8px var(--accent-glow));
         }
 
         .ring-text {
@@ -232,147 +348,25 @@
         }
 
         .ring-text .count {
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 26px;
+            font-weight: 900;
             color: #fff;
         }
 
-        .step-info-row {
+        .step-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             width: 100%;
-            margin-top: 12px;
+            margin-top: 14px;
         }
 
-        .step-info-card {
-            background: #0b0c10;
+        .step-stat-card {
+            background: #08090d;
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 8px;
             text-align: center;
-        }
-
-        .step-info-card .val {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--gold);
-        }
-
-        .step-btns {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn-sensor {
-            flex: 1;
-            background: #1c2130;
-            border: 1px solid #2e364f;
-            color: #fff;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* Besin Kartları */
-        .cal-box {
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .macro-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin-top: 8px;
-        }
-
-        .macro-pill {
-            background: #0b0c10;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 5px 4px;
-            text-align: center;
-        }
-
-        .food-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 380px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .food-card {
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .food-img {
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
-            background: #1b1e2b;
-        }
-
-        .food-info {
-            flex: 1;
-        }
-
-        .food-info .name {
-            font-size: 12px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .food-info .cal {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .btn-add-food {
-            background: #1e2436;
-            border: 1px solid #2b344d;
-            color: #fff;
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        /* PR Rozeti ve Kartı */
-        .pr-result-box {
-            display: none;
-            margin-top: 12px;
-            padding: 12px;
-            border-radius: 10px;
-            background: rgba(255, 94, 0, 0.08);
-            border: 1px dashed var(--accent);
-            color: var(--accent);
-            text-align: center;
-            font-size: 13px;
-            font-weight: 700;
         }
 
         /* ANA EKRAN DÜZENİ */
@@ -380,7 +374,7 @@
             display: grid;
             grid-template-columns: 1.1fr 1fr;
             gap: 16px;
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
         }
 
@@ -395,12 +389,12 @@
             border: 1px solid var(--border);
             border-radius: 18px;
             padding: 18px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* Anatomi & Flip */
+        /* 3D T-Pose Medikal Kas Çevirme Alanı */
         .anatomy-viewport {
-            background: radial-gradient(circle at center, #161924 0%, #090a0e 100%);
+            background: radial-gradient(circle at center, #171b26 0%, #080a0f 100%);
             border: 1px solid var(--border);
             border-radius: 18px;
             padding: 16px;
@@ -443,25 +437,26 @@
         .anatomy-svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.9));
+            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95));
         }
 
         .hotspot-node {
             position: absolute;
             border-radius: 50%;
-            border: 2px solid rgba(255, 94, 0, 0.8);
-            background: rgba(255, 94, 0, 0.2);
+            border: 2px solid rgba(255, 69, 0, 0.85);
+            background: rgba(255, 69, 0, 0.2);
             cursor: pointer;
-            animation: pulseWave 2s infinite ease-in-out;
+            animation: pulseGlow 2s infinite ease-in-out;
         }
 
         .hotspot-node.active {
             background: var(--accent);
             border-color: #fff;
-            box-shadow: 0 0 15px var(--accent);
+            box-shadow: 0 0 20px var(--accent);
+            transform: scale(1.1);
         }
 
-        @keyframes pulseWave {
+        @keyframes pulseGlow {
             0% {
                 transform: scale(1);
                 opacity: 0.8;
@@ -478,6 +473,7 @@
             }
         }
 
+        /* Ön Kas Hotspotları */
         .hs-chest {
             top: 21%;
             left: 37%;
@@ -540,6 +536,7 @@
             border-radius: 12px;
         }
 
+        /* Arka Kas Hotspotları */
         .hs-traps {
             top: 17%;
             left: 39%;
@@ -604,13 +601,13 @@
             border-radius: 10px;
         }
 
-        .flip-indicator {
+        .flip-hint {
             position: absolute;
             bottom: 12px;
             font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            background: rgba(16, 18, 26, 0.8);
+            font-weight: 800;
+            color: var(--muted);
+            background: rgba(18, 22, 32, 0.8);
             border: 1px solid var(--border);
             padding: 6px 14px;
             border-radius: 20px;
@@ -627,13 +624,15 @@
         .exercise-item {
             background: var(--surface-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 10px 12px;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .exercise-item:hover {
             border-color: var(--accent);
+            background: #191e2b;
         }
 
         .exercise-item .name {
@@ -643,7 +642,7 @@
         }
 
         .exercise-item .meta {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--accent);
             margin-top: 4px;
             display: flex;
@@ -663,13 +662,14 @@
 
         input {
             width: 100%;
-            background: #0b0c10;
+            background: #080a0f;
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 12px;
+            padding: 13px;
             color: #fff;
             font-size: 14px;
             outline: none;
+            transition: border-color 0.2s;
         }
 
         input:focus {
@@ -678,17 +678,24 @@
 
         .btn-submit {
             width: 100%;
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), #d93800);
             color: #000;
             border: none;
-            border-radius: 10px;
-            padding: 13px;
-            font-weight: 800;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 900;
             font-size: 14px;
             text-transform: uppercase;
             cursor: pointer;
+            box-shadow: 0 4px 16px var(--accent-glow);
+            transition: all 0.15s;
         }
 
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Antrenman Kayıtları */
         .log-entry {
             display: flex;
             justify-content: space-between;
@@ -701,7 +708,35 @@
             border-left: 4px solid var(--accent);
         }
 
-        /* Modal */
+        /* PR Kutlama Bannerı */
+        .pr-alert-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.15), rgba(255, 69, 0, 0.15));
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Video Modal */
         .modal-backdrop {
             display: none;
             position: fixed;
@@ -710,7 +745,8 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
+            backdrop-filter: blur(6px);
+            z-index: 99999;
             align-items: center;
             justify-content: center;
             padding: 16px;
@@ -721,12 +757,12 @@
             border: 1px solid var(--border);
             border-radius: 16px;
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             overflow: hidden;
         }
 
         .modal-head {
-            padding: 12px 16px;
+            padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -753,62 +789,65 @@
 
 <body>
 
-    <!-- SOL AÇILIR MENÜ (DRAWER: KALORİ / PR / ADIMSAYAR) -->
+    <!-- SOL AÇILIR MENÜ (DRAWER: KALORİ / ADIMSAYAR / GRAFİKLER) -->
     <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer(event)">
         <div class="drawer" onclick="event.stopPropagation()">
             <div class="drawer-header">
                 <div style="font-size: 14px; font-weight: 800; color: var(--accent);"><i
-                        class="fa-solid fa-sliders"></i> KONTROL PANELİ</div>
+                        class="fa-solid fa-chart-pie"></i> ANALİTİK MERKEZİ</div>
                 <button onclick="toggleDrawer()"
-                    style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
+                    style="background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer;">&times;</button>
             </div>
 
-            <!-- Sekme Butonları -->
+            <!-- Sekme Seçici -->
             <div class="drawer-tabs">
                 <div class="d-tab active" onclick="switchDrawerTab('cal', this)"><i class="fa-solid fa-utensils"></i>
                     Kalori</div>
-                <div class="d-tab" onclick="switchDrawerTab('pr', this)"><i class="fa-solid fa-trophy"></i> PR Sorgula
-                </div>
+                <div class="d-tab" onclick="switchDrawerTab('chart', this)"><i class="fa-solid fa-chart-line"></i>
+                    Grafik</div>
                 <div class="d-tab" onclick="switchDrawerTab('steps', this)"><i class="fa-solid fa-shoe-prints"></i>
                     Adımlar</div>
             </div>
 
-            <!-- 1. SEKME: KALORİ & BESİNLER -->
+            <!-- 1. SEKME: %100 GERÇEK VE DOĞRU BESİNLER -->
             <div class="tab-panel active" id="tabCal">
-                <div class="cal-box">
-                    <div style="font-size: 20px; font-weight: 800;"><span id="calVal">0</span> <span
-                            style="font-size: 11px; color: var(--text-muted);">/ 2500 KCAL</span></div>
-                    <div class="macro-row">
+                <div class="nutrition-metric">
+                    <div style="font-size: 22px; font-weight: 900;"><span id="calVal">0</span> <span
+                            style="font-size: 12px; color: var(--muted);">/ 2500 KCAL</span></div>
+                    <div class="macro-grid">
                         <div class="macro-pill">
-                            <div style="font-size:9px; color:var(--protein); font-weight:700;">P</div>
-                            <div style="font-size:12px; font-weight:800;" id="pVal">0g</div>
+                            <div style="font-size:9px; color:var(--protein); font-weight:800;">PROTEİN</div>
+                            <div style="font-size:13px; font-weight:800;" id="pVal">0g</div>
                         </div>
                         <div class="macro-pill">
-                            <div style="font-size:9px; color:var(--carb); font-weight:700;">K</div>
-                            <div style="font-size:12px; font-weight:800;" id="cVal">0g</div>
+                            <div style="font-size:9px; color:var(--carb); font-weight:800;">KARB</div>
+                            <div style="font-size:13px; font-weight:800;" id="cVal">0g</div>
                         </div>
                         <div class="macro-pill">
-                            <div style="font-size:9px; color:var(--fat); font-weight:700;">Y</div>
-                            <div style="font-size:12px; font-weight:800;" id="fVal">0g</div>
+                            <div style="font-size:9px; color:var(--fat); font-weight:800;">YAĞ</div>
+                            <div style="font-size:13px; font-weight:800;" id="fVal">0g</div>
                         </div>
                     </div>
                 </div>
+
                 <div class="food-list" id="foodContainer"></div>
                 <button onclick="resetCalories()"
-                    style="width:100%; margin-top:10px; background:#1c2130; border:1px solid #2e364f; color:#fff; padding:8px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Günü
+                    style="width:100%; margin-top:10px; background:#1c2130; border:1px solid #2e364f; color:#fff; padding:10px; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer;">Günü
                     Sıfırla</button>
             </div>
 
-            <!-- 2. SEKME: PR (KİŞİSEL REKOR) -->
-            <div class="tab-panel" id="tabPr">
-                <div style="display:flex; gap:8px; margin-bottom:10px;">
-                    <input type="text" id="prQueryInput" placeholder="Hareket (Örn: Bench Press)" />
-                    <button class="btn-submit" style="width:90px; padding:0;" onclick="checkPR()">Bul</button>
+            <!-- 2. SEKME: CANLI GELİŞİM GRAFİĞİ -->
+            <div class="tab-panel" id="tabChart">
+                <div
+                    style="font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px; text-transform:uppercase;">
+                    Son 7 Set Ağırlık / Hacim Eğrisi</div>
+                <div
+                    style="background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:10px;">
+                    <canvas id="workoutChart" height="230"></canvas>
                 </div>
-                <div id="prResultBox" class="pr-result-box"></div>
             </div>
 
-            <!-- 3. SEKME: CANLI ADIMSAYAR -->
+            <!-- 3. SEKME: ADIMSAYAR -->
             <div class="tab-panel" id="tabSteps">
                 <div class="step-circle-box">
                     <div class="ring-box">
@@ -818,24 +857,29 @@
                         </svg>
                         <div class="ring-text">
                             <div class="count" id="stepCountDisplay">0</div>
-                            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">/ 10.000 ADIM</div>
+                            <div style="font-size:10px; color:var(--muted); font-weight:800;">/ 10.000 ADIM</div>
                         </div>
                     </div>
-                    <div class="step-info-row">
-                        <div class="step-info-card">
-                            <div style="font-size:9px; color:var(--text-muted); font-weight:700;">🔥 YAKILAN</div>
-                            <div class="val" id="burnedCalDisplay">0.0 kcal</div>
+
+                    <div class="step-stats">
+                        <div class="step-stat-card">
+                            <div style="font-size:9px; color:var(--muted); font-weight:800;">🔥 YAKILAN</div>
+                            <div style="font-size:14px; font-weight:800; color:var(--gold);" id="burnedCalDisplay">0.0
+                                kcal</div>
                         </div>
-                        <div class="step-info-card">
-                            <div style="font-size:9px; color:var(--text-muted); font-weight:700;">📍 MESAFE</div>
-                            <div class="val" id="distanceDisplay">0.00 km</div>
+                        <div class="step-stat-card">
+                            <div style="font-size:9px; color:var(--muted); font-weight:800;">📍 MESAFE</div>
+                            <div style="font-size:14px; font-weight:800; color:var(--gold);" id="distanceDisplay">0.00
+                                km</div>
                         </div>
                     </div>
-                    <div class="step-btns">
-                        <button class="btn-sensor" id="sensorBtn" onclick="toggleSensor()"><i
-                                class="fa-solid fa-play"></i> Başlat</button>
-                        <button class="btn-sensor" onclick="addManualSteps(50)"><i class="fa-solid fa-plus"></i>
-                            +50</button>
+
+                    <div style="display:flex; gap:8px; width:100%; margin-top:12px;">
+                        <button class="btn-submit" style="flex:1; padding:10px; font-size:11px;" id="sensorBtn"
+                            onclick="toggleSensor()">Sensörü Aç</button>
+                        <button class="btn-submit"
+                            style="flex:1; padding:10px; font-size:11px; background:#1c2130; color:#fff;"
+                            onclick="addManualSteps(50)">+50 Adım</button>
                     </div>
                 </div>
             </div>
@@ -844,18 +888,18 @@
     </div>
 
     <!-- Header -->
-    <header class="header">
-        <div class="header-left">
-            <button class="menu-toggle-btn" onclick="toggleDrawer()"><i class="fa-solid fa-bars"></i></button>
-            <h1>IRON<span>TRUCK</span> PRO</h1>
+    <header class="app-header">
+        <div class="header-brand">
+            <button class="btn-drawer-open" onclick="toggleDrawer()"><i class="fa-solid fa-bars-staggered"></i></button>
+            <div class="brand-title">IRON<span>TRUCK</span></div>
         </div>
-        <div style="font-size: 13px; font-weight: 700; color: var(--accent);" id="headerCal">0 / 2500 KCAL</div>
+        <div class="cal-badge" id="headerCalBadge">0 / 2500 KCAL</div>
     </header>
 
-    <!-- ANA ANTRENMAN EKRANI -->
+    <!-- ANA ANTRENMAN DÜZENİ -->
     <main class="main-container">
 
-        <!-- 1. SÜTUN: MEDİKAL KAS ANATOMİSİ -->
+        <!-- 1. KOLON: 3D ANATOMİK KAS MODELİ (ÖN / ARKA) -->
         <section class="anatomy-viewport" onclick="flipBody(event)">
             <div class="flip-stage" id="stageCard">
 
@@ -864,15 +908,15 @@
                     <svg class="anatomy-svg" viewBox="0 0 300 480">
                         <defs>
                             <linearGradient id="mf" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#99261a" />
-                                <stop offset="100%" stop-color="#5a130c" />
+                                <stop offset="0%" stop-color="#a62619" />
+                                <stop offset="100%" stop-color="#540f09" />
                             </linearGradient>
                             <linearGradient id="tf" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#cbd5e1" />
                                 <stop offset="100%" stop-color="#64748b" />
                             </linearGradient>
                         </defs>
-                        <ellipse cx="150" cy="45" rx="20" ry="24" fill="url(#mf)" stroke="#380d07" />
+                        <ellipse cx="150" cy="45" rx="20" ry="24" fill="url(#mf)" stroke="#2b0805" />
                         <path d="M138 68 L162 68 L176 90 L124 90 Z" fill="url(#mf)" />
                         <path d="M125 90 C140 85, 150 88, 150 114 C134 120, 122 116, 115 110 Z" fill="url(#mf)"
                             stroke="#220603" stroke-width="1.5" />
@@ -899,8 +943,10 @@
                     </div>
                     <div class="hotspot-node hs-shoulder-r" onclick="pickMuscle('shoulders', event)" title="Sağ Omuz">
                     </div>
-                    <div class="hotspot-node hs-biceps-l" onclick="pickMuscle('biceps', event)" title="Sol Kol"></div>
-                    <div class="hotspot-node hs-biceps-r" onclick="pickMuscle('biceps', event)" title="Sağ Kol"></div>
+                    <div class="hotspot-node hs-biceps-l" onclick="pickMuscle('biceps', event)" title="Sol Biceps">
+                    </div>
+                    <div class="hotspot-node hs-biceps-r" onclick="pickMuscle('biceps', event)" title="Sağ Biceps">
+                    </div>
                     <div class="hotspot-node hs-abs" onclick="pickMuscle('abs', event)" title="Karın"></div>
                     <div class="hotspot-node hs-quads-l" onclick="pickMuscle('quads', event)" title="Sol Ön Bacak">
                     </div>
@@ -911,7 +957,7 @@
                 <!-- ARKA ANATOMİ -->
                 <div class="body-card back">
                     <svg class="anatomy-svg" viewBox="0 0 300 480">
-                        <ellipse cx="150" cy="45" rx="20" ry="24" fill="url(#mf)" stroke="#380d07" />
+                        <ellipse cx="150" cy="45" rx="20" ry="24" fill="url(#mf)" stroke="#2b0805" />
                         <path d="M138 68 L162 68 L185 102 L150 130 L115 102 Z" fill="url(#mf)" />
                         <path d="M115 102 C126 114, 138 122, 144 160 C130 156, 118 144, 110 124 Z" fill="url(#mf)" />
                         <path d="M185 102 C174 114, 162 122, 156 160 C170 156, 182 144, 190 124 Z" fill="url(#mf)" />
@@ -926,7 +972,7 @@
                     </svg>
 
                     <div class="hotspot-node hs-traps" onclick="pickMuscle('traps', event)" title="Trapez"></div>
-                    <div class="hotspot-node hs-lats" onclick="pickMuscle('lats', event)" title="Sırt / Kanat"></div>
+                    <div class="hotspot-node hs-lats" onclick="pickMuscle('lats', event)" title="Kanat & Sırt"></div>
                     <div class="hotspot-node hs-triceps-l" onclick="pickMuscle('triceps', event)" title="Sol Triceps">
                     </div>
                     <div class="hotspot-node hs-triceps-r" onclick="pickMuscle('triceps', event)" title="Sağ Triceps">
@@ -940,14 +986,23 @@
                 </div>
 
             </div>
-            <div class="flip-indicator"><i class="fa-solid fa-arrows-rotate"></i> Vücudu çevirmek için dokun</div>
+            <div class="flip-hint"><i class="fa-solid fa-arrows-rotate"></i> Çevirmek için dokun</div>
         </section>
 
-        <!-- 2. SÜTUN: HAREKETLER & SET KAYDI -->
+        <!-- 2. KOLON: SEÇİLEN HAREKETLER & SET GİRİŞ FORMU -->
         <section class="panel">
-            <div style="font-size:14px; font-weight:700; text-transform:uppercase; margin-bottom:12px;"
-                id="activeMuscleTitle"><i class="fa-solid fa-fire" style="color:var(--accent);"></i> Göğüs (Chest)
-                Egzersizleri</div>
+            <!-- PR Kutlama Kartı -->
+            <div id="prAlertBanner" class="pr-alert-banner">
+                <div style="font-size:11px; font-weight:800; color:var(--gold); text-transform:uppercase;">🔥 REKOR
+                    KIRILDI! TEBRİKLER 🔥</div>
+                <div style="font-size:15px; font-weight:900; color:#fff; margin-top:2px;" id="prAlertText">Yeni PR: 100
+                    KG</div>
+            </div>
+
+            <div style="font-size:14px; font-weight:800; text-transform:uppercase; margin-bottom:12px;"
+                id="activeMuscleTitle">
+                <i class="fa-solid fa-fire" style="color:var(--accent);"></i> Göğüs (Chest) Egzersizleri
+            </div>
             <div class="exercise-grid" id="exerciseGrid"></div>
 
             <form id="workoutForm" class="workout-form">
@@ -955,21 +1010,23 @@
                     <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz" required />
                 </div>
                 <div>
-                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" required />
+                    <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
+                        required />
                 </div>
                 <div>
-                    <input type="number" id="reps" placeholder="Tekrar" required />
+                    <input type="number" id="reps" placeholder="Tekrar" inputmode="numeric" required />
                 </div>
                 <div class="full-span">
-                    <input type="number" id="setNumber" placeholder="Set No" value="1" required />
+                    <input type="number" id="setNumber" placeholder="Set No" value="1" inputmode="numeric" required />
                 </div>
                 <div class="full-span">
-                    <button type="submit" class="btn-submit">Seti Kaydet</button>
+                    <button type="submit" class="btn-submit">Seti Kaydet & Listeye Bas</button>
                 </div>
             </form>
 
-            <div style="font-size:13px; font-weight:700; text-transform:uppercase; margin-top:12px; margin-bottom:8px;">
-                <i class="fa-solid fa-list-check" style="color:var(--accent);"></i> Antrenman Kayıtları</div>
+            <div style="font-size:13px; font-weight:800; text-transform:uppercase; margin-top:14px; margin-bottom:8px;">
+                <i class="fa-solid fa-list-check" style="color:var(--accent);"></i> Güncel Antrenman Kayıtları
+            </div>
             <div id="logsList" style="max-height: 220px; overflow-y: auto;">Kayıtlar yükleniyor...</div>
         </section>
 
@@ -981,7 +1038,7 @@
             <div class="modal-head">
                 <strong id="modalTitle" style="color:var(--accent);">Form Videosu</strong>
                 <button onclick="closeModal()"
-                    style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
+                    style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
             </div>
             <div class="video-box">
                 <iframe id="videoPlayer" src="" allowfullscreen></iframe>
@@ -995,7 +1052,7 @@
     <script>
         const API_URL = '/api/WorkoutLogs';
 
-        /* DRAWER KONTROLÜ */
+        /* 1. SOL DRAWER KONTROLÜ */
         function toggleDrawer() {
             document.getElementById('drawerOverlay').classList.toggle('open');
         }
@@ -1010,37 +1067,99 @@
             el.classList.add('active');
 
             if (tabName === 'cal') document.getElementById('tabCal').classList.add('active');
-            if (tabName === 'pr') document.getElementById('tabPr').classList.add('active');
+            if (tabName === 'chart') {
+                document.getElementById('tabChart').classList.add('active');
+                renderChart();
+            }
             if (tabName === 'steps') document.getElementById('tabSteps').classList.add('active');
         }
 
-        /* 1. PR SORGULAMA */
-        async function checkPR() {
-            const name = document.getElementById('prQueryInput').value.trim();
-            const box = document.getElementById('prResultBox');
-            if (!name) return;
-
-            try {
-                const res = await fetch(`${API_URL}/pr/${encodeURIComponent(name)}`);
-                box.style.display = 'block';
-                if (res.status === 404) {
-                    box.style.borderColor = '#333';
-                    box.style.color = '#888';
-                    box.innerText = `${name} için henüz rekor yok.`;
-                    return;
-                }
-                const data = await res.json();
-                box.style.borderColor = 'var(--accent)';
-                box.style.color = 'var(--accent)';
-                box.innerHTML = `🏆 <strong>${data.exercise}</strong> PR: <strong>${data.maxWeight} KG</strong>`;
-            } catch (e) {
-                box.style.display = 'block';
-                box.innerText = "Sorgu başarısız.";
+        /* 2. %100 GERÇEK VE DOĞRULANMIŞ BESİNLER LİSTESİ */
+        const foods = [
+            {
+                name: "Izgara Tavuk Göğsü (150g)",
+                cal: 247, p: 46, c: 0, f: 5,
+                img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=150&auto=format&fit=crop&q=80"
+            },
+            {
+                name: "Beyaz Pirinç Pilavı (200g)",
+                cal: 260, p: 5, c: 57, f: 1,
+                img: "https://images.unsplash.com/photo-1516684732162-798a0062be99?w=150&auto=format&fit=crop&q=80"
+            },
+            {
+                name: "Yulaf & Muz Kasesi (80g)",
+                cal: 310, p: 10, c: 58, f: 5,
+                img: "https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=150&auto=format&fit=crop&q=80"
+            },
+            {
+                name: "Haşlanmış Yumurta (3 Adet)",
+                cal: 215, p: 18, c: 1, f: 15,
+                img: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=150&auto=format&fit=crop&q=80"
+            },
+            {
+                name: "Izgara Kasap Köfte (160g)",
+                cal: 340, p: 30, c: 4, f: 22,
+                img: "https://images.unsplash.com/photo-1529042410759-befb1204b468?w=150&auto=format&fit=crop&q=80"
+            },
+            {
+                name: "Çikolatalı Whey Shake",
+                cal: 120, p: 24, c: 2, f: 1.5,
+                img: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=150&auto=format&fit=crop&q=80"
+            },
+            {
+                name: "Fıstık Ezmeli Muz Dilimleri",
+                cal: 280, p: 8, c: 35, f: 14,
+                img: "https://images.unsplash.com/photo-1528751014936-863e6e7a319c?w=150&auto=format&fit=crop&q=80"
             }
+        ];
+
+        let nutrition = JSON.parse(localStorage.getItem('ironTruckNutritionFull')) || { cal: 0, p: 0, c: 0, f: 0 };
+
+        function renderFoods() {
+            const container = document.getElementById('foodContainer');
+            container.innerHTML = '';
+            foods.forEach((f, i) => {
+                const div = document.createElement('div');
+                div.className = 'food-card';
+                div.innerHTML = `
+                    <img src="${f.img}" alt="${f.name}" class="food-img" loading="lazy" />
+                    <div class="food-info">
+                        <div class="name">${f.name}</div>
+                        <div class="cal">${f.cal} kcal &bull; P:${f.p}g K:${f.c}g Y:${f.f}g</div>
+                    </div>
+                    <button class="btn-add-food" onclick="addFoodItem(${i})"><i class="fa-solid fa-plus"></i></button>
+                `;
+                container.appendChild(div);
+            });
+            updateNutritionUI();
         }
 
-        /* 2. CANLI ADIMSAYAR */
-        let stepCount = parseInt(localStorage.getItem('ironTruckSteps')) || 0;
+        function addFoodItem(i) {
+            const item = foods[i];
+            nutrition.cal += item.cal;
+            nutrition.p += item.p;
+            nutrition.c += item.c;
+            nutrition.f += item.f;
+            localStorage.setItem('ironTruckNutritionFull', JSON.stringify(nutrition));
+            updateNutritionUI();
+        }
+
+        function resetCalories() {
+            nutrition = { cal: 0, p: 0, c: 0, f: 0 };
+            localStorage.setItem('ironTruckNutritionFull', JSON.stringify(nutrition));
+            updateNutritionUI();
+        }
+
+        function updateNutritionUI() {
+            document.getElementById('calVal').innerText = nutrition.cal;
+            document.getElementById('pVal').innerText = `${nutrition.p}g`;
+            document.getElementById('cVal').innerText = `${nutrition.c}g`;
+            document.getElementById('fVal').innerText = `${nutrition.f}g`;
+            document.getElementById('headerCalBadge').innerText = `${nutrition.cal} / 2500 KCAL`;
+        }
+
+        /* 3. CANLI ADIMSAYAR */
+        let stepCount = parseInt(localStorage.getItem('ironTruckStepPro')) || 0;
         let sensorActive = false;
         let lastStepTime = 0;
 
@@ -1053,7 +1172,7 @@
 
             const offset = 440 - (Math.min(1, stepCount / 10000) * 440);
             document.getElementById('stepBar').style.strokeDashoffset = offset;
-            localStorage.setItem('ironTruckSteps', stepCount);
+            localStorage.setItem('ironTruckStepPro', stepCount);
         }
 
         function handleMotion(e) {
@@ -1079,15 +1198,15 @@
                 }
                 window.addEventListener('devicemotion', handleMotion);
                 sensorActive = true;
-                btn.innerHTML = '<i class="fa-solid fa-pause"></i> Duraklat';
+                btn.innerHTML = 'Durdur';
                 btn.style.background = 'var(--accent)';
                 btn.style.color = '#000';
             } else {
                 window.removeEventListener('devicemotion', handleMotion);
                 sensorActive = false;
-                btn.innerHTML = '<i class="fa-solid fa-play"></i> Başlat';
-                btn.style.background = '#1c2130';
-                btn.style.color = '#fff';
+                btn.innerHTML = 'Sensörü Aç';
+                btn.style.background = 'linear-gradient(135deg, var(--accent), #d93800)';
+                btn.style.color = '#000';
             }
         }
 
@@ -1096,63 +1215,7 @@
             updateStepDisplay();
         }
 
-        /* 3. BESİNLER & KALORİ */
-        const foods = [
-            { name: "Izgara Tavuk Göğsü (150g)", cal: 247, p: 46, c: 0, f: 5, img: "https://images.pexels.com/photos/6210876/pexels-photo-6210876.jpeg?auto=compress&cs=tinysrgb&w=150" },
-            { name: "Beyaz Pirinç Pilavı (200g)", cal: 260, p: 5, c: 57, f: 1, img: "https://images.pexels.com/photos/723198/pexels-photo-723198.jpeg?auto=compress&cs=tinysrgb&w=150" },
-            { name: "Fitness Yulaf Kasesi (80g)", cal: 310, p: 10, c: 58, f: 5, img: "https://images.pexels.com/photos/103124/pexels-photo-103124.jpeg?auto=compress&cs=tinysrgb&w=150" },
-            { name: "Haşlanmış Yumurta (3 Adet)", cal: 215, p: 18, c: 1, f: 15, img: "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=150" },
-            { name: "Döküm Izgara Köfte (160g)", cal: 340, p: 30, c: 4, f: 22, img: "https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=150" },
-            { name: "Çikolatalı Whey Shake", cal: 120, p: 24, c: 2, f: 1.5, img: "https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=150" },
-            { name: "Taze Lor Peyniri (100g)", cal: 98, p: 12, c: 3, f: 4, img: "https://images.pexels.com/photos/4198019/pexels-photo-4198019.jpeg?auto=compress&cs=tinysrgb&w=150" }
-        ];
-
-        let nutrition = JSON.parse(localStorage.getItem('ironTruckNutrition')) || { cal: 0, p: 0, c: 0, f: 0 };
-
-        function renderFoods() {
-            const container = document.getElementById('foodContainer');
-            container.innerHTML = '';
-            foods.forEach((f, i) => {
-                const div = document.createElement('div');
-                div.className = 'food-card';
-                div.innerHTML = `
-                    <img src="${f.img}" alt="${f.name}" class="food-img" loading="lazy" />
-                    <div class="food-info">
-                        <div class="name">${f.name}</div>
-                        <div class="cal">${f.cal} kcal &bull; P:${f.p}g K:${f.c}g Y:${f.f}g</div>
-                    </div>
-                    <button class="btn-add-food" onclick="addFoodItem(${i})"><i class="fa-solid fa-plus"></i></button>
-                `;
-                container.appendChild(div);
-            });
-            updateCalUI();
-        }
-
-        function addFoodItem(i) {
-            const item = foods[i];
-            nutrition.cal += item.cal;
-            nutrition.p += item.p;
-            nutrition.c += item.c;
-            nutrition.f += item.f;
-            localStorage.setItem('ironTruckNutrition', JSON.stringify(nutrition));
-            updateCalUI();
-        }
-
-        function resetCalories() {
-            nutrition = { cal: 0, p: 0, c: 0, f: 0 };
-            localStorage.setItem('ironTruckNutrition', JSON.stringify(nutrition));
-            updateCalUI();
-        }
-
-        function updateCalUI() {
-            document.getElementById('calVal').innerText = nutrition.cal;
-            document.getElementById('pVal').innerText = `${nutrition.p}g`;
-            document.getElementById('cVal').innerText = `${nutrition.c}g`;
-            document.getElementById('fVal').innerText = `${nutrition.f}g`;
-            document.getElementById('headerCal').innerText = `${nutrition.cal} / 2500 KCAL`;
-        }
-
-        /* 4. MEDİKAL ANATOMİ & HAREKETLER */
+        /* 4. MEDİKAL ANATOMİ & TAM EŞLEŞEN RESMİ VİDEOLAR */
         let isFlipped = false;
         function flipBody(e) {
             if (e.target.classList.contains('hotspot-node')) return;
@@ -1166,58 +1229,69 @@
                 items: [
                     { name: "Barbell Bench Press", id: "rT7DgCr-3pg", meta: "Bileşik • Güç" },
                     { name: "Incline Dumbbell Press", id: "8iPEnn-ltC8", meta: "Üst Göğüs" },
-                    { name: "Cable Fly", id: "Z57CtFmRMxA", meta: "İzolasyon" }
+                    { name: "Cable Chest Fly", id: "Z57CtFmRMxA", meta: "İzolasyon" },
+                    { name: "Chest Dips", id: "2z8JmcrW-As", meta: "Alt Göğüs" }
                 ]
             },
             shoulders: {
                 title: "Omuz (Deltoids) Egzersizleri",
                 items: [
-                    { name: "Overhead Barbell Press", id: "2yjwXTZQDDI", meta: "Güç" },
-                    { name: "Dumbbell Lateral Raise", id: "3VcKaXpzqRo", meta: "Yan Omuz" }
+                    { name: "Overhead Barbell Press", id: "2yjwXTZQDDI", meta: "Ön Omuz & Güç" },
+                    { name: "Dumbbell Lateral Raise", id: "3VcKaXpzqRo", meta: "Yan Omuz" },
+                    { name: "Face Pull", id: "rep-qVOkqgk", meta: "Arka Omuz" }
                 ]
             },
             biceps: {
                 title: "Biceps Egzersizleri",
                 items: [
                     { name: "Barbell Biceps Curl", id: "ykJmrZ5v0Oo", meta: "Kütle" },
-                    { name: "Hammer Curl", id: "zC3nLlEvin4", meta: "Ön Kol" }
+                    { name: "Dumbbell Hammer Curl", id: "zC3nLlEvin4", meta: "Brachialis" },
+                    { name: "Incline Dumbbell Curl", id: "soxrZlIl35U", meta: "Uzun Baş" }
                 ]
             },
             triceps: {
-                title: "Triceps Egzersizleri",
+                title: "Triceps (Arka Kol) Egzersizleri",
                 items: [
-                    { name: "Triceps Pushdown", id: "vB5OHsJ3EME", meta: "İzolasyon" },
-                    { name: "Skull Crusher", id: "d_KZxkH_toI", meta: "Kütle" }
+                    { name: "Triceps Rope Pushdown", id: "vB5OHsJ3EME", meta: "İzolasyon" },
+                    { name: "Skull Crusher (Lying Ext)", id: "d_KZxkH_toI", meta: "Kütle" }
                 ]
             },
             abs: {
-                title: "Karın Egzersizleri",
-                items: [{ name: "Hanging Leg Raise", id: "hdng3Nm1x_E", meta: "Alt Karın" }]
+                title: "Karın (Core) Egzersizleri",
+                items: [
+                    { name: "Hanging Leg Raise", id: "hdng3Nm1x_E", meta: "Alt Karın" },
+                    { name: "Cable Crunch", id: "pZapRXZcggU", meta: "Üst Karın" }
+                ]
             },
             quads: {
-                title: "Ön Bacak Egzersizleri",
+                title: "Ön Bacak (Quadriceps) Egzersizleri",
                 items: [
-                    { name: "Barbell Back Squat", id: "bEv6CCg2BC8", meta: "Bileşik • Güç" },
-                    { name: "Leg Press", id: "IZxyjW7MPJQ", meta: "Hipertrofi" }
+                    { name: "Barbell Back Squat", id: "bEv6CCg2BC8", meta: "Temel Güç" },
+                    { name: "Leg Press", id: "IZxyjW7MPJQ", meta: "Hipertrofi" },
+                    { name: "Leg Extension", id: "m0FOpMEgero", meta: "İzolasyon" }
                 ]
             },
             lats: {
-                title: "Sırt / Kanat Egzersizleri",
+                title: "Sırt & Kanat (Lats) Egzersizleri",
                 items: [
-                    { name: "Barbell Row", id: "9efgc2TrvEg", meta: "Kalınlık" },
-                    { name: "Lat Pulldown", id: "CAwf7n6Luuc", meta: "Genişlik" }
+                    { name: "Barbell Bent-Over Row", id: "9efgc2TrvEg", meta: "Kalınlık" },
+                    { name: "Lat Pulldown", id: "CAwf7n6Luuc", meta: "Genişlik" },
+                    { name: "Deadlift", id: "op9kVnSso6Q", meta: "Tüm Sırt" }
                 ]
             },
             traps: {
                 title: "Trapez Egzersizleri",
-                items: [{ name: "Barbell Shrug", id: "g6qbq4Du13Q", meta: "Trapez" }]
+                items: [{ name: "Barbell Shrug", id: "g6qbq4Du13Q", meta: "Kütle" }]
             },
             hamstrings: {
-                title: "Arka Bacak Egzersizleri",
-                items: [{ name: "Romanian Deadlift", id: "JCXUYuzwNrM", meta: "Gerilim" }]
+                title: "Arka Bacak (Hamstrings) Egzersizleri",
+                items: [
+                    { name: "Romanian Deadlift", id: "JCXUYuzwNrM", meta: "Gerilim" },
+                    { name: "Lying Leg Curl", id: "ELOCsoDSmrg", meta: "İzolasyon" }
+                ]
             },
             calves: {
-                title: "Baldır Egzersizleri",
+                title: "Baldır (Calves) Egzersizleri",
                 items: [{ name: "Standing Calf Raise", id: "-M4-G8p8fmc", meta: "Kalf" }]
             }
         };
@@ -1261,25 +1335,47 @@
 
         function selectFromModal() {
             document.getElementById('exerciseName').value = pickedName;
-            document.getElementById('prQueryInput').value = pickedName;
             closeModal();
         }
 
-        /* 5. ANTRENMAN KAYITLARI */
+        /* 5. PR KUTLAMA EFEKTİ (CONFETTI + HAPTIC) */
+        function triggerPREffect(exName, weight) {
+            // Ekranda Altın Konfeti Yağmuru
+            confetti({
+                particleCount: 120,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4500', '#ffb703', '#ffffff']
+            });
+
+            // Telefon Titreşimi (Haptic)
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+
+            // Üst Bannerı Yak
+            const banner = document.getElementById('prAlertBanner');
+            document.getElementById('prAlertText').innerText = `${exName}: ${weight} KG YENİ REKOR!`;
+            banner.style.display = 'block';
+            setTimeout(() => banner.style.display = 'none', 5000);
+        }
+
+        /* 6. SET KAYITLARI, CANLI GRAFİK & API */
+        let globalLogs = [];
+        let myChart = null;
+
         async function fetchLogs() {
             const list = document.getElementById('logsList');
             try {
                 const res = await fetch(API_URL);
                 if (!res.ok) throw new Error();
-                const logs = await res.json();
+                globalLogs = await res.json();
                 list.innerHTML = '';
 
-                if (!logs || logs.length === 0) {
-                    list.innerHTML = '<p style="color:var(--text-muted); font-size:12px; text-align:center; padding:8px 0;">Henüz set kaydedilmedi.</p>';
+                if (!globalLogs || globalLogs.length === 0) {
+                    list.innerHTML = '<p style="color:var(--muted); font-size:12px; text-align:center; padding:8px 0;">Henüz set kaydedilmedi.</p>';
                     return;
                 }
 
-                logs.forEach(log => {
+                globalLogs.forEach(log => {
                     const row = document.createElement('div');
                     row.className = 'log-entry';
                     row.innerHTML = `
@@ -1292,18 +1388,57 @@
                     list.appendChild(row);
                 });
             } catch (err) {
-                list.innerHTML = '<p style="color:var(--text-muted); font-size:12px; text-align:center; padding:8px 0;">Henüz set kaydedilmedi.</p>';
+                list.innerHTML = '<p style="color:var(--muted); font-size:12px; text-align:center; padding:8px 0;">Henüz set kaydedilmedi.</p>';
             }
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('workoutChart').getContext('2d');
+            const recent = globalLogs.slice(-7);
+            const labels = recent.map((l, i) => `S${l.setNumber || (i + 1)}`);
+            const weights = recent.map(l => l.weight);
+
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.length ? labels : ['1', '2', '3', '4'],
+                    datasets: [{
+                        label: 'Ağırlık (KG)',
+                        data: weights.length ? weights : [40, 50, 60, 65],
+                        borderColor: '#ff4500',
+                        backgroundColor: 'rgba(255, 69, 0, 0.15)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: '#1e2436' }, ticks: { color: '#8892b0' } },
+                        y: { grid: { color: '#1e2436' }, ticks: { color: '#8892b0' } }
+                    }
+                }
+            });
         }
 
         document.getElementById('workoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const setInput = document.getElementById('setNumber');
             const cSet = parseInt(setInput.value) || 1;
+            const exName = document.getElementById('exerciseName').value;
+            const weightVal = parseFloat(document.getElementById('weight').value);
+
+            // PR Kontrolü: Bu hareket için önceki en yüksek ağırlığı bul
+            const prevMax = globalLogs
+                .filter(l => l.exerciseName.toLowerCase() === exName.toLowerCase())
+                .reduce((max, l) => l.weight > max ? l.weight : max, 0);
 
             const payload = {
-                exerciseName: document.getElementById('exerciseName').value,
-                weight: parseFloat(document.getElementById('weight').value),
+                exerciseName: exName,
+                weight: weightVal,
                 reps: parseInt(document.getElementById('reps').value),
                 setNumber: cSet
             };
@@ -1314,6 +1449,12 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+
+                // Önceki ağırlığı geçtiyse PR patlat
+                if (weightVal > prevMax && prevMax > 0) {
+                    triggerPREffect(exName, weightVal);
+                }
+
                 document.getElementById('weight').value = '';
                 document.getElementById('reps').value = '';
                 setInput.value = cSet + 1;
