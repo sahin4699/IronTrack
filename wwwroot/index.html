@@ -32,7 +32,6 @@
             /* Fırınlanmış Terracotta */
             --accent-glow: rgba(245, 158, 11, 0.35);
             --gold: #fbbf24;
-            --clay: #d97706;
 
             --text: #f5f3f4;
             --text-muted: #a3989e;
@@ -51,7 +50,6 @@
 
         body {
             background-color: var(--bg);
-            /* Belli belirsiz, sinematik spor salonu arka planı */
             background-image:
                 radial-gradient(circle at 50% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
                 linear-gradient(180deg, rgba(11, 9, 10, 0.88) 0%, rgba(13, 11, 12, 0.94) 100%),
@@ -309,20 +307,21 @@
             margin-bottom: 14px;
         }
 
+        /* 5 Ayrık Sekme */
         .drawer-tabs {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             background: rgba(28, 24, 27, 0.85);
             border-radius: 12px;
             padding: 4px;
             margin-bottom: 16px;
-            gap: 3px;
+            gap: 2px;
         }
 
         .d-tab {
             text-align: center;
             padding: 9px 2px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
@@ -612,6 +611,44 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
+        /* Hızlı Egzersiz Seçim Butonları (Tek Tıkla Seç) */
+        .quick-exercise-chips {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            scrollbar-width: none;
+        }
+
+        .quick-exercise-chips::-webkit-scrollbar {
+            display: none;
+        }
+
+        .q-chip {
+            background: rgba(35, 28, 32, 0.85);
+            border: 1px solid var(--border);
+            color: #d1c7cc;
+            padding: 7px 13px;
+            border-radius: 18px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .q-chip:hover {
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .q-chip:active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
         /* Gün Seçim Tabları */
         .day-selector {
             display: flex;
@@ -862,10 +899,11 @@
                     style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</button>
             </div>
 
-            <!-- Sekme Seçici -->
+            <!-- 5 Ayrık Sekme Seçici -->
             <div class="drawer-tabs">
                 <div class="d-tab active" onclick="switchDrawerTab('muscles', this)">Kaslar</div>
                 <div class="d-tab" onclick="switchDrawerTab('chart', this)">Grafik</div>
+                <div class="d-tab" onclick="switchDrawerTab('steps', this)">Adımlar</div>
                 <div class="d-tab" onclick="switchDrawerTab('profile', this)">Profil</div>
                 <div class="d-tab" onclick="switchDrawerTab('cal', this)">Kalori</div>
             </div>
@@ -907,6 +945,7 @@
                             <option value="Deadlift">Deadlift</option>
                             <option value="Overhead Barbell Press">Overhead Barbell Press</option>
                             <option value="Barbell Bent-Over Row">Barbell Bent-Over Row</option>
+                            <option value="Lat Pulldown">Lat Pulldown</option>
                             <option value="Barbell Biceps Curl">Barbell Biceps Curl</option>
                             <option value="Triceps Rope Pushdown">Triceps Rope Pushdown</option>
                         </select>
@@ -915,25 +954,8 @@
                 </div>
             </div>
 
-            <!-- 3. SEKME: PROFİL & VÜCUT ANALİZİ -->
-            <div class="tab-panel" id="tabProfile">
-                <div class="profile-card">
-                    <div style="font-size:12px; font-weight:800; color:#fff; text-transform:uppercase;"><i
-                            class="fa-solid fa-user-check" style="color:var(--accent);"></i> Sporcu Bilgileri</div>
-                    <div class="profile-stats-list">
-                        <div class="p-stat-item"><span>İsim</span><strong id="pNameDisp">-</strong></div>
-                        <div class="p-stat-item"><span>Yaş / Boy</span><strong id="pAgeHeightDisp">-</strong></div>
-                        <div class="p-stat-item"><span>Mevcut Kilo</span><strong id="pWeightDisp">-</strong></div>
-                        <div class="p-stat-item"><span>Hedef Kilo</span><strong id="pTargetDisp">-</strong></div>
-                        <div class="p-stat-item"><span>Vücut Kitle İndeksi (VKİ)</span><strong id="pBmiDisp"
-                                style="color:var(--accent);">-</strong></div>
-                    </div>
-                    <button onclick="openOnboardingModal()"
-                        style="width:100%; margin-top:12px; background:#241d21; border:1px solid var(--border); color:#fff; padding:10px; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer;">Bilgileri
-                        Güncelle</button>
-                </div>
-
-                <!-- Adımsayar -->
+            <!-- 3. SEKME: ADIMSAYAR (BAĞIMSIZ AYRI PANEL) -->
+            <div class="tab-panel" id="tabSteps">
                 <div class="step-circle-box">
                     <div class="ring-box">
                         <svg class="ring-svg" viewBox="0 0 160 160">
@@ -959,7 +981,7 @@
                     </div>
                     <div style="display:flex; gap:8px; width:100%; margin-top:12px;">
                         <button class="btn-submit" style="flex:1; padding:10px; font-size:11px;" id="sensorBtn"
-                            onclick="toggleSensor()">Sensör</button>
+                            onclick="toggleSensor()">Sensör Başlat</button>
                         <button class="btn-submit"
                             style="flex:1; padding:10px; font-size:11px; background:#231c20; color:#fff;"
                             onclick="addManualSteps(50)">+50 Adım</button>
@@ -967,7 +989,26 @@
                 </div>
             </div>
 
-            <!-- 4. SEKME: KALORİ & BESİNLER -->
+            <!-- 4. SEKME: PROFİL & VÜCUT BİLGİLERİ -->
+            <div class="tab-panel" id="tabProfile">
+                <div class="profile-card">
+                    <div style="font-size:12px; font-weight:800; color:#fff; text-transform:uppercase;"><i
+                            class="fa-solid fa-user-check" style="color:var(--accent);"></i> Sporcu Bilgileri</div>
+                    <div class="profile-stats-list">
+                        <div class="p-stat-item"><span>İsim</span><strong id="pNameDisp">-</strong></div>
+                        <div class="p-stat-item"><span>Yaş / Boy</span><strong id="pAgeHeightDisp">-</strong></div>
+                        <div class="p-stat-item"><span>Mevcut Kilo</span><strong id="pWeightDisp">-</strong></div>
+                        <div class="p-stat-item"><span>Hedef Kilo</span><strong id="pTargetDisp">-</strong></div>
+                        <div class="p-stat-item"><span>Vücut Kitle İndeksi (VKİ)</span><strong id="pBmiDisp"
+                                style="color:var(--accent);">-</strong></div>
+                    </div>
+                    <button onclick="openOnboardingModal()"
+                        style="width:100%; margin-top:12px; background:#241d21; border:1px solid var(--border); color:#fff; padding:10px; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer;">Bilgileri
+                        Güncelle</button>
+                </div>
+            </div>
+
+            <!-- 5. SEKME: KALORİ & BESİNLER -->
             <div class="tab-panel" id="tabCal">
                 <div class="nutrition-metric">
                     <div style="font-size: 22px; font-weight: 900;"><span id="calVal">0</span> <span
@@ -1037,7 +1078,7 @@
             <div class="exercise-list" id="exerciseListContainer"></div>
         </section>
 
-        <!-- 2. KOLON: SET GİRİŞİ & KAYITLAR -->
+        <!-- 2. KOLON: HIZLI SEÇİM BUTONLARI & SET GİRİŞİ -->
         <section class="panel">
             <div id="prAlertBanner" class="pr-alert-banner">
                 <div style="font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase;">🔥 REKOR
@@ -1047,13 +1088,27 @@
             </div>
 
             <div
-                style="font-size:14px; font-weight:800; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                style="font-size:14px; font-weight:800; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-stopwatch-20" style="color:var(--accent);"></i> Set Kaydet & Uygula
+            </div>
+
+            <!-- TEK DOKUNUŞLA DOLDURAN POPÜLER HAREKET BUTONLARI -->
+            <div class="quick-exercise-chips">
+                <span class="q-chip" onclick="quickSelect('Barbell Bench Press')">Bench Press</span>
+                <span class="q-chip" onclick="quickSelect('Incline Dumbbell Press')">Incline Dumbbell</span>
+                <span class="q-chip" onclick="quickSelect('Barbell Bent-Over Row')">Barbell Row</span>
+                <span class="q-chip" onclick="quickSelect('Lat Pulldown')">Lat Pulldown</span>
+                <span class="q-chip" onclick="quickSelect('Barbell Back Squat')">Squat</span>
+                <span class="q-chip" onclick="quickSelect('Deadlift')">Deadlift</span>
+                <span class="q-chip" onclick="quickSelect('Overhead Barbell Press')">Omuz Press</span>
+                <span class="q-chip" onclick="quickSelect('Barbell Biceps Curl')">Biceps Curl</span>
+                <span class="q-chip" onclick="quickSelect('Triceps Rope Pushdown')">Triceps Rope</span>
             </div>
 
             <form id="workoutForm" class="workout-form">
                 <div class="full-span">
-                    <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz" required />
+                    <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz (veya yukarıdan tıkla)"
+                        required />
                 </div>
                 <div>
                     <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
@@ -1100,7 +1155,32 @@
     <script>
         const API_URL = '/api/WorkoutLogs';
 
-        /* 1. KULLANICI PROFİLİ & ONBOARDING */
+        /* 1. HIZLI HAREKET SEÇİMİ (KUTUYU DOLDURUR + GRAFİĞİ GÜNCELLER) */
+        function quickSelect(name) {
+            document.getElementById('exerciseName').value = name;
+            const selectEl = document.getElementById('exerciseChartSelect');
+            if (selectEl) {
+                // Eğer select içinde varsa seç, yoksa yeni seçenek olarak ekle
+                let exists = false;
+                for (let i = 0; i < selectEl.options.length; i++) {
+                    if (selectEl.options[i].value === name) {
+                        selectEl.selectedIndex = i;
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.innerText = name;
+                    selectEl.appendChild(opt);
+                    selectEl.value = name;
+                }
+                updateExerciseChart();
+            }
+        }
+
+        /* 2. KULLANICI PROFİLİ & ONBOARDING */
         function getProfile() {
             return JSON.parse(localStorage.getItem('ironTruckUserProfile')) || {
                 name: "Şahin",
@@ -1156,7 +1236,7 @@
             initProfile();
         });
 
-        /* 2. SOL MENÜ (DRAWER) VE SEKMELER */
+        /* 3. SOL MENÜ (DRAWER) VE 5 SEÇENEKLİ SEKMELER */
         function toggleDrawer() {
             document.getElementById('drawerOverlay').classList.toggle('open');
         }
@@ -1175,11 +1255,12 @@
                 document.getElementById('tabChart').classList.add('active');
                 updateExerciseChart();
             }
+            if (tabName === 'steps') document.getElementById('tabSteps').classList.add('active');
             if (tabName === 'profile') document.getElementById('tabProfile').classList.add('active');
             if (tabName === 'cal') document.getElementById('tabCal').classList.add('active');
         }
 
-        /* 3. HAREKETE ÖZEL AĞIRLIK GRAFİĞİ MOTORU */
+        /* 4. HAREKETE ÖZEL AĞIRLIK GRAFİĞİ MOTORU */
         let exerciseChart = null;
         let globalLogs = [];
 
@@ -1236,7 +1317,7 @@
             });
         }
 
-        /* 4. GÜNLÜK ANTRENMAN ŞABLONLARI & KAS KÜTÜPHANESİ */
+        /* 5. GÜNLÜK ANTRENMAN ŞABLONLARI & KAS KÜTÜPHANESİ */
         const routineTemplates = {
             mon: {
                 title: "PUSH: GÖĞÜS, ÖN OMUZ & TRICEPS", desc: "Ağır itiş & bileşik kuvvet seansı", exercises: [
@@ -1354,8 +1435,7 @@
                     <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')"><i class="fa-solid fa-play"></i> Video</button>
                 `;
                 card.onclick = () => {
-                    document.getElementById('exerciseName').value = ex.name;
-                    document.getElementById('exerciseChartSelect').value = ex.name;
+                    quickSelect(ex.name);
                     window.scrollTo({ top: document.getElementById('workoutForm').offsetTop - 20, behavior: 'smooth' });
                 };
                 list.appendChild(card);
@@ -1386,7 +1466,7 @@
                     <button class="btn-video" onclick="event.stopPropagation(); openVideo('${ex.name}', '${ex.id}')"><i class="fa-solid fa-play"></i> Video</button>
                 `;
                 card.onclick = () => {
-                    document.getElementById('exerciseName').value = ex.name;
+                    quickSelect(ex.name);
                     toggleDrawer();
                 };
                 list.appendChild(card);
@@ -1394,7 +1474,7 @@
             toggleDrawer();
         }
 
-        /* 5. BESİNLER & KALORİ */
+        /* 6. BESİNLER & KALORİ */
         const foods = [
             { name: "Izgara Tavuk Göğsü (150g)", cal: 247, p: 46, c: 0, f: 5, img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=150&auto=format&fit=crop&q=80" },
             { name: "Beyaz Pirinç Pilavı (200g)", cal: 260, p: 5, c: 57, f: 1, img: "https://images.unsplash.com/photo-1516684732162-798a0062be99?w=150&auto=format&fit=crop&q=80" },
@@ -1449,7 +1529,7 @@
             document.getElementById('headerCalBadge').innerText = `${nutrition.cal} / 2500 KCAL`;
         }
 
-        /* 6. CANLI ADIMSAYAR */
+        /* 7. CANLI ADIMSAYAR */
         let stepCount = parseInt(localStorage.getItem('ironTruckStepWarm')) || 0;
         let sensorActive = false;
         let lastStepTime = 0;
@@ -1495,7 +1575,7 @@
             } else {
                 window.removeEventListener('devicemotion', handleMotion);
                 sensorActive = false;
-                btn.innerHTML = 'Sensör';
+                btn.innerHTML = 'Sensör Başlat';
                 btn.style.background = 'rgba(35, 28, 32, 0.85)';
                 btn.style.color = '#fff';
             }
@@ -1506,7 +1586,7 @@
             updateStepDisplay();
         }
 
-        /* 7. VİDEO MODAL & PR KUTLAMASI */
+        /* 8. VİDEO MODAL & PR KUTLAMASI */
         let pickedName = "";
         function openVideo(name, id) {
             pickedName = name;
@@ -1521,8 +1601,7 @@
         }
 
         function selectFromModal() {
-            document.getElementById('exerciseName').value = pickedName;
-            document.getElementById('exerciseChartSelect').value = pickedName;
+            quickSelect(pickedName);
             closeModal();
         }
 
@@ -1542,7 +1621,7 @@
             setTimeout(() => banner.style.display = 'none', 5000);
         }
 
-        /* 8. SET KAYITLARI & API */
+        /* 9. SET KAYITLARI & API */
         async function fetchLogs() {
             const list = document.getElementById('logsList');
             try {
