@@ -6,17 +6,18 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
-    <!-- iOS SAFARI STANDALONE / APP MODU ETİKETLERİ -->
+    <!-- iOS SAFARI STANDALONE / APP MODU VE DAHİLİ DATA-URI İKON -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="IronTruck" />
-    <link rel="apple-touch-icon"
-        href="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=180&auto=format&fit=crop" />
-
-    <!-- Standart PWA ve Android Manifest -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#0b090a" />
-    <link rel="manifest" href="/manifest.json" />
+
+    <!-- DAHİLİ BASE64 APPLE TOUCH ICON (BAĞIMSIZ, ASLA BOZULMAZ) -->
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'><rect width='512' height='512' rx='112' fill='%23120e10'/><rect width='500' height='500' x='6' y='6' rx='106' fill='none' stroke='%23f59e0b' stroke-width='8'/><g transform='translate(56, 56) scale(0.78)'><rect x='60' y='140' width='44' height='232' rx='16' fill='%23ea580c'/><rect x='114' y='176' width='36' height='160' rx='12' fill='%23f59e0b'/><rect x='150' y='236' width='212' height='40' rx='8' fill='%23f3f4f6'/><line x1='216' y1='236' x2='216' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='236' y1='236' x2='236' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='256' y1='236' x2='256' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='276' y1='236' x2='276' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='296' y1='236' x2='296' y2='276' stroke='%234b5563' stroke-width='4'/><rect x='362' y='176' width='36' height='160' rx='12' fill='%23f59e0b'/><rect x='408' y='140' width='44' height='232' rx='16' fill='%23ea580c'/></g></svg>" />
+    <link rel="icon"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23120e10'/><g transform='translate(56, 56) scale(0.78)'><rect x='60' y='140' width='44' height='232' rx='16' fill='%23ea580c'/><rect x='114' y='176' width='36' height='160' rx='12' fill='%23f59e0b'/><rect x='150' y='236' width='212' height='40' rx='8' fill='%23f3f4f6'/><rect x='362' y='176' width='36' height='160' rx='12' fill='%23f59e0b'/><rect x='408' y='140' width='44' height='232' rx='16' fill='%23ea580c'/></g></svg>" />
 
     <title>IRONTRUCK PRO</title>
 
@@ -69,8 +70,7 @@
             background-repeat: no-repeat;
             color: var(--text);
             padding: 12px;
-            /* iOS Çentik ve Alt Çizgi Koruma Alanları */
-            padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+            padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
             padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 85px);
             min-height: 100vh;
             user-select: none;
@@ -320,7 +320,6 @@
             padding: 13px;
             color: #fff;
             font-size: 16px;
-            /* iOS'ta otomatik zoom'u engellemek için minimum 16px olmalıdır */
             outline: none;
         }
 
@@ -369,7 +368,7 @@
             text-align: center;
         }
 
-        /* ALT MOBİL NAVİGASYON (BOTTOM APP BAR) */
+        /* ALT MOBİL NAVİGASYON */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -407,7 +406,7 @@
             font-weight: 800;
         }
 
-        /* SOL AÇILIR MENÜ (DRAWER) */
+        /* SOL AÇILIR MENÜ */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -1073,21 +1072,6 @@
 
     <script>
         const API_URL = '/api/WorkoutLogs';
-
-        /* iOS Safari Standalone Modunda Dışarıya Link Açılmasını Engelleyen Kilit */
-        if (("standalone" in window.navigator) && window.navigator.standalone) {
-            var noddy, remotes = false;
-            document.addEventListener('click', function (event) {
-                noddy = event.target;
-                while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
-                    noddy = noddy.parentNode;
-                }
-                if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes)) {
-                    event.preventDefault();
-                    document.location.href = noddy.href;
-                }
-            }, false);
-        }
 
         function scrollToWorkout() {
             window.scrollTo({ top: document.getElementById('workoutSection').offsetTop - 20, behavior: 'smooth' });
