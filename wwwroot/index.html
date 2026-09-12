@@ -6,14 +6,12 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
-    <!-- iOS SAFARI STANDALONE / APP MODU VE DAHİLİ DATA-URI İKON -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="IronTruck" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#0b090a" />
 
-    <!-- DAHİLİ BASE64 APPLE TOUCH ICON (BAĞIMSIZ, ASLA BOZULMAZ) -->
     <link rel="apple-touch-icon"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'><rect width='512' height='512' rx='112' fill='%23120e10'/><rect width='500' height='500' x='6' y='6' rx='106' fill='none' stroke='%23f59e0b' stroke-width='8'/><g transform='translate(56, 56) scale(0.78)'><rect x='60' y='140' width='44' height='232' rx='16' fill='%23ea580c'/><rect x='114' y='176' width='36' height='160' rx='12' fill='%23f59e0b'/><rect x='150' y='236' width='212' height='40' rx='8' fill='%23f3f4f6'/><line x1='216' y1='236' x2='216' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='236' y1='236' x2='236' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='256' y1='236' x2='256' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='276' y1='236' x2='276' y2='276' stroke='%234b5563' stroke-width='4'/><line x1='296' y1='236' x2='296' y2='276' stroke='%234b5563' stroke-width='4'/><rect x='362' y='176' width='36' height='160' rx='12' fill='%23f59e0b'/><rect x='408' y='140' width='44' height='232' rx='16' fill='%23ea580c'/></g></svg>" />
     <link rel="icon"
@@ -21,7 +19,6 @@
 
     <title>IRONTRUCK PRO</title>
 
-    <!-- Google Fonts, FontAwesome & Kütüphaneler -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
@@ -50,7 +47,9 @@
             --fat: #fbbf24;
         }
 
-        * {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -58,8 +57,15 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html,
         body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
             background-color: var(--bg);
+        }
+
+        body {
             background-image:
                 radial-gradient(circle at 50% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
                 linear-gradient(180deg, rgba(11, 9, 10, 0.9) 0%, rgba(13, 11, 12, 0.95) 100%),
@@ -69,47 +75,52 @@
             background-attachment: fixed;
             background-repeat: no-repeat;
             color: var(--text);
-            padding: 12px;
+            padding: 10px;
             padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
-            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 85px);
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 95px);
             min-height: 100vh;
-            user-select: none;
-            -webkit-touch-callout: none;
         }
 
         /* Top Header */
         .app-header {
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(24, 20, 23, 0.85);
+            background: rgba(24, 20, 23, 0.88);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 10px 16px;
+            border-radius: 14px;
+            padding: 10px 14px;
             margin-bottom: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            min-width: 0;
         }
 
         .btn-drawer-open {
             background: rgba(35, 30, 34, 0.85);
             border: 1px solid var(--border);
             color: #fff;
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .user-greeting {
+            min-width: 0;
         }
 
         .user-greeting .sub {
@@ -118,61 +129,77 @@
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: block;
         }
 
         .user-greeting .name {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 900;
             color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .user-greeting .name span {
             color: var(--accent);
         }
 
+        .header-badges {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
         .meta-pill {
             background: rgba(245, 158, 11, 0.12);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             border: 1px solid rgba(245, 158, 11, 0.3);
             color: var(--accent);
             font-size: 11px;
             font-weight: 800;
-            padding: 6px 10px;
+            padding: 5px 8px;
             border-radius: 8px;
+            white-space: nowrap;
         }
 
         /* Ana Grid Düzeni */
         .main-container {
+            width: 100%;
             display: grid;
             grid-template-columns: 1.15fr 1fr;
-            gap: 14px;
-            max-width: 1350px;
+            gap: 12px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 880px) {
             .main-container {
                 grid-template-columns: 1fr;
             }
         }
 
         .panel {
+            width: 100%;
+            min-width: 0;
             background: var(--surface);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
         /* Hızlı Egzersiz Çipleri */
         .quick-exercise-chips {
+            width: 100%;
             display: flex;
             gap: 6px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             margin-bottom: 12px;
+            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
 
@@ -181,15 +208,16 @@
         }
 
         .q-chip {
-            background: rgba(35, 28, 32, 0.9);
+            background: rgba(35, 28, 32, 0.95);
             border: 1px solid var(--border);
             color: #d1c7cc;
-            padding: 7px 12px;
-            border-radius: 16px;
-            font-size: 12px;
+            padding: 7px 11px;
+            border-radius: 14px;
+            font-size: 11px;
             font-weight: 700;
             white-space: nowrap;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .q-chip:active {
@@ -200,11 +228,13 @@
 
         /* Gün Seçici */
         .day-selector {
+            width: 100%;
             display: flex;
             gap: 6px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             margin-bottom: 12px;
+            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
 
@@ -215,41 +245,43 @@
         .day-tab {
             background: rgba(28, 24, 27, 0.7);
             border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 10px;
+            padding: 7px 11px;
+            border-radius: 8px;
             font-size: 11px;
             font-weight: 800;
             color: var(--text-muted);
             white-space: nowrap;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .day-tab.active {
             background: rgba(35, 28, 32, 0.95);
             border-color: var(--accent);
             color: var(--accent);
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
         }
 
         .routine-banner {
+            width: 100%;
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(234, 88, 12, 0.06));
             border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 14px;
-            padding: 12px 14px;
+            border-radius: 12px;
+            padding: 10px 12px;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
         }
 
         .routine-banner h3 {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             color: #fff;
         }
 
         .routine-banner p {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             margin-top: 2px;
         }
@@ -261,14 +293,15 @@
         }
 
         .exercise-card {
+            width: 100%;
             background: rgba(28, 24, 27, 0.75);
-            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 12px;
+            padding: 10px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
             cursor: pointer;
         }
 
@@ -293,14 +326,16 @@
             background: rgba(245, 158, 11, 0.12);
             color: var(--accent);
             border: 1px solid rgba(245, 158, 11, 0.35);
-            padding: 6px 10px;
+            padding: 5px 9px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 800;
+            flex-shrink: 0;
         }
 
-        /* Form */
+        /* Form Elemanları (Mobilde Taşmayı Önleyen Grid) */
         .workout-form {
+            width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
@@ -311,13 +346,24 @@
             grid-column: span 2;
         }
 
+        @media (max-width: 520px) {
+            .workout-form {
+                grid-template-columns: 1fr;
+            }
+
+            .full-span {
+                grid-column: span 1;
+            }
+        }
+
         input,
         select {
             width: 100%;
+            max-width: 100%;
             background: rgba(13, 11, 12, 0.85);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 13px;
+            padding: 11px 12px;
             color: #fff;
             font-size: 16px;
             outline: none;
@@ -332,13 +378,13 @@
             background: linear-gradient(135deg, var(--accent), var(--accent-warm));
             color: #120e0f;
             border: none;
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 10px;
+            padding: 13px;
             font-weight: 900;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 16px var(--accent-glow);
+            box-shadow: 0 4px 14px var(--accent-glow);
         }
 
         .btn-submit:active {
@@ -346,18 +392,19 @@
         }
 
         .log-entry {
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(28, 24, 27, 0.7);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 10px 12px;
+            padding: 9px 12px;
             margin-bottom: 6px;
             border-left: 4px solid var(--accent);
+            gap: 8px;
         }
 
-        /* PR Kutlama Bannerı */
         .pr-alert-banner {
             display: none;
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(234, 88, 12, 0.12));
@@ -368,13 +415,14 @@
             text-align: center;
         }
 
-        /* ALT MOBİL NAVİGASYON */
+        /* ALT MOBİL NAVİGASYON (TAŞMAYI ÖNLEYEN SAFE-AREA) */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 100vw;
-            background: rgba(18, 15, 17, 0.94);
+            right: 0;
+            width: 100%;
+            background: rgba(18, 15, 17, 0.96);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
@@ -382,23 +430,24 @@
             justify-content: space-around;
             padding: 8px 0;
             padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
-            z-index: 999;
+            z-index: 9999;
         }
 
         .b-nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             color: var(--text-muted);
             font-size: 10px;
             font-weight: 700;
             cursor: pointer;
-            width: 20%;
+            flex: 1;
+            text-align: center;
         }
 
         .b-nav-item i {
-            font-size: 17px;
+            font-size: 16px;
         }
 
         .b-nav-item.active {
@@ -406,16 +455,16 @@
             font-weight: 800;
         }
 
-        /* SOL AÇILIR MENÜ */
+        /* SOL AÇILIR MENÜ (DRAWER) */
         .drawer-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            z-index: 9999;
+            z-index: 10000;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -429,50 +478,50 @@
         .drawer {
             position: fixed;
             top: 0;
-            left: -420px;
-            width: 360px;
-            max-width: 88vw;
-            height: 100vh;
-            background: rgba(15, 12, 14, 0.96);
+            left: -340px;
+            width: 320px;
+            max-width: 85%;
+            height: 100%;
+            background: rgba(15, 12, 14, 0.98);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-right: 1px solid var(--border);
-            z-index: 10000;
-            padding: 20px 16px;
-            padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+            z-index: 10001;
+            padding: 16px 14px;
+            padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
             overflow-y: auto;
-            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
             display: flex;
             flex-direction: column;
         }
 
         .drawer-overlay.open .drawer {
-            transform: translateX(420px);
+            transform: translateX(340px);
         }
 
         .drawer-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 14px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .drawer-tabs {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             background: rgba(28, 24, 27, 0.85);
-            border-radius: 10px;
-            padding: 3px;
-            margin-bottom: 14px;
+            border-radius: 8px;
+            padding: 2px;
+            margin-bottom: 12px;
             gap: 2px;
         }
 
         .d-tab {
             text-align: center;
-            padding: 8px 2px;
-            font-size: 10px;
+            padding: 7px 1px;
+            font-size: 9px;
             font-weight: 700;
             border-radius: 6px;
             cursor: pointer;
@@ -498,28 +547,22 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 16px;
         }
 
         .d-muscle-btn {
             background: rgba(28, 24, 27, 0.7);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 10px;
+            border-radius: 10px;
+            padding: 10px 8px;
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             color: var(--text-muted);
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-        }
-
-        .d-muscle-btn i {
-            font-size: 16px;
-            color: var(--accent);
+            gap: 5px;
         }
 
         .d-muscle-btn.active {
@@ -532,18 +575,18 @@
         .step-circle-box {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 16px;
+            border-radius: 12px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .ring-box {
             position: relative;
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
         }
 
         .ring-svg {
@@ -566,7 +609,6 @@
             stroke-dasharray: 440;
             stroke-dashoffset: 440;
             transition: stroke-dashoffset 0.4s ease;
-            filter: drop-shadow(0 0 8px var(--accent-glow));
         }
 
         .ring-text {
@@ -582,7 +624,7 @@
         }
 
         .ring-text .count {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             color: #fff;
         }
@@ -592,14 +634,14 @@
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             width: 100%;
-            margin-top: 14px;
+            margin-top: 12px;
         }
 
         .step-stat-card {
             background: rgba(13, 11, 12, 0.85);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 6px;
             text-align: center;
         }
 
@@ -607,8 +649,8 @@
         .nutrition-metric {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
+            border-radius: 12px;
+            padding: 12px;
             text-align: center;
             margin-bottom: 12px;
         }
@@ -616,94 +658,99 @@
         .macro-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin-top: 10px;
+            gap: 4px;
+            margin-top: 8px;
         }
 
         .macro-pill {
             background: rgba(13, 11, 12, 0.85);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 6px 4px;
+            border-radius: 6px;
+            padding: 5px 2px;
             text-align: center;
         }
 
         .food-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 350px;
+            gap: 6px;
+            max-height: 320px;
             overflow-y: auto;
         }
 
         .food-card {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px 10px;
+            border-radius: 10px;
+            padding: 6px 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .food-img {
-            width: 46px;
-            height: 46px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             object-fit: cover;
             flex-shrink: 0;
         }
 
         .food-info {
             flex: 1;
+            min-width: 0;
         }
 
         .food-info .name {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .food-info .cal {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-muted);
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .btn-add-food {
             background: rgba(35, 28, 32, 0.85);
             border: 1px solid var(--border);
             color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         /* Profil */
         .profile-card {
             background: rgba(28, 24, 27, 0.75);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 14px;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
         }
 
         .profile-stats-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 6px;
+            margin-top: 8px;
         }
 
         .p-stat-item {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            padding: 6px 0;
+            font-size: 11px;
+            padding: 5px 0;
             border-bottom: 1px solid var(--border);
         }
 
@@ -713,27 +760,27 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.88);
             backdrop-filter: blur(8px);
-            z-index: 99999;
+            z-index: 100000;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 12px;
         }
 
         .modal-box {
-            background: rgba(22, 18, 21, 0.95);
+            background: rgba(22, 18, 21, 0.98);
             border: 1px solid var(--border);
             border-radius: 16px;
             width: 100%;
-            max-width: 480px;
+            max-width: 440px;
             overflow: hidden;
         }
 
         .modal-head {
-            padding: 12px 16px;
+            padding: 12px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -762,13 +809,13 @@
 
     <!-- GİRİŞ & PROFİL DÜZENLEME MODALI -->
     <div class="modal-backdrop" id="onboardingModal">
-        <div class="modal-box" style="padding: 20px;">
-            <h3 style="color:#fff; font-size:16px; font-weight:800; margin-bottom:6px;">👤 Profilini Tanımla</h3>
-            <p style="color:var(--text-muted); font-size:12px; margin-bottom:14px;">Bilgilerini kaydet, sana özel
-                hedefleri takip et.</p>
+        <div class="modal-box" style="padding: 16px;">
+            <h3 style="color:#fff; font-size:15px; font-weight:800; margin-bottom:4px;">👤 Profilini Tanımla</h3>
+            <p style="color:var(--text-muted); font-size:11px; margin-bottom:12px;">Sana özel antrenman ve hedefleri
+                kaydet.</p>
 
             <form id="onboardingForm">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:14px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
                     <div style="grid-column: span 2;">
                         <input type="text" id="obName" placeholder="Adın Soyadın" required />
                     </div>
@@ -796,10 +843,10 @@
     <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer(event)">
         <div class="drawer" onclick="event.stopPropagation()">
             <div class="drawer-header">
-                <div style="font-size: 14px; font-weight: 800; color: var(--accent);"><i
+                <div style="font-size: 13px; font-weight: 800; color: var(--accent);"><i
                         class="fa-solid fa-sliders"></i> KONTROL PANELİ</div>
                 <button onclick="toggleDrawer()"
-                    style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</button>
+                    style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
             </div>
 
             <div class="drawer-tabs">
@@ -834,7 +881,7 @@
 
             <!-- 2. GRAFİK -->
             <div class="tab-panel" id="tabChart">
-                <div style="margin-bottom:10px;">
+                <div style="margin-bottom:8px;">
                     <select id="exerciseChartSelect" onchange="updateExerciseChart()">
                         <option value="Barbell Bench Press">Barbell Bench Press</option>
                         <option value="Incline Dumbbell Press">Incline Dumbbell Press</option>
@@ -860,26 +907,26 @@
                         </svg>
                         <div class="ring-text">
                             <div class="count" id="stepCountDisplay">0</div>
-                            <div style="font-size:10px; color:var(--text-muted); font-weight:800;">/ 10.000 ADIM</div>
+                            <div style="font-size:9px; color:var(--text-muted); font-weight:800;">/ 10.000 ADIM</div>
                         </div>
                     </div>
                     <div class="step-stats">
                         <div class="step-stat-card">
                             <div style="font-size:9px; color:var(--text-muted); font-weight:800;">🔥 YAKILAN</div>
-                            <div style="font-size:13px; font-weight:800; color:var(--accent);" id="burnedCalDisplay">0.0
+                            <div style="font-size:12px; font-weight:800; color:var(--accent);" id="burnedCalDisplay">0.0
                                 kcal</div>
                         </div>
                         <div class="step-stat-card">
                             <div style="font-size:9px; color:var(--text-muted); font-weight:800;">📍 MESAFE</div>
-                            <div style="font-size:13px; font-weight:800; color:var(--gold);" id="distanceDisplay">0.00
+                            <div style="font-size:12px; font-weight:800; color:var(--gold);" id="distanceDisplay">0.00
                                 km</div>
                         </div>
                     </div>
-                    <div style="display:flex; gap:8px; width:100%; margin-top:12px;">
-                        <button class="btn-submit" style="flex:1; padding:10px; font-size:11px;" id="sensorBtn"
+                    <div style="display:flex; gap:6px; width:100%; margin-top:10px;">
+                        <button class="btn-submit" style="flex:1; padding:9px; font-size:11px;" id="sensorBtn"
                             onclick="toggleSensor()">Sensör</button>
                         <button class="btn-submit"
-                            style="flex:1; padding:10px; font-size:11px; background:#231c20; color:#fff;"
+                            style="flex:1; padding:9px; font-size:11px; background:#231c20; color:#fff;"
                             onclick="addManualSteps(50)">+50 Adım</button>
                     </div>
                 </div>
@@ -897,7 +944,7 @@
                                 style="color:var(--accent);">-</strong></div>
                     </div>
                     <button onclick="openOnboardingModal()"
-                        style="width:100%; margin-top:12px; background:#241d21; border:1px solid var(--border); color:#fff; padding:10px; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer;">Bilgileri
+                        style="width:100%; margin-top:10px; background:#241d21; border:1px solid var(--border); color:#fff; padding:9px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">Bilgileri
                         Güncelle</button>
                 </div>
             </div>
@@ -905,26 +952,26 @@
             <!-- 5. KALORİ -->
             <div class="tab-panel" id="tabCal">
                 <div class="nutrition-metric">
-                    <div style="font-size: 20px; font-weight: 900;"><span id="calVal">0</span> <span
-                            style="font-size: 11px; color: var(--text-muted);">/ 2500 KCAL</span></div>
+                    <div style="font-size: 18px; font-weight: 900;"><span id="calVal">0</span> <span
+                            style="font-size: 10px; color: var(--text-muted);">/ 2500 KCAL</span></div>
                     <div class="macro-grid">
                         <div class="macro-pill">
-                            <div style="font-size:9px; color:var(--protein); font-weight:800;">PRO</div>
-                            <div style="font-size:12px; font-weight:800;" id="pVal">0g</div>
+                            <div style="font-size:8px; color:var(--protein); font-weight:800;">PRO</div>
+                            <div style="font-size:11px; font-weight:800;" id="pVal">0g</div>
                         </div>
                         <div class="macro-pill">
-                            <div style="font-size:9px; color:var(--carb); font-weight:800;">KARB</div>
-                            <div style="font-size:12px; font-weight:800;" id="cVal">0g</div>
+                            <div style="font-size:8px; color:var(--carb); font-weight:800;">KARB</div>
+                            <div style="font-size:11px; font-weight:800;" id="cVal">0g</div>
                         </div>
                         <div class="macro-pill">
-                            <div style="font-size:9px; color:var(--fat); font-weight:800;">YAĞ</div>
-                            <div style="font-size:12px; font-weight:800;" id="fVal">0g</div>
+                            <div style="font-size:8px; color:var(--fat); font-weight:800;">YAĞ</div>
+                            <div style="font-size:11px; font-weight:800;" id="fVal">0g</div>
                         </div>
                     </div>
                 </div>
                 <div class="food-list" id="foodContainer"></div>
                 <button onclick="resetCalories()"
-                    style="width:100%; margin-top:10px; background:#241d21; border:1px solid var(--border); color:#fff; padding:10px; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer;">Günü
+                    style="width:100%; margin-top:10px; background:#241d21; border:1px solid var(--border); color:#fff; padding:9px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">Günü
                     Sıfırla</button>
             </div>
 
@@ -940,7 +987,7 @@
                 <span class="name" id="headerUserName">Hoş geldin, <span>Şahin</span></span>
             </div>
         </div>
-        <div style="display:flex; gap:6px;">
+        <div class="header-badges">
             <div class="meta-pill" onclick="openOnboardingModal()" id="userHeaderWeightBadge">67 KG</div>
             <div class="meta-pill" onclick="openDrawerTabDirect('cal')" style="color:var(--gold);" id="headerCalBadge">0
                 KCAL</div>
@@ -950,7 +997,7 @@
     <!-- ANA ANTRENMAN DÜZENİ -->
     <main class="main-container">
 
-        <!-- 1. KOLON: GÜNÜN PROGRAMI VE EGZERSİZLER -->
+        <!-- 1. SÜTUN: GÜNÜN PROGRAMI -->
         <section class="panel">
             <div class="day-selector" id="daySelector">
                 <div class="day-tab active" onclick="switchDay('mon', this)">Pzt</div>
@@ -972,24 +1019,24 @@
             <div class="exercise-list" id="exerciseListContainer"></div>
         </section>
 
-        <!-- 2. KOLON: SET GİRİŞİ & KAYITLAR -->
+        <!-- 2. SÜTUN: SET GİRİŞİ -->
         <section class="panel" id="workoutSection">
             <div id="prAlertBanner" class="pr-alert-banner">
                 <div style="font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase;">🔥 REKOR
                     KIRILDI! TEBRİKLER 🔥</div>
-                <div style="font-size:14px; font-weight:900; color:#fff; margin-top:2px;" id="prAlertText">Yeni PR: 100
+                <div style="font-size:13px; font-weight:900; color:#fff; margin-top:2px;" id="prAlertText">Yeni PR: 100
                     KG</div>
             </div>
 
             <div
-                style="font-size:13px; font-weight:800; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                style="font-size:12px; font-weight:800; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
                 <i class="fa-solid fa-stopwatch-20" style="color:var(--accent);"></i> Set Kaydet & Uygula
             </div>
 
-            <!-- Hızlı Hareket Seçim Çipleri -->
+            <!-- Hızlı Seçim Butonları -->
             <div class="quick-exercise-chips">
                 <span class="q-chip" onclick="quickSelect('Barbell Bench Press')">Bench Press</span>
-                <span class="q-chip" onclick="quickSelect('Incline Dumbbell Press')">Incline Dumbbell</span>
+                <span class="q-chip" onclick="quickSelect('Incline Dumbbell Press')">Incline DB</span>
                 <span class="q-chip" onclick="quickSelect('Barbell Bent-Over Row')">Barbell Row</span>
                 <span class="q-chip" onclick="quickSelect('Lat Pulldown')">Lat Pulldown</span>
                 <span class="q-chip" onclick="quickSelect('Barbell Back Squat')">Squat</span>
@@ -1001,8 +1048,7 @@
 
             <form id="workoutForm" class="workout-form">
                 <div class="full-span">
-                    <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz (veya yukarıdan tıkla)"
-                        required />
+                    <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz" required />
                 </div>
                 <div>
                     <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
@@ -1020,16 +1066,16 @@
             </form>
 
             <div
-                style="font-size:13px; font-weight:800; text-transform:uppercase; margin-top:14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                style="font-size:12px; font-weight:800; text-transform:uppercase; margin-top:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
                 <span><i class="fa-solid fa-list-check" style="color:var(--gold);"></i> Güncel Antrenman Günlüğü</span>
                 <span style="font-size:11px; color:var(--text-muted);" id="todayTotalSets">0 Set</span>
             </div>
-            <div id="logsList" style="max-height: 220px; overflow-y: auto;">Kayıtlar yükleniyor...</div>
+            <div id="logsList" style="max-height: 200px; overflow-y: auto;">Kayıtlar yükleniyor...</div>
         </section>
 
     </main>
 
-    <!-- ALT MOBİL NAVİGASYON BAR (NATIVE APP HİSSİYATI) -->
+    <!-- ALT MOBİL NAVİGASYON BAR -->
     <nav class="bottom-nav">
         <div class="b-nav-item active" onclick="scrollToWorkout()">
             <i class="fa-solid fa-dumbbell"></i>
@@ -1057,14 +1103,14 @@
     <div class="modal-backdrop" id="videoModal">
         <div class="modal-box">
             <div class="modal-head">
-                <strong id="modalTitle" style="color:var(--accent);">Egzersiz Formu</strong>
+                <strong id="modalTitle" style="color:var(--accent); font-size:13px;">Egzersiz Formu</strong>
                 <button onclick="closeModal()"
-                    style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
+                    style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
             </div>
             <div class="video-box">
                 <iframe id="videoPlayer" src="" allowfullscreen></iframe>
             </div>
-            <div style="padding:12px;">
+            <div style="padding:10px;">
                 <button class="btn-submit" onclick="selectFromModal()">Bu Hareketi Antrenmana Seç</button>
             </div>
         </div>
@@ -1074,7 +1120,7 @@
         const API_URL = '/api/WorkoutLogs';
 
         function scrollToWorkout() {
-            window.scrollTo({ top: document.getElementById('workoutSection').offsetTop - 20, behavior: 'smooth' });
+            window.scrollTo({ top: document.getElementById('workoutSection').offsetTop - 10, behavior: 'smooth' });
         }
 
         function openDrawerTabDirect(tab) {
@@ -1132,7 +1178,7 @@
 
             const hMeter = p.height / 100;
             const bmi = (p.weight / (hMeter * hMeter)).toFixed(1);
-            document.getElementById('pBmiDisp').innerText = `${bmi} (Normal Aralık)`;
+            document.getElementById('pBmiDisp').innerText = `${bmi} (Normal)`;
 
             if (!localStorage.getItem('ironTruckUserProfile')) {
                 openOnboardingModal();
@@ -1216,27 +1262,28 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `${exName} Ağırlık (kg)`,
+                        label: `${exName} (kg)`,
                         data: dataPoints,
                         borderColor: '#f59e0b',
                         backgroundColor: 'rgba(245, 158, 11, 0.15)',
-                        borderWidth: 3,
+                        borderWidth: 2.5,
                         pointBackgroundColor: '#ea580c',
                         pointBorderColor: '#fff',
-                        pointRadius: 5,
+                        pointRadius: 4,
                         fill: true,
                         tension: 0.35
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
                         tooltip: { callbacks: { label: (ctx) => `${ctx.raw} KG` } }
                     },
                     scales: {
-                        x: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e' } },
-                        y: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e' } }
+                        x: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e', font: { size: 10 } } }
                     }
                 }
             });
@@ -1244,7 +1291,7 @@
 
         const routineTemplates = {
             mon: {
-                title: "PUSH: GÖĞÜS & TRICEPS", desc: "Ağır itiş & bileşik kuvvet seansı", exercises: [
+                title: "PUSH: GÖĞÜS & TRICEPS", desc: "Ağır itiş & bileşik seansı", exercises: [
                     { name: "Barbell Bench Press", id: "rT7DgCr-3pg", target: "4 Set x 6-8 Tekrar" },
                     { name: "Incline Dumbbell Press", id: "8iPEnn-ltC8", target: "3 Set x 8-10 Tekrar" },
                     { name: "Overhead Barbell Press", id: "2yjwXTZQDDI", target: "3 Set x 8-10 Tekrar" },
@@ -1252,7 +1299,7 @@
                 ]
             },
             tue: {
-                title: "PULL: SIRT & BICEPS", desc: "Çekiş kuvveti ve sırt kalınlığı", exercises: [
+                title: "PULL: SIRT & BICEPS", desc: "Çekiş ve sırt kalınlığı", exercises: [
                     { name: "Barbell Bent-Over Row", id: "9efgc2TrvEg", target: "4 Set x 6-8 Tekrar" },
                     { name: "Lat Pulldown", id: "CAwf7n6Luuc", target: "3 Set x 10-12 Tekrar" },
                     { name: "Face Pull", id: "rep-qVOkqgk", target: "4 Set x 15 Tekrar" },
@@ -1268,7 +1315,7 @@
                 ]
             },
             thu: {
-                title: "PUSH 2: OMUZ & GÖĞÜS", desc: "Hacim ve izolasyon odaklı itiş", exercises: [
+                title: "PUSH 2: OMUZ & GÖĞÜS", desc: "Hacim ve izolasyon seansı", exercises: [
                     { name: "Incline Dumbbell Press", id: "8iPEnn-ltC8", target: "4 Set x 8-10 Tekrar" },
                     { name: "Dumbbell Lateral Raise", id: "3VcKaXpzqRo", target: "4 Set x 12-15 Tekrar" },
                     { name: "Cable Chest Fly", id: "Z57CtFmRMxA", target: "3 Set x 12-15 Tekrar" },
@@ -1276,7 +1323,7 @@
                 ]
             },
             fri: {
-                title: "PULL 2: DEADLIFT & KANAT", desc: "Arka zincir ve biceps hipertrofi", exercises: [
+                title: "PULL 2: DEADLIFT & SIRT", desc: "Arka zincir hipertrofisi", exercises: [
                     { name: "Deadlift", id: "op9kVnSso6Q", target: "3 Set x 5 Tekrar" },
                     { name: "Seated Cable Row", id: "GZbfZ033f74", target: "4 Set x 10-12 Tekrar" },
                     { name: "Dumbbell Hammer Curl", id: "zC3nLlEvin4", target: "3 Set x 12 Tekrar" },
@@ -1284,7 +1331,7 @@
                 ]
             },
             sat: {
-                title: "LEGS 2 & CORE: GÜÇ", desc: "Bacak gücü ve merkez bölge", exercises: [
+                title: "LEGS 2 & CORE: GÜÇ", desc: "Bacak gücü ve karın", exercises: [
                     { name: "Barbell Back Squat", id: "bEv6CCg2BC8", target: "4 Set x 8 Tekrar" },
                     { name: "Leg Extension", id: "m0FOpMEgero", target: "3 Set x 12-15 Tekrar" },
                     { name: "Lying Leg Curl", id: "ELOCsoDSmrg", target: "3 Set x 12-15 Tekrar" },
@@ -1352,7 +1399,7 @@
                 const card = document.createElement('div');
                 card.className = 'exercise-card';
                 card.innerHTML = `
-                    <div>
+                    <div style="min-width:0;">
                         <div class="title">${ex.name}</div>
                         <div class="sub">${ex.target}</div>
                     </div>
@@ -1373,7 +1420,7 @@
             const exercises = muscleLibrary[key];
             if (!exercises) return;
 
-            document.getElementById('routineDayTitle').innerText = `${key.toUpperCase()} ÖZEL ÇALIŞMA`;
+            document.getElementById('routineDayTitle').innerText = `${key.toUpperCase()} ÇALIŞMASI`;
             document.getElementById('routineDayDesc').innerText = "Menüden seçilen egzersizler";
             document.getElementById('routineExerciseCount').innerText = `${exercises.length} Hareket`;
 
@@ -1383,7 +1430,7 @@
                 const card = document.createElement('div');
                 card.className = 'exercise-card';
                 card.innerHTML = `
-                    <div>
+                    <div style="min-width:0;">
                         <div class="title">${ex.name}</div>
                         <div class="sub">${ex.target}</div>
                     </div>
@@ -1499,7 +1546,7 @@
                 window.removeEventListener('devicemotion', handleMotion);
                 sensorActive = false;
                 btn.innerHTML = 'Sensör';
-                btn.style.background = '#231c20';
+                btn.style.background = 'rgba(35, 28, 32, 0.85)';
                 btn.style.color = '#fff';
             }
         }
@@ -1563,11 +1610,11 @@
                     const row = document.createElement('div');
                     row.className = 'log-entry';
                     row.innerHTML = `
-                        <div>
+                        <div style="min-width:0;">
                             <strong style="font-size:13px; color:#fff;">${log.exerciseName}</strong> &bull; Set ${log.setNumber}
                             <div style="color:var(--accent); font-size:11px; font-weight:800; margin-top:2px;">${log.weight} KG &times; ${log.reps} Tekrar</div>
                         </div>
-                        <button onclick="deleteLog(${log.id})" style="background:rgba(38, 24, 29, 0.85); border:1px solid #4a212c; color:#ff4d4f; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:800; cursor:pointer;">Sil</button>
+                        <button onclick="deleteLog(${log.id})" style="background:rgba(38, 24, 29, 0.85); border:1px solid #4a212c; color:#ff4d4f; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:800; cursor:pointer; flex-shrink:0;">Sil</button>
                     `;
                     list.appendChild(row);
                 });
