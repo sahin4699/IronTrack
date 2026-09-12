@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#090a0f" />
-    <title>IronTrack Pro</title>
+    <title>IronTruck Pro - Gym & Nutrition Tracker</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,6 @@
             --protein: #10b981;
             --carb: #3b82f6;
             --fat: #f59e0b;
-            --muscle-red: #8b1e13;
         }
 
         * {
@@ -60,10 +59,12 @@
         .header h1 {
             font-size: 20px;
             font-weight: 800;
+            letter-spacing: 0.5px;
         }
 
         .header h1 span {
             color: var(--accent);
+            text-shadow: 0 0 12px var(--accent-glow);
         }
 
         .main-grid {
@@ -210,7 +211,7 @@
             cursor: pointer;
         }
 
-        /* Beslenme & Resimli Yemek Kartları */
+        /* Beslenme & Yemek Kartları */
         .cal-box {
             background: var(--surface-card);
             border: 1px solid var(--border);
@@ -252,7 +253,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-height: 320px;
+            max-height: 330px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -282,11 +283,11 @@
         }
 
         .food-img {
-            width: 52px;
-            height: 52px;
+            width: 54px;
+            height: 54px;
             border-radius: 10px;
             object-fit: cover;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
             background: #1b1e2b;
         }
@@ -684,13 +685,13 @@
 <body>
 
     <header class="header">
-        <h1>IRON<span>TRACK</span> PRO</h1>
+        <h1>IRON<span>TRUCK</span> PRO</h1>
         <div style="font-size: 13px; font-weight: 700; color: var(--accent);" id="headerCal">0 / 2500 KCAL</div>
     </header>
 
     <main class="main-grid">
 
-        <!-- 1. KOLON: ADIMSAYAR & BESLENME (GERÇEK YEMEK RESİMLERİ) -->
+        <!-- 1. KOLON: CANLI ADIMSAYAR & GERÇEK FOTOĞRAFLI BESLENME -->
         <section class="panel">
             <div class="panel-title"><i class="fa-solid fa-person-running"></i> Canlı Adımsayar</div>
 
@@ -891,7 +892,7 @@
         const API_URL = '/api/WorkoutLogs';
 
         /* 1. ADIMSAYAR MOTORU */
-        let stepCount = parseInt(localStorage.getItem('ironSteps')) || 0;
+        let stepCount = parseInt(localStorage.getItem('ironTruckSteps')) || 0;
         let sensorActive = false;
         let lastStepTime = 0;
 
@@ -904,7 +905,7 @@
 
             const offset = 440 - (Math.min(1, stepCount / 10000) * 440);
             document.getElementById('stepBar').style.strokeDashoffset = offset;
-            localStorage.setItem('ironSteps', stepCount);
+            localStorage.setItem('ironTruckSteps', stepCount);
         }
 
         function handleMotion(e) {
@@ -947,46 +948,46 @@
             updateStepDisplay();
         }
 
-        /* 2. BESİNLER & GERÇEK YEMEK GÖRSELLERİ */
+        /* 2. ÖZEL VE AYRI BESİN FOTOĞRAFLARI */
         const foods = [
             {
-                name: "Tavuk Göğsü (150g)",
+                name: "Izgara Tavuk Göğsü (150g)",
                 cal: 247, p: 46, c: 0, f: 5,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Grilled_chicken_breast.jpg/320px-Grilled_chicken_breast.jpg"
+                img: "https://images.pexels.com/photos/6210876/pexels-photo-6210876.jpeg?auto=compress&cs=tinysrgb&w=150"
             },
             {
-                name: "Pirinç Pilavı (200g)",
+                name: "Beyaz Pirinç Pilavı (200g)",
                 cal: 260, p: 5, c: 57, f: 1,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Turkish_rice_pilaf.jpg/320px-Turkish_rice_pilaf.jpg"
+                img: "https://images.pexels.com/photos/723198/pexels-photo-723198.jpeg?auto=compress&cs=tinysrgb&w=150"
             },
             {
-                name: "Yulaf Ezmesi & Meyve",
+                name: "Fitness Yulaf Kasesi (80g)",
                 cal: 310, p: 10, c: 58, f: 5,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Oatmeal_porridge.jpg/320px-Oatmeal_porridge.jpg"
+                img: "https://images.pexels.com/photos/103124/pexels-photo-103124.jpeg?auto=compress&cs=tinysrgb&w=150"
             },
             {
                 name: "Haşlanmış Yumurta (3 Adet)",
                 cal: 215, p: 18, c: 1, f: 15,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Boiled_egg_-_three_stages_of_boiling.jpg/320px-Boiled_egg_-_three_stages_of_boiling.jpg"
+                img: "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=150"
             },
             {
-                name: "Izgara Kasap Köfte (160g)",
+                name: "Döküm Izgara Köfte (160g)",
                 cal: 340, p: 30, c: 4, f: 22,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/K%C3%B6fte_with_rice.jpg/320px-K%C3%B6fte_with_rice.jpg"
+                img: "https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=150"
             },
             {
-                name: "Whey Protein Shake",
+                name: "Çikolatalı Whey Shake",
                 cal: 120, p: 24, c: 2, f: 1.5,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Chocolate_protein_shake.jpg/320px-Chocolate_protein_shake.jpg"
+                img: "https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=150"
             },
             {
-                name: "Lor Peyniri (100g)",
+                name: "Taze Lor Peyniri (100g)",
                 cal: 98, p: 12, c: 3, f: 4,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Cottage_cheese_bowl.jpg/320px-Cottage_cheese_bowl.jpg"
+                img: "https://images.pexels.com/photos/4198019/pexels-photo-4198019.jpeg?auto=compress&cs=tinysrgb&w=150"
             }
         ];
 
-        let nutrition = JSON.parse(localStorage.getItem('ironNutritionFull')) || { cal: 0, p: 0, c: 0, f: 0 };
+        let nutrition = JSON.parse(localStorage.getItem('ironTruckNutrition')) || { cal: 0, p: 0, c: 0, f: 0 };
 
         function renderFoods() {
             const container = document.getElementById('foodContainer');
@@ -995,7 +996,7 @@
                 const div = document.createElement('div');
                 div.className = 'food-card';
                 div.innerHTML = `
-                    <img src="${f.img}" alt="${f.name}" class="food-img" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=120&q=80'" />
+                    <img src="${f.img}" alt="${f.name}" class="food-img" loading="lazy" />
                     <div class="food-info">
                         <div class="name">${f.name}</div>
                         <div class="cal">${f.cal} kcal &bull; P:${f.p}g K:${f.c}g Y:${f.f}g</div>
@@ -1013,7 +1014,7 @@
             nutrition.p += item.p;
             nutrition.c += item.c;
             nutrition.f += item.f;
-            localStorage.setItem('ironNutritionFull', JSON.stringify(nutrition));
+            localStorage.setItem('ironTruckNutrition', JSON.stringify(nutrition));
             updateCalUI();
         }
 
@@ -1139,7 +1140,7 @@
             closeModal();
         }
 
-        /* 4. ANTRENMAN KAYITLARI & API BAĞLANTISI */
+        /* 4. ANTRENMAN KAYITLARI & API */
         async function fetchLogs() {
             const list = document.getElementById('logsList');
             try {
