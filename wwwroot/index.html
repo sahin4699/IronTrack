@@ -30,14 +30,14 @@
     <style>
         :root {
             --bg: #0b090a;
-            --surface: rgba(20, 17, 19, 0.85);
+            --surface: rgba(20, 17, 19, 0.88);
             --surface-card: rgba(28, 24, 27, 0.85);
             --border: rgba(61, 51, 57, 0.65);
             --border-highlight: rgba(245, 158, 11, 0.4);
 
             --accent: #f59e0b;
             --accent-warm: #ea580c;
-            --accent-glow: rgba(245, 158, 11, 0.35);
+            --accent-glow: rgba(245, 158, 11, 0.45);
             --gold: #fbbf24;
 
             --text: #f5f3f4;
@@ -87,62 +87,94 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(24, 20, 23, 0.88);
+            background: rgba(24, 20, 23, 0.9);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 10px 14px;
+            border-radius: 16px;
+            padding: 12px 14px;
             margin-bottom: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             min-width: 0;
         }
 
         .btn-drawer-open {
-            background: rgba(35, 30, 34, 0.85);
+            background: rgba(35, 30, 34, 0.9);
             border: 1px solid var(--border);
             color: #fff;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
+            font-size: 16px;
             cursor: pointer;
             flex-shrink: 0;
+            transition: all 0.2s;
         }
 
-        .user-greeting {
+        .btn-drawer-open:active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .brand-box {
+            display: flex;
+            flex-direction: column;
             min-width: 0;
         }
 
-        .user-greeting .sub {
-            font-size: 9px;
-            font-weight: 800;
-            color: var(--text-muted);
+        .brand-title {
+            font-size: 21px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: block;
+            line-height: 1.1;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .user-greeting .name {
-            font-size: 14px;
+        .brand-title span {
+            background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px var(--accent-glow));
+        }
+
+        .brand-badge {
+            font-size: 9px;
             font-weight: 900;
-            color: #fff;
+            letter-spacing: 0.5px;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 2px 5px;
+            border-radius: 5px;
+            text-shadow: none;
+            -webkit-text-fill-color: initial;
+        }
+
+        .user-greeting {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 2px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .user-greeting .name span {
-            color: var(--accent);
+        .user-greeting strong {
+            color: #fff;
         }
 
         .header-badges {
@@ -154,11 +186,11 @@
         .meta-pill {
             background: rgba(245, 158, 11, 0.12);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.35);
             color: var(--accent);
             font-size: 11px;
             font-weight: 800;
-            padding: 5px 8px;
+            padding: 6px 9px;
             border-radius: 8px;
             white-space: nowrap;
         }
@@ -333,7 +365,7 @@
             flex-shrink: 0;
         }
 
-        /* Form Elemanları (Mobilde Taşmayı Önleyen Grid) */
+        /* Form */
         .workout-form {
             width: 100%;
             display: grid;
@@ -415,7 +447,7 @@
             text-align: center;
         }
 
-        /* ALT MOBİL NAVİGASYON (TAŞMAYI ÖNLEYEN SAFE-AREA) */
+        /* Alt Sabit Menü */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -455,7 +487,7 @@
             font-weight: 800;
         }
 
-        /* SOL AÇILIR MENÜ (DRAWER) */
+        /* Sol Menü (Drawer) */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -508,25 +540,33 @@
             margin-bottom: 12px;
         }
 
+        /* Resimli/İkonlu Menü Tabları */
         .drawer-tabs {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             background: rgba(28, 24, 27, 0.85);
-            border-radius: 8px;
-            padding: 2px;
-            margin-bottom: 12px;
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 14px;
             gap: 2px;
         }
 
         .d-tab {
-            text-align: center;
-            padding: 7px 1px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 1px;
             font-size: 9px;
             font-weight: 700;
             border-radius: 6px;
             cursor: pointer;
             color: var(--text-muted);
             white-space: nowrap;
+        }
+
+        .d-tab i {
+            font-size: 13px;
         }
 
         .d-tab.active {
@@ -541,6 +581,20 @@
 
         .tab-panel.active {
             display: block;
+        }
+
+        /* Menü İçi Kartlar & Görseller */
+        .drawer-banner-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--accent);
+            padding-left: 8px;
         }
 
         .drawer-muscle-grid {
@@ -562,13 +616,37 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+        }
+
+        .d-muscle-btn img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 6px;
         }
 
         .d-muscle-btn.active {
             border-color: var(--accent);
             color: #fff;
-            background: rgba(35, 28, 32, 0.9);
+            background: rgba(35, 28, 32, 0.95);
+        }
+
+        /* MOBİLDE KİLİTLENMEYİ BİTİREN KORUMALI GRAFİK KUTUSU */
+        .chart-box-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            max-height: 220px;
+            background: rgba(13, 11, 12, 0.85);
+            border-radius: 10px;
+            padding: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .chart-box-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
         }
 
         /* Adımsayar Halka */
@@ -807,7 +885,7 @@
 
 <body>
 
-    <!-- GİRİŞ & PROFİL DÜZENLEME MODALI -->
+    <!-- GİRİŞ & PROFİL MODALI -->
     <div class="modal-backdrop" id="onboardingModal">
         <div class="modal-box" style="padding: 16px;">
             <h3 style="color:#fff; font-size:15px; font-weight:800; margin-bottom:4px;">👤 Profilini Tanımla</h3>
@@ -849,38 +927,76 @@
                     style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
             </div>
 
+            <!-- Resimli/İkonlu 5 Sekme -->
             <div class="drawer-tabs">
-                <div class="d-tab active" onclick="switchDrawerTab('muscles', this)">Kaslar</div>
-                <div class="d-tab" onclick="switchDrawerTab('chart', this)">Grafik</div>
-                <div class="d-tab" onclick="switchDrawerTab('steps', this)">Adımlar</div>
-                <div class="d-tab" onclick="switchDrawerTab('profile', this)">Profil</div>
-                <div class="d-tab" onclick="switchDrawerTab('cal', this)">Kalori</div>
-            </div>
-
-            <!-- 1. KAS GRUPLARI -->
-            <div class="tab-panel active" id="tabMuscles">
-                <div class="drawer-muscle-grid">
-                    <div class="d-muscle-btn active" onclick="selectMuscleGroup('chest', this)"><i
-                            class="fa-solid fa-shield-halved"></i> Göğüs</div>
-                    <div class="d-muscle-btn" onclick="selectMuscleGroup('back', this)"><i
-                            class="fa-solid fa-dragon"></i> Sırt / Kanat</div>
-                    <div class="d-muscle-btn" onclick="selectMuscleGroup('shoulders', this)"><i
-                            class="fa-solid fa-bolt"></i> Omuz</div>
-                    <div class="d-muscle-btn" onclick="selectMuscleGroup('biceps', this)"><i
-                            class="fa-solid fa-hand-back-fist"></i> Biceps</div>
-                    <div class="d-muscle-btn" onclick="selectMuscleGroup('triceps', this)"><i
-                            class="fa-solid fa-fire-flame-curved"></i> Triceps</div>
-                    <div class="d-muscle-btn" onclick="selectMuscleGroup('abs', this)"><i class="fa-solid fa-cubes"></i>
-                        Karın</div>
-                    <div class="d-muscle-btn" onclick="selectMuscleGroup('quads', this)"><i
-                            class="fa-solid fa-person-running"></i> Ön Bacak</div>
-                    <div class="d-muscle-btn" onclick="selectMuscleGroup('hams', this)"><i
-                            class="fa-solid fa-shoe-prints"></i> Arka Bacak</div>
+                <div class="d-tab active" onclick="switchDrawerTab('muscles', this)">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <span>Kaslar</span>
+                </div>
+                <div class="d-tab" onclick="switchDrawerTab('chart', this)">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Grafik</span>
+                </div>
+                <div class="d-tab" onclick="switchDrawerTab('steps', this)">
+                    <i class="fa-solid fa-shoe-prints"></i>
+                    <span>Adım</span>
+                </div>
+                <div class="d-tab" onclick="switchDrawerTab('profile', this)">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profil</span>
+                </div>
+                <div class="d-tab" onclick="switchDrawerTab('cal', this)">
+                    <i class="fa-solid fa-bowl-food"></i>
+                    <span>Kalori</span>
                 </div>
             </div>
 
-            <!-- 2. GRAFİK -->
+            <!-- 1. KAS GRUPLARI (GÖRSELLİ) -->
+            <div class="tab-panel active" id="tabMuscles">
+                <div class="drawer-banner-header">Hedef Kas Grupları</div>
+                <div class="drawer-muscle-grid">
+                    <div class="d-muscle-btn active" onclick="selectMuscleGroup('chest', this)">
+                        <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=80&q=80" alt="Göğüs" />
+                        <span>Göğüs</span>
+                    </div>
+                    <div class="d-muscle-btn" onclick="selectMuscleGroup('back', this)">
+                        <img src="https://images.unsplash.com/photo-1603287681836-b174ce5074c2?w=80&q=80" alt="Sırt" />
+                        <span>Sırt / Kanat</span>
+                    </div>
+                    <div class="d-muscle-btn" onclick="selectMuscleGroup('shoulders', this)">
+                        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=80&q=80" alt="Omuz" />
+                        <span>Omuz</span>
+                    </div>
+                    <div class="d-muscle-btn" onclick="selectMuscleGroup('biceps', this)">
+                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=80&q=80"
+                            alt="Biceps" />
+                        <span>Biceps</span>
+                    </div>
+                    <div class="d-muscle-btn" onclick="selectMuscleGroup('triceps', this)">
+                        <img src="https://images.unsplash.com/photo-1530821875964-91927b611bbe?w=80&q=80"
+                            alt="Triceps" />
+                        <span>Triceps</span>
+                    </div>
+                    <div class="d-muscle-btn" onclick="selectMuscleGroup('abs', this)">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=80&q=80" alt="Karın" />
+                        <span>Karın</span>
+                    </div>
+                    <div class="d-muscle-btn" onclick="selectMuscleGroup('quads', this)">
+                        <img src="https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=80&q=80"
+                            alt="Ön Bacak" />
+                        <span>Ön Bacak</span>
+                    </div>
+                    <div class="d-muscle-btn" onclick="selectMuscleGroup('hams', this)">
+                        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=80&q=80"
+                            alt="Arka Bacak" />
+                        <span>Arka Bacak</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. GRAFİK (GÖRSELLİ VE MOBİL SIKIŞMASINI BİTİREN WRAPPER) -->
             <div class="tab-panel" id="tabChart">
+                <div class="drawer-banner-header">Ağırlık Gelişim Analizi</div>
                 <div style="margin-bottom:8px;">
                     <select id="exerciseChartSelect" onchange="updateExerciseChart()">
                         <option value="Barbell Bench Press">Barbell Bench Press</option>
@@ -894,11 +1010,15 @@
                         <option value="Triceps Rope Pushdown">Triceps Rope Pushdown</option>
                     </select>
                 </div>
-                <canvas id="exerciseSpecificChart" height="230"></canvas>
+
+                <div class="chart-box-wrapper">
+                    <canvas id="exerciseSpecificChart"></canvas>
+                </div>
             </div>
 
             <!-- 3. ADIMSAYAR -->
             <div class="tab-panel" id="tabSteps">
+                <div class="drawer-banner-header">Canlı Adımsayar</div>
                 <div class="step-circle-box">
                     <div class="ring-box">
                         <svg class="ring-svg" viewBox="0 0 160 160">
@@ -934,6 +1054,7 @@
 
             <!-- 4. PROFİL -->
             <div class="tab-panel" id="tabProfile">
+                <div class="drawer-banner-header">Kullanıcı Karnesi</div>
                 <div class="profile-card">
                     <div class="profile-stats-list">
                         <div class="p-stat-item"><span>İsim</span><strong id="pNameDisp">-</strong></div>
@@ -951,6 +1072,7 @@
 
             <!-- 5. KALORİ -->
             <div class="tab-panel" id="tabCal">
+                <div class="drawer-banner-header">Günlük Beslenme</div>
                 <div class="nutrition-metric">
                     <div style="font-size: 18px; font-weight: 900;"><span id="calVal">0</span> <span
                             style="font-size: 10px; color: var(--text-muted);">/ 2500 KCAL</span></div>
@@ -982,9 +1104,10 @@
     <header class="app-header">
         <div class="header-left">
             <button class="btn-drawer-open" onclick="toggleDrawer()"><i class="fa-solid fa-bars-staggered"></i></button>
-            <div class="user-greeting">
-                <span class="sub">IRONTRUCK</span>
-                <span class="name" id="headerUserName">Hoş geldin, <span>Şahin</span></span>
+            <div class="brand-box">
+                <div class="brand-title">IRON<span>TRUCK</span> <span class="brand-badge">PRO</span></div>
+                <div class="user-greeting" id="headerGreetingText">Hoş geldin, <strong
+                        id="headerUserName">Şahin</strong></div>
             </div>
         </div>
         <div class="header-badges">
@@ -1168,7 +1291,7 @@
 
         function initProfile() {
             const p = getProfile();
-            document.getElementById('headerUserName').innerHTML = `Hoş geldin, <span>${p.name}</span>`;
+            document.getElementById('headerUserName').innerText = p.name;
             document.getElementById('userHeaderWeightBadge').innerText = `${p.weight} KG`;
 
             document.getElementById('pNameDisp').innerText = p.name;
@@ -1225,13 +1348,16 @@
             if (tabName === 'muscles') document.getElementById('tabMuscles').classList.add('active');
             if (tabName === 'chart') {
                 document.getElementById('tabChart').classList.add('active');
-                updateExerciseChart();
+                setTimeout(() => {
+                    updateExerciseChart();
+                }, 100);
             }
             if (tabName === 'steps') document.getElementById('tabSteps').classList.add('active');
             if (tabName === 'profile') document.getElementById('tabProfile').classList.add('active');
             if (tabName === 'cal') document.getElementById('tabCal').classList.add('active');
         }
 
+        /* HATASIZ VE RESPONSIVE HAREKET GRAFİĞİ MOTORU */
         let exerciseChart = null;
         let globalLogs = [];
 
@@ -1239,7 +1365,9 @@
             const selectEl = document.getElementById('exerciseChartSelect');
             if (!selectEl) return;
             const exName = selectEl.value;
-            const ctx = document.getElementById('exerciseSpecificChart').getContext('2d');
+            const canvas = document.getElementById('exerciseSpecificChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
 
             const filteredLogs = globalLogs.filter(l =>
                 l.exerciseName.toLowerCase().trim() === exName.toLowerCase().trim()
@@ -1249,29 +1377,32 @@
             let dataPoints = [];
 
             if (filteredLogs.length > 0) {
-                labels = filteredLogs.map((l, i) => `Set ${l.setNumber || (i + 1)}`);
+                labels = filteredLogs.map((l, i) => `S${l.setNumber || (i + 1)}`);
                 dataPoints = filteredLogs.map(l => l.weight);
             } else {
                 labels = ['Kayıt Yok'];
                 dataPoints = [0];
             }
 
-            if (exerciseChart) exerciseChart.destroy();
+            if (exerciseChart) {
+                exerciseChart.destroy();
+            }
+
             exerciseChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `${exName} (kg)`,
+                        label: `${exName}`,
                         data: dataPoints,
                         borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                        backgroundColor: 'rgba(245, 158, 11, 0.18)',
                         borderWidth: 2.5,
                         pointBackgroundColor: '#ea580c',
                         pointBorderColor: '#fff',
                         pointRadius: 4,
                         fill: true,
-                        tension: 0.35
+                        tension: 0.3
                     }]
                 },
                 options: {
@@ -1282,11 +1413,20 @@
                         tooltip: { callbacks: { label: (ctx) => `${ctx.raw} KG` } }
                     },
                     scales: {
-                        x: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e', font: { size: 10 } } },
-                        y: { grid: { color: 'rgba(61, 51, 57, 0.4)' }, ticks: { color: '#a3989e', font: { size: 10 } } }
+                        x: {
+                            grid: { color: 'rgba(61, 51, 57, 0.3)' },
+                            ticks: { color: '#a3989e', font: { size: 9 } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(61, 51, 57, 0.3)' },
+                            ticks: { color: '#a3989e', font: { size: 9 } }
+                        }
                     }
                 }
             });
+
+            // Mobil resize emri
+            exerciseChart.resize();
         }
 
         const routineTemplates = {
@@ -1546,7 +1686,7 @@
                 window.removeEventListener('devicemotion', handleMotion);
                 sensorActive = false;
                 btn.innerHTML = 'Sensör';
-                btn.style.background = 'rgba(35, 28, 32, 0.85)';
+                btn.style.background = '#231c20';
                 btn.style.color = '#fff';
             }
         }
