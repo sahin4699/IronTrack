@@ -9,10 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="IronTrack" />
-    <title>IronTrack 3D Anatomy Pro</title>
-
-    <!-- Three.js Kütüphanesi -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <title>IronTrack - Anatomi & Antrenman Takip</title>
 
     <style>
         :root {
@@ -25,6 +22,8 @@
             --gold: #ffa502;
             --text: #f5f6fa;
             --muted: #8a8f9d;
+            --muscle-base: #242933;
+            --muscle-stroke: #171920;
         }
 
         * {
@@ -50,79 +49,142 @@
             margin: 0 auto;
         }
 
-        /* 3D Model Bölümü */
-        .viewer-box {
-            background: radial-gradient(circle at center, #1c1f26 0%, #0d0e11 100%);
+        /* Hero */
+        .hero {
+            background: linear-gradient(145deg, #16181d, #0d0e11);
+            border: 1px solid #282c35;
+            border-radius: 18px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            margin-bottom: 14px;
+        }
+
+        .hero-text h1 {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-text h1 span {
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .hero-text p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* 3D Anatomik Model Kutusu */
+        .anatomy-card {
+            background: radial-gradient(circle at center, #171a22 0%, #0c0d10 100%);
             border: 1px solid var(--card-border);
             border-radius: 18px;
-            overflow: hidden;
+            padding: 16px;
             margin-bottom: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            text-align: center;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
         }
 
-        #canvas3d {
+        .view-switch {
+            display: inline-flex;
+            background: #111216;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 12px;
+            gap: 4px;
+        }
+
+        .switch-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding: 7px 18px;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .switch-btn.active {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 2px 10px var(--accent-glow);
+        }
+
+        /* İnsan Anatomisi Vektör Alanı */
+        .body-viewport {
             width: 100%;
-            height: 240px;
-            display: block;
-            touch-action: none;
-            cursor: grab;
+            height: 330px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 800px;
         }
 
-        #canvas3d:active {
-            cursor: grabbing;
+        .body-flip-container {
+            width: 220px;
+            height: 320px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
         }
 
-        .viewer-hint {
+        .body-flip-container.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .body-face {
             position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .body-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .muscle-part {
+            fill: var(--muscle-base);
+            stroke: var(--muscle-stroke);
+            stroke-width: 1.5;
+            cursor: pointer;
+            transition: fill 0.25s, filter 0.25s;
+        }
+
+        .muscle-part:hover {
+            fill: #343b49;
+        }
+
+        .muscle-part.active {
+            fill: var(--accent) !important;
+            filter: drop-shadow(0 0 8px var(--accent-glow));
+        }
+
+        .anatomy-hint {
             font-size: 11px;
             color: var(--muted);
-            background: rgba(0, 0, 0, 0.6);
-            padding: 4px 10px;
-            border-radius: 12px;
-            pointer-events: none;
+            margin-top: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        /* Kas Seçim Hapları */
-        .muscle-selector {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding: 10px 14px;
-            background: #111216;
-            border-bottom: 1px solid var(--card-border);
-            scrollbar-width: none;
-        }
-
-        .muscle-selector::-webkit-scrollbar {
-            display: none;
-        }
-
-        .m-tag {
-            background: #191b22;
-            border: 1px solid #282d38;
-            padding: 7px 13px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-weight: 700;
-            color: #b0b5c0;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        .m-tag.active {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        /* Egzersiz Öneri Kartları */
+        /* Kartlar & Form */
         .box {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -139,20 +201,20 @@
             align-items: center;
             gap: 8px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .exercise-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 8px;
         }
 
         .ex-card {
             background: #090a0d;
             border: 1px solid #232732;
             border-radius: 10px;
-            padding: 10px;
+            padding: 11px 12px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -160,7 +222,7 @@
         .ex-card:hover,
         .ex-card:active {
             border-color: var(--accent);
-            background: #15171e;
+            background: #14171f;
         }
 
         .ex-card .title {
@@ -177,7 +239,63 @@
             justify-content: space-between;
         }
 
-        /* Video Modal */
+        /* Form */
+        .grid-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .full-row {
+            grid-column: span 2;
+        }
+
+        input {
+            width: 100%;
+            background: #090a0d;
+            border: 1px solid #232732;
+            border-radius: 10px;
+            padding: 13px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        button.btn-primary {
+            width: 100%;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        button.btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* Dinlenme Barı */
+        .timer-bar {
+            background: #14171d;
+            border: 1px solid #282d38;
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        /* Modal */
         .video-modal {
             display: none;
             position: fixed;
@@ -225,57 +343,6 @@
             border: none;
         }
 
-        /* Form */
-        .grid-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .full-row {
-            grid-column: span 2;
-        }
-
-        input {
-            width: 100%;
-            background: #090a0d;
-            border: 1px solid #232732;
-            border-radius: 10px;
-            padding: 13px;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: var(--accent);
-        }
-
-        button.btn-primary {
-            width: 100%;
-            background: var(--accent);
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-weight: 800;
-            font-size: 14px;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
-
-        /* Rest Timer Bar */
-        .timer-bar {
-            background: #14171d;
-            border: 1px solid #282d38;
-            border-radius: 12px;
-            padding: 10px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
         .log-item {
             display: flex;
             justify-content: space-between;
@@ -294,24 +361,124 @@
 
     <div class="container">
 
-        <!-- 3D Anatomi Görüntüleyici -->
-        <div class="viewer-box">
-            <div class="muscle-selector">
-                <span class="m-tag active" onclick="selectMuscle('chest', this)">GÖĞÜS</span>
-                <span class="m-tag" onclick="selectMuscle('back', this)">SIRT</span>
-                <span class="m-tag" onclick="selectMuscle('shoulders', this)">OMUZ</span>
-                <span class="m-tag" onclick="selectMuscle('biceps', this)">BICEPS</span>
-                <span class="m-tag" onclick="selectMuscle('triceps', this)">TRICEPS</span>
-                <span class="m-tag" onclick="selectMuscle('legs', this)">BACAK</span>
+        <div class="hero">
+            <div class="hero-text">
+                <h1>IRON<span>TRACK</span></h1>
+                <p>Hardcore Anatomi & Antrenman</p>
             </div>
-
-            <canvas id="canvas3d"></canvas>
-            <div class="viewer-hint">🔄 Döndürmek için kaydır</div>
         </div>
 
-        <!-- Seçili Kas Hareketleri -->
+        <!-- Gerçek İnsan Anatomisi Modülü -->
+        <div class="anatomy-card">
+            <div class="view-switch">
+                <button class="switch-btn active" id="btnFront" onclick="toggleView('front')">ÖN GÖRÜNÜM</button>
+                <button class="switch-btn" id="btnBack" onclick="toggleView('back')">ARKA GÖRÜNÜM 🔄</button>
+            </div>
+
+            <div class="body-viewport" id="viewportTouch">
+                <div class="body-flip-container" id="flipContainer">
+
+                    <!-- ÖN VÜCUT (ANTERIOR) -->
+                    <div class="body-face front">
+                        <svg viewBox="0 0 200 320" width="100%" height="100%">
+                            <!-- Kafa & Boyun -->
+                            <path class="muscle-part" data-muscle="traps" d="M90 28 L110 28 L116 48 L84 48 Z" />
+                            <ellipse cx="100" cy="18" rx="14" ry="16" fill="#1b1e26" stroke="#171920"
+                                stroke-width="1.5" />
+
+                            <!-- Omuzlar (Ön Deltoid) -->
+                            <path class="muscle-part" data-muscle="shoulders"
+                                d="M68 50 C62 55, 58 68, 64 80 C70 82, 76 74, 76 60 Z" />
+                            <path class="muscle-part" data-muscle="shoulders"
+                                d="M132 50 C138 55, 142 68, 136 80 C130 82, 124 74, 124 60 Z" />
+
+                            <!-- Göğüs (Pectoralis) -->
+                            <path class="muscle-part active" data-muscle="chest"
+                                d="M78 54 C88 52, 98 56, 99 74 C92 78, 80 78, 74 72 C72 64, 74 58, 78 54 Z" />
+                            <path class="muscle-part active" data-muscle="chest"
+                                d="M122 54 C112 52, 102 56, 101 74 C108 78, 120 78, 126 72 C128 64, 126 58, 122 54 Z" />
+
+                            <!-- Biceps & Ön Kol -->
+                            <path class="muscle-part" data-muscle="biceps"
+                                d="M62 82 C56 94, 56 108, 62 116 C68 116, 70 104, 68 88 Z" />
+                            <path class="muscle-part" data-muscle="biceps"
+                                d="M138 82 C144 94, 144 108, 138 116 C132 116, 130 104, 132 88 Z" />
+                            <path class="muscle-part" data-muscle="forearms"
+                                d="M60 120 C54 135, 52 152, 56 162 C60 162, 66 148, 66 126 Z" />
+                            <path class="muscle-part" data-muscle="forearms"
+                                d="M140 120 C146 135, 148 152, 144 162 C140 162, 134 148, 134 126 Z" />
+
+                            <!-- Karın (Abs) -->
+                            <path class="muscle-part" data-muscle="abs" d="M84 80 L116 80 L114 130 L86 130 Z" />
+
+                            <!-- Ön Bacak (Quadriceps) -->
+                            <path class="muscle-part" data-muscle="quads"
+                                d="M78 140 C70 160, 68 195, 74 220 C82 222, 92 220, 94 185 C96 160, 94 142, 88 140 Z" />
+                            <path class="muscle-part" data-muscle="quads"
+                                d="M122 140 C130 160, 132 195, 126 220 C118 222, 108 220, 106 185 C104 160, 106 142, 112 140 Z" />
+
+                            <!-- Kalf (Ön) -->
+                            <path class="muscle-part" data-muscle="calves"
+                                d="M74 235 C68 255, 70 280, 74 295 L84 295 C88 280, 88 255, 84 235 Z" />
+                            <path class="muscle-part" data-muscle="calves"
+                                d="M126 235 C132 255, 130 280, 126 295 L116 295 C112 280, 112 255, 116 235 Z" />
+                        </svg>
+                    </div>
+
+                    <!-- ARKA VÜCUT (POSTERIOR) -->
+                    <div class="body-face back">
+                        <svg viewBox="0 0 200 320" width="100%" height="100%">
+                            <!-- Baş & Trapez -->
+                            <ellipse cx="100" cy="18" rx="14" ry="16" fill="#1b1e26" stroke="#171920"
+                                stroke-width="1.5" />
+                            <path class="muscle-part" data-muscle="traps" d="M88 34 L112 34 L126 64 L100 84 L74 64 Z" />
+
+                            <!-- Arka Omuz -->
+                            <path class="muscle-part" data-muscle="shoulders"
+                                d="M66 54 C60 62, 60 74, 66 82 C72 82, 74 72, 74 60 Z" />
+                            <path class="muscle-part" data-muscle="shoulders"
+                                d="M134 54 C140 62, 140 74, 134 82 C128 82, 126 72, 126 60 Z" />
+
+                            <!-- Kanat (Lats / Sırt) -->
+                            <path class="muscle-part" data-muscle="lats"
+                                d="M74 72 C84 80, 94 86, 98 116 C86 114, 76 104, 72 88 Z" />
+                            <path class="muscle-part" data-muscle="lats"
+                                d="M126 72 C116 80, 106 86, 102 116 C114 114, 124 104, 128 88 Z" />
+
+                            <!-- Triceps -->
+                            <path class="muscle-part" data-muscle="triceps"
+                                d="M60 82 C54 96, 54 110, 60 118 C66 116, 68 102, 66 84 Z" />
+                            <path class="muscle-part" data-muscle="triceps"
+                                d="M140 82 C146 96, 146 110, 140 118 C134 116, 132 102, 134 84 Z" />
+
+                            <!-- Bel / Glutes (Kalça) -->
+                            <path class="muscle-part" data-muscle="glutes"
+                                d="M78 132 C72 144, 74 165, 84 172 C94 172, 98 155, 98 134 Z" />
+                            <path class="muscle-part" data-muscle="glutes"
+                                d="M122 132 C128 144, 126 165, 116 172 C106 172, 102 155, 102 134 Z" />
+
+                            <!-- Arka Bacak (Hamstrings) -->
+                            <path class="muscle-part" data-muscle="hamstrings"
+                                d="M76 176 C72 195, 72 215, 78 226 C86 226, 92 215, 94 185 Z" />
+                            <path class="muscle-part" data-muscle="hamstrings"
+                                d="M124 176 C128 195, 128 215, 122 226 C114 226, 108 215, 106 185 Z" />
+
+                            <!-- Kalf (Arka) -->
+                            <path class="muscle-part" data-muscle="calves"
+                                d="M72 235 C66 255, 68 280, 74 295 L84 295 C90 280, 90 255, 84 235 Z" />
+                            <path class="muscle-part" data-muscle="calves"
+                                d="M128 235 C134 255, 132 280, 126 295 L116 295 C110 280, 110 255, 116 235 Z" />
+                        </svg>
+                    </div>
+
+                </div>
+            </div>
+            <div class="anatomy-hint">Vücuttaki bir kasa tıkla veya görünümü çevir</div>
+        </div>
+
+        <!-- Seçilen Kasın Hareketleri -->
         <div class="box">
-            <h2 id="muscleTitle">🎯 GÖĞÜS HAREKETLERİ & FORM</h2>
+            <h2 id="muscleTitle">🎯 GÖĞÜS (CHEST) HAREKETLERİ</h2>
             <div class="exercise-grid" id="exerciseGrid"></div>
         </div>
 
@@ -331,10 +498,10 @@
 
         <!-- Set Giriş Formu -->
         <div class="box">
-            <h2>➕ Seti Kaydet</h2>
+            <h2>➕ Set Ekle</h2>
             <form id="workoutForm" class="grid-form">
                 <div class="full-row">
-                    <input type="text" id="exerciseName" placeholder="Seçilen Hareket" required />
+                    <input type="text" id="exerciseName" placeholder="Seçilen Egzersiz" required />
                 </div>
                 <div>
                     <input type="number" id="weight" placeholder="Ağırlık (kg)" step="0.5" inputmode="decimal"
@@ -347,7 +514,7 @@
                     <input type="number" id="setNumber" placeholder="Set No" value="1" inputmode="numeric" required />
                 </div>
                 <div class="full-row">
-                    <button type="submit" class="btn-primary">Seti Bas & Sayacı Başlat</button>
+                    <button type="submit" class="btn-primary">Seti Kaydet</button>
                 </div>
             </form>
         </div>
@@ -360,13 +527,13 @@
 
     </div>
 
-    <!-- Video Modal Penceresi -->
+    <!-- Video Modal -->
     <div class="video-modal" id="videoModal">
         <div class="modal-content">
             <div class="modal-header">
                 <strong id="modalTitle" style="color:var(--accent);">Egzersiz Formu</strong>
                 <button onclick="closeModal()"
-                    style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
+                    style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
             </div>
             <div class="video-wrapper">
                 <iframe id="videoFrame" src="" allowfullscreen></iframe>
@@ -380,225 +547,148 @@
     <script>
         const API_URL = '/api/WorkoutLogs';
 
-        // Kas Veritabanı ve Eğitim Videoları
-        const muscleData = {
+        // Detaylı Kas & Egzersiz Kütüphanesi
+        const muscleLibrary = {
             chest: {
-                title: "🎯 GÖĞÜS HAREKETLERİ",
-                rotation: 0, // Öne bak
-                targetMesh: "chest",
+                title: "🎯 GÖĞÜS (CHEST)",
                 exercises: [
-                    { name: "Barbell Bench Press", videoId: "rT7DgCr-3pg", sets: "3-4 Set" },
-                    { name: "Incline Dumbbell Press", videoId: "8iPEnn-ltC8", sets: "3-4 Set" },
-                    { name: "Chest Fly (Cable/Dumbbell)", videoId: "Z57CtFmRMxA", sets: "3 Set" },
-                    { name: "Dips (Göğüs Odaklı)", videoId: "2z8JmcrW-As", sets: "3 Set" }
-                ]
-            },
-            back: {
-                title: "🎯 SIRT HAREKETLERİ",
-                rotation: Math.PI, // Arkaya bak
-                targetMesh: "back",
-                exercises: [
-                    { name: "Barbell Bent-Over Row", videoId: "9efgc2TrvEg", sets: "4 Set" },
-                    { name: "Lat Pulldown", videoId: "CAwf7n6Luuc", sets: "3-4 Set" },
-                    { name: "Seated Cable Row", videoId: "GZbfZ033f74", sets: "3 Set" },
-                    { name: "Deadlift", videoId: "op9kVnSso6Q", sets: "3-5 Set" }
+                    { name: "Barbell Bench Press", videoId: "rT7DgCr-3pg", meta: "Bileşik • Güç" },
+                    { name: "Incline Dumbbell Press", videoId: "8iPEnn-ltC8", meta: "Üst Göğüs" },
+                    { name: "Chest Cable Fly", videoId: "Z57CtFmRMxA", meta: "İzolasyon" },
+                    { name: "Chest Dips", videoId: "2z8JmcrW-As", meta: "Alt Göğüs" }
                 ]
             },
             shoulders: {
-                title: "🎯 OMUZ HAREKETLERİ",
-                rotation: 0,
-                targetMesh: "shoulders",
+                title: "🎯 OMUZ (DELTOIDS)",
                 exercises: [
-                    { name: "Overhead Barbell Press", videoId: "2yjwXTZQDDI", sets: "4 Set" },
-                    { name: "Dumbbell Lateral Raise", videoId: "3VcKaXpzqRo", sets: "4 Set" },
-                    { name: "Face Pull", videoId: "rep-qVOkqgk", sets: "3-4 Set" },
-                    { name: "Reverse Pec Deck", videoId: "6yMdhi2DVao", sets: "3 Set" }
+                    { name: "Overhead Barbell Press", videoId: "2yjwXTZQDDI", meta: "Bileşik • Güç" },
+                    { name: "Dumbbell Lateral Raise", videoId: "3VcKaXpzqRo", meta: "Yan Omuz" },
+                    { name: "Face Pull", videoId: "rep-qVOkqgk", meta: "Arka Omuz" }
                 ]
             },
             biceps: {
-                title: "🎯 BICEPS HAREKETLERİ",
-                rotation: 0,
-                targetMesh: "arms",
+                title: "🎯 BICEPS (KOL)",
                 exercises: [
-                    { name: "Barbell Curl", videoId: "ykJmrZ5v0Oo", sets: "3-4 Set" },
-                    { name: "Incline Dumbbell Curl", videoId: "soxrZlIl35U", sets: "3 Set" },
-                    { name: "Hammer Curl", videoId: "zC3nLlEvin4", sets: "3 Set" }
+                    { name: "Barbell Curl", videoId: "ykJmrZ5v0Oo", meta: "Kütle" },
+                    { name: "Incline Dumbbell Curl", videoId: "soxrZlIl35U", meta: "Uzun Baş" },
+                    { name: "Hammer Curl", videoId: "zC3nLlEvin4", meta: "Brachialis" }
                 ]
             },
             triceps: {
-                title: "🎯 TRICEPS HAREKETLERİ",
-                rotation: Math.PI,
-                targetMesh: "arms",
+                title: "🎯 TRICEPS (ARKA KOL)",
                 exercises: [
-                    { name: "Triceps Rope Pushdown", videoId: "vB5OHsJ3EME", sets: "3-4 Set" },
-                    { name: "Skull Crusher", videoId: "d_KZxkH_toI", sets: "3 Set" },
-                    { name: "Overhead Dumbbell Extension", videoId: "nRiJVZDpdL0", sets: "3 Set" }
+                    { name: "Triceps Pushdown", videoId: "vB5OHsJ3EME", meta: "İzolasyon" },
+                    { name: "Skull Crusher", videoId: "d_KZxkH_toI", meta: "Kütle" },
+                    { name: "Overhead Extension", videoId: "nRiJVZDpdL0", meta: "Uzun Baş" }
                 ]
             },
-            legs: {
-                title: "🎯 BACAK HAREKETLERİ",
-                rotation: 0,
-                targetMesh: "legs",
+            lats: {
+                title: "🎯 KANAT & SIRT (LATS)",
                 exercises: [
-                    { name: "Barbell Squat", videoId: "bEv6CCg2BC8", sets: "4 Set" },
-                    { name: "Leg Press", videoId: "IZxyjW7MPJQ", sets: "3-4 Set" },
-                    { name: "Romanian Deadlift", videoId: "JCXUYuzwNrM", sets: "3-4 Set" },
-                    { name: "Leg Extension / Curl", videoId: "m0FOpMEgero", sets: "3 Set" }
+                    { name: "Barbell Bent-Over Row", videoId: "9efgc2TrvEg", meta: "Kalınlık" },
+                    { name: "Lat Pulldown", videoId: "CAwf7n6Luuc", meta: "Genişlik" },
+                    { name: "Seated Cable Row", videoId: "GZbfZ033f74", meta: "Orta Sırt" }
+                ]
+            },
+            traps: {
+                title: "🎯 TRAPEZ & BOYUN",
+                exercises: [
+                    { name: "Barbell Shrug", videoId: "g6qbq4Du13Q", meta: "Trapez" },
+                    { name: "Dumbbell Farmer Walk", videoId: "Fkzk_RqlYig", meta: "Kondisyon" }
+                ]
+            },
+            abs: {
+                title: "🎯 KARIN (CORE)",
+                exercises: [
+                    { name: "Hanging Leg Raise", videoId: "hdng3Nm1x_E", meta: "Alt Karın" },
+                    { name: "Cable Woodchopper", videoId: "pZapRXZcggU", meta: "Oblik" }
+                ]
+            },
+            quads: {
+                title: "🎯 ÖN BACAK (QUADRICEPS)",
+                exercises: [
+                    { name: "Barbell Back Squat", videoId: "bEv6CCg2BC8", meta: "Temel Güç" },
+                    { name: "Leg Press", videoId: "IZxyjW7MPJQ", meta: "Hipertrofi" },
+                    { name: "Leg Extension", videoId: "m0FOpMEgero", meta: "İzolasyon" }
+                ]
+            },
+            hamstrings: {
+                title: "🎯 ARKA BACAK (HAMSTRINGS)",
+                exercises: [
+                    { name: "Romanian Deadlift", videoId: "JCXUYuzwNrM", meta: "Gerilim" },
+                    { name: "Lying Leg Curl", videoId: "ELOCsoDSmrg", meta: "İzolasyon" }
+                ]
+            },
+            glutes: {
+                title: "🎯 KALÇA (GLUTES)",
+                exercises: [
+                    { name: "Barbell Hip Thrust", videoId: "SEdqd1n0cvg", meta: "Ana Güç" },
+                    { name: "Bulgarian Split Squat", videoId: "2C-uNgKwPLE", meta: "Tek Bacak" }
+                ]
+            },
+            calves: {
+                title: "🎯 BALDIR (CALVES)",
+                exercises: [
+                    { name: "Standing Calf Raise", videoId: "-M4-G8p8fmc", meta: "Gastrocnemius" },
+                    { name: "Seated Calf Raise", videoId: "JbyjNymZOt0", meta: "Soleus" }
                 ]
             }
         };
 
         let selectedExName = "";
 
-        /* ================= 3D THREE.JS MOTORU ================= */
-        let scene, camera, renderer, mannequin;
-        let meshes = {};
-        let isDragging = false;
-        let prevMouseX = 0;
-        let targetRotationY = 0;
+        // Ön/Arka Vücut Çevirme
+        function toggleView(view) {
+            const container = document.getElementById('flipContainer');
+            const btnFront = document.getElementById('btnFront');
+            const btnBack = document.getElementById('btnBack');
 
-        function init3D() {
-            const canvas = document.getElementById('canvas3d');
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(40, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-            camera.position.set(0, 1.2, 4.2);
-
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            // Işıklar
-            const ambient = new THREE.AmbientLight(0xffffff, 0.7);
-            scene.add(ambient);
-            const dirLight = new THREE.DirectionalLight(0xff6b00, 1.2);
-            dirLight.position.set(2, 4, 3);
-            scene.add(dirLight);
-
-            // Manken Grubu
-            mannequin = new THREE.Group();
-
-            const matBase = new THREE.MeshStandardMaterial({ color: 0x222630, roughness: 0.5 });
-            const matAccent = new THREE.MeshStandardMaterial({ color: 0xff6b00, roughness: 0.3, emissive: 0x552200 });
-
-            // Baş
-            const head = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), matBase);
-            head.position.y = 1.9;
-            mannequin.add(head);
-
-            // Göğüs
-            meshes.chest = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.35, 0.3), matAccent);
-            meshes.chest.position.set(0, 1.5, 0.05);
-            mannequin.add(meshes.chest);
-
-            // Sırt
-            meshes.back = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.45, 0.15), matBase);
-            meshes.back.position.set(0, 1.45, -0.08);
-            mannequin.add(meshes.back);
-
-            // Omuzlar
-            const shoulderGeo = new THREE.SphereGeometry(0.14, 16, 16);
-            meshes.shoulderL = new THREE.Mesh(shoulderGeo, matBase);
-            meshes.shoulderL.position.set(-0.38, 1.6, 0);
-            meshes.shoulderR = new THREE.Mesh(shoulderGeo, matBase);
-            meshes.shoulderR.position.set(0.38, 1.6, 0);
-            mannequin.add(meshes.shoulderL, meshes.shoulderR);
-
-            // Kollar
-            const armGeo = new THREE.CylinderGeometry(0.08, 0.07, 0.5, 12);
-            meshes.armL = new THREE.Mesh(armGeo, matBase);
-            meshes.armL.position.set(-0.42, 1.2, 0);
-            meshes.armR = new THREE.Mesh(armGeo, matBase);
-            meshes.armR.position.set(0.42, 1.2, 0);
-            mannequin.add(meshes.armL, meshes.armR);
-
-            // Bel
-            const abs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.3, 0.25), matBase);
-            abs.position.set(0, 1.15, 0);
-            mannequin.add(abs);
-
-            // Bacaklar
-            const legGeo = new THREE.CylinderGeometry(0.11, 0.09, 0.8, 12);
-            meshes.legL = new THREE.Mesh(legGeo, matBase);
-            meshes.legL.position.set(-0.16, 0.6, 0);
-            meshes.legR = new THREE.Mesh(legGeo, matBase);
-            meshes.legR.position.set(0.16, 0.6, 0);
-            mannequin.add(meshes.legL, meshes.legR);
-
-            mannequin.position.y = -0.7;
-            scene.add(mannequin);
-
-            // Dokunmatik ve Fare Kontrolleri
-            canvas.addEventListener('pointerdown', (e) => {
-                isDragging = true;
-                prevMouseX = e.clientX;
-            });
-            window.addEventListener('pointerup', () => isDragging = false);
-            window.addEventListener('pointermove', (e) => {
-                if (!isDragging) return;
-                const delta = e.clientX - prevMouseX;
-                mannequin.rotation.y += delta * 0.015;
-                targetRotationY = mannequin.rotation.y;
-                prevMouseX = e.clientX;
-            });
-
-            animate();
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            // Yumuşak dönüş geçişi
-            if (!isDragging) {
-                mannequin.rotation.y += (targetRotationY - mannequin.rotation.y) * 0.08;
+            if (view === 'back') {
+                container.classList.add('flipped');
+                btnBack.classList.add('active');
+                btnFront.classList.remove('active');
+            } else {
+                container.classList.remove('flipped');
+                btnFront.classList.add('active');
+                btnBack.classList.remove('active');
             }
-            renderer.render(scene, camera);
         }
 
-        /* Kas Seçildiğinde 3D Modeli Vurgula */
-        function highlightMesh(group) {
-            const defaultMat = new THREE.MeshStandardMaterial({ color: 0x222630, roughness: 0.5 });
-            const activeMat = new THREE.MeshStandardMaterial({ color: 0xff6b00, roughness: 0.2, emissive: 0x662200 });
+        // Kasa Tıklandığında Tetiklenen Olay
+        function bindMuscleEvents() {
+            document.querySelectorAll('.muscle-part').forEach(part => {
+                part.addEventListener('click', () => {
+                    const muscleKey = part.getAttribute('data-muscle');
+                    if (!muscleKey || !muscleLibrary[muscleKey]) return;
 
-            meshes.chest.material = defaultMat;
-            meshes.back.material = defaultMat;
-            meshes.shoulderL.material = defaultMat;
-            meshes.shoulderR.material = defaultMat;
-            meshes.armL.material = defaultMat;
-            meshes.armR.material = defaultMat;
-            meshes.legL.material = defaultMat;
-            meshes.legR.material = defaultMat;
+                    // Aktif stili güncelle
+                    document.querySelectorAll('.muscle-part').forEach(p => p.classList.remove('active'));
+                    document.querySelectorAll(`[data-muscle="${muscleKey}"]`).forEach(p => p.classList.add('active'));
 
-            if (group === 'chest') meshes.chest.material = activeMat;
-            if (group === 'back') meshes.back.material = activeMat;
-            if (group === 'shoulders') { meshes.shoulderL.material = activeMat; meshes.shoulderR.material = activeMat; }
-            if (group === 'biceps' || group === 'triceps') { meshes.armL.material = activeMat; meshes.armR.material = activeMat; }
-            if (group === 'legs') { meshes.legL.material = activeMat; meshes.legR.material = activeMat; }
+                    loadMuscleExercises(muscleKey);
+                });
+            });
         }
 
-        function selectMuscle(key, el) {
-            document.querySelectorAll('.m-tag').forEach(t => t.classList.remove('active'));
-            if (el) el.classList.add('active');
-
-            const data = muscleData[key];
+        function loadMuscleExercises(key) {
+            const data = muscleLibrary[key];
             document.getElementById('muscleTitle').innerText = data.title;
-            targetRotationY = data.rotation;
-            highlightMesh(key);
-
-            // Egzersizleri Listele
             const grid = document.getElementById('exerciseGrid');
             grid.innerHTML = '';
+
             data.exercises.forEach(ex => {
                 const card = document.createElement('div');
                 card.className = 'ex-card';
                 card.innerHTML = `
                     <div class="title">${ex.name}</div>
-                    <div class="meta"><span>${ex.sets}</span><span>▶ Video</span></div>
+                    <div class="meta"><span>${ex.meta}</span><span>▶ Video</span></div>
                 `;
                 card.onclick = () => openVideo(ex.name, ex.videoId);
                 grid.appendChild(card);
             });
         }
 
-        /* Modal & Video */
+        // Video Modal
         function openVideo(name, videoId) {
             selectedExName = name;
             document.getElementById('modalTitle').innerText = name;
@@ -617,7 +707,7 @@
             window.scrollTo({ top: document.getElementById('workoutForm').offsetTop - 20, behavior: 'smooth' });
         }
 
-        /* Timer */
+        // Dinlenme Sayacı
         let tSec = 90, tInt = null;
         function updateT() {
             const m = Math.floor(tSec / 60), s = tSec % 60;
@@ -632,16 +722,15 @@
         }
         function resetTimer() { clearInterval(tInt); tSec = 90; updateT(); }
 
-        /* API Veri İletişimi */
+        // API İşlemleri
         async function loadLogs() {
             const container = document.getElementById('logsList');
             try {
                 const res = await fetch(API_URL);
-                if (!res.ok) throw new Error();
                 const logs = await res.json();
                 container.innerHTML = '';
                 if (logs.length === 0) {
-                    container.innerHTML = '<p style="color:var(--muted); font-size:13px; text-align:center;">Henüz set girilmedi.</p>';
+                    container.innerHTML = '<p style="color:var(--muted); font-size:13px; text-align:center;">Henüz set kaydedilmedi.</p>';
                     return;
                 }
                 logs.forEach(log => {
@@ -657,7 +746,7 @@
                     container.appendChild(item);
                 });
             } catch (e) {
-                container.innerHTML = '<p style="color:#888; font-size:13px; text-align:center;">API hazır.</p>';
+                container.innerHTML = '<p style="color:var(--muted); font-size:13px; text-align:center;">Kayıtlar listelenmeye hazır.</p>';
             }
         }
 
@@ -691,9 +780,10 @@
             loadLogs();
         }
 
+        // Başlangıç
         window.onload = () => {
-            init3D();
-            selectMuscle('chest', document.querySelector('.m-tag'));
+            bindMuscleEvents();
+            loadMuscleExercises('chest');
             loadLogs();
         };
     </script>
